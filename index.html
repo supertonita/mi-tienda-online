@@ -84,7 +84,7 @@
       padding: 0 1rem;
     }
 
-    /* Tabs de Navegación Interior */
+    /* Tabs de Navegación */
     .nav-tabs {
       display: flex;
       gap: 0.5rem;
@@ -127,7 +127,7 @@
       align-items: center;
       gap: 0.6rem;
       box-shadow: var(--shadow-sm);
-      margin-bottom: 1.25rem;
+      margin-bottom: 1rem;
     }
 
     .search-box input {
@@ -139,7 +139,37 @@
       color: var(--text-main);
     }
 
-    /* Promos Carrusel */
+    /* Categorías Pills */
+    .categories-bar {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.25rem;
+      -webkit-overflow-scrolling: touch;
+    }
+    .categories-bar::-webkit-scrollbar { display: none; }
+
+    .cat-chip {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 0.5rem 1rem;
+      border-radius: 99px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .cat-chip.active {
+      background: var(--brand-dark);
+      color: white;
+      border-color: var(--brand-dark);
+    }
+
+    /* Banner Carrusel */
     .promo-carousel {
       display: flex;
       gap: 1rem;
@@ -149,7 +179,6 @@
       margin-bottom: 1.5rem;
       -webkit-overflow-scrolling: touch;
     }
-
     .promo-carousel::-webkit-scrollbar { display: none; }
 
     .banner-card {
@@ -164,25 +193,14 @@
       align-items: center;
       box-shadow: var(--shadow-card);
     }
-
-    @media (min-width: 640px) {
-      .banner-card { min-width: 48%; }
-    }
+    @media (min-width: 640px) { .banner-card { min-width: 48%; } }
 
     .banner-card.accent {
       background: linear-gradient(135deg, #059669 0%, #047857 100%);
     }
 
-    .banner-text h3 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 0.25rem;
-    }
-
-    .banner-text p {
-      font-size: 0.8rem;
-      opacity: 0.9;
-    }
+    .banner-text h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .banner-text p { font-size: 0.8rem; opacity: 0.9; }
 
     .banner-tag {
       background: rgba(255, 255, 255, 0.2);
@@ -201,12 +219,8 @@
       grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
       gap: 1rem;
     }
-
     @media (min-width: 640px) {
-      .grid {
-        grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-        gap: 1.25rem;
-      }
+      .grid { grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 1.25rem; }
     }
 
     .card {
@@ -218,13 +232,12 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      cursor: pointer;
+      position: relative;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 28px -4px rgba(15, 23, 42, 0.1);
+    .card.out-of-stock {
+      opacity: 0.65;
     }
 
     .card img {
@@ -239,11 +252,18 @@
     .card h3 {
       font-size: 0.95rem;
       font-weight: 700;
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.2rem;
       color: var(--text-main);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    .card .category-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-bottom: 0.4rem;
     }
 
     .card .price-row {
@@ -257,6 +277,20 @@
       font-size: 1.1rem;
       font-weight: 800;
       color: var(--brand-dark);
+    }
+
+    /* Tag Agotado */
+    .out-tag {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      background: rgba(239, 68, 68, 0.9);
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 0.25rem 0.5rem;
+      border-radius: 6px;
+      text-transform: uppercase;
     }
 
     /* Tarjetas de Órdenes */
@@ -309,7 +343,7 @@
     }
 
     .btn:disabled {
-      opacity: 0.6;
+      opacity: 0.5;
       cursor: not-allowed;
     }
 
@@ -356,7 +390,6 @@
       .modal-card { max-width: 500px; border-radius: 28px; }
     }
 
-    /* Modal de Detalle Estilo Tarjeta */
     .product-detail-card {
       display: flex;
       flex-direction: column;
@@ -396,10 +429,7 @@
       opacity: 0.6;
     }
 
-    .gallery-dot.active {
-      border-color: var(--emerald-accent);
-      opacity: 1;
-    }
+    .gallery-dot.active { border-color: var(--emerald-accent); opacity: 1; }
 
     /* Formulario */
     .form-group { margin-bottom: 1rem; }
@@ -507,18 +537,18 @@
           <div style="background: var(--emerald-light); width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem auto;">
             <i data-lucide="user-check" style="color: var(--emerald-accent); width:28px; height:28px;"></i>
           </div>
-          <h3 style="font-size: 1.25rem;">Bienvenido</h3>
+          <h3 style="font-size: 1.25rem;">Super Toñita Online</h3>
           <p style="color: var(--text-muted); font-size: 0.85rem;">Ingresa tus datos para continuar</p>
         </div>
 
         <form id="accessForm">
           <div class="form-group">
             <label>Nombre Completo</label>
-            <input type="text" id="accessName" class="form-control" placeholder="Ej: María López" required>
+            <input type="text" id="accessName" class="form-control" placeholder="Tu Nombre" required>
           </div>
           <div class="form-group">
-            <label>Teléfono / Clave</label>
-            <input type="password" id="accessPass" class="form-control" placeholder="Ej: 70000000" required>
+            <label>Teléfono </label>
+            <input type="password" id="accessPass" class="form-control" placeholder="Tu Numero" required>
           </div>
           <button type="submit" class="btn btn-emerald" style="width: 100%; margin-top: 0.5rem;">
             Ingresar a la Tienda <i data-lucide="arrow-right" style="width:16px;"></i>
@@ -546,28 +576,40 @@
           <input type="text" id="searchInput" placeholder="Buscar productos en Super Toñita...">
         </div>
 
+        <!-- Barra de Categorías -->
+        <div class="categories-bar" id="categoriesBar">
+          <button class="cat-chip active" onclick="filterByCategory('Todas')">Todas</button>
+          <button class="cat-chip" onclick="filterByCategory('Abarrotes')">Abarrotes</button>
+          <button class="cat-chip" onclick="filterByCategory('Bebidas')">Bebidas</button>
+          <button class="cat-chip" onclick="filterByCategory('Galletas / Snacks')">Botanas / Snacks</button>
+          <button class="cat-chip" onclick="filterByCategory('Embutidos / Lácteos')">Embutidos / Lácteos</button>
+          <button class="cat-chip" onclick="filterByCategory('Limpieza')">Limpieza</button>
+          <button class="cat-chip" onclick="filterByCategory('Otros')">Otros</button>
+          <button class="cat-chip" onclick="filterByCategory('Aseo Personal')">Aseo Personal</button>
+        </div>
+
         <div class="promo-carousel">
           <div class="banner-card accent">
             <div class="banner-text">
-              <span class="banner-tag">Envíos Rápidos</span>
-              <h3>Servicio a Domicilio</h3>
-              <p>A solo $4.00 directo hasta tu puerta</p>
+              <span class="banner-tag">Opción de Recoger</span>
+              <h3>Sin Cobro de Envío</h3>
+              <p>Retira en Los Fuentes, Corinto o Metapán</p>
             </div>
-            <i data-lucide="truck" style="width: 42px; height: 42px; opacity: 0.8;"></i>
+            <i data-lucide="store" style="width: 42px; height: 42px; opacity: 0.8;"></i>
           </div>
 
           <div class="banner-card">
             <div class="banner-text">
-              <span class="banner-tag">Pedidos por WhatsApp</span>
-              <h3>Atención Directa</h3>
-              <p>Envía tu lista de compras al instante</p>
+              <span class="banner-tag">Envíos Rápidos</span>
+              <h3>A Domicilio</h3>
+              <p>Solo $4.00 directo hasta tu casa</p>
             </div>
-            <i data-lucide="message-circle" style="width: 42px; height: 42px; color: var(--whatsapp);"></i>
+            <i data-lucide="truck" style="width: 42px; height: 42px; color: var(--emerald-accent);"></i>
           </div>
         </div>
 
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-          <h2 style="font-size: 1.1rem; font-weight: 800;">Catálogo Disponible</h2>
+          <h2 style="font-size: 1.1rem; font-weight: 800;" id="catalogTitle">Catálogo Disponible</h2>
           <span style="font-size: 0.8rem; color: var(--text-muted);" id="productCounter">0 items</span>
         </div>
 
@@ -619,6 +661,27 @@
             </div>
 
             <div class="form-group">
+              <label>Categoría</label>
+              <select id="prodCategory" class="form-control" required>
+                <option value="Abarrotes">Abarrotes</option>
+                <option value="Bebidas">Bebidas</option>
+                <option value="Galletas / Snacks">Galletas / Snacks</option>
+                <option value="Embutidos / Lácteos">Embutidos / Lácteos</option>
+                <option value="Limpieza">Limpieza</option>
+                <option value="Otros">Otros</option>
+                <option value="Aseo Personal">Aseo Personal</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Estado de Disponibilidad</label>
+              <select id="prodStock" class="form-control" required>
+                <option value="Disponible">Disponible</option>
+                <option value="Agotado">Agotado</option>
+              </select>
+            </div>
+
+            <div class="form-group">
               <label>Descripción</label>
               <textarea id="prodDesc" class="form-control" rows="2" placeholder="Detalles o peso..." required></textarea>
             </div>
@@ -663,9 +726,7 @@
         <button class="btn btn-sm btn-secondary" id="closeDetailBtn">✕</button>
       </div>
 
-      <div class="product-detail-card" id="detailContent">
-        <!-- Contenido generado con JS -->
-      </div>
+      <div class="product-detail-card" id="detailContent"></div>
     </div>
   </div>
 
@@ -686,19 +747,19 @@
           <span>Subtotal:</span>
           <span>$<span id="subtotalPrice">0.00</span></span>
         </div>
-        <div>
+        <div id="shippingRow">
           <span>Costo de Envío:</span>
-          <span>$4.00</span>
+          <span>$<span id="shippingPrice">4.00</span></span>
         </div>
         <div class="total">
-          <span>Total a Pagar:</span>
+          <span>Total a Pagas:</span>
           <span>$<span id="totalPrice">4.00</span></span>
         </div>
       </div>
 
       <form id="checkoutForm">
         <h4 style="margin: 1.2rem 0 0.8rem 0; font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase;">
-          Datos de Entrega
+          Opciones de Entrega y Pago
         </h4>
         
         <div class="form-group">
@@ -711,22 +772,44 @@
           <input type="tel" id="custPhone" class="form-control" required readonly>
         </div>
 
+        <!-- Tipo de Entrega -->
         <div class="form-group">
-          <label>Dirección del Domicilio</label>
-          <textarea id="custAddress" class="form-control" rows="2" placeholder="Barrio, colonia, pasaje, # de casa..." required></textarea>
+          <label>Tipo de Entrega</label>
+          <select id="deliveryType" class="form-control" required>
+            <option value="Envío a Domicilio"> Envío a Domicilio (+$4.00)</option>
+            <option value="Recoger en Tienda"> Recoger en Tienda (Gratis)</option>
+          </select>
         </div>
 
-        <div class="form-group">
-          <label>Punto de Referencia</label>
-          <input type="text" id="custRef" class="form-control" placeholder="Ej: Cerca de la tienda, portón negro..." required>
+        <!-- Selección Sucursal -->
+        <div class="form-group hidden" id="branchSelectGroup">
+          <label>Sucursal para Retiro</label>
+          <select id="pickupBranch" class="form-control">
+            <option value="Super Toñita Los Fuentes">Super Toñita Los Fuentes</option>
+            <option value="Super Toñita Corinto">Super Toñita Corinto</option>
+            <option value="Super Toñita Metapán">Super Toñita Metapán</option>
+          </select>
+        </div>
+
+        <!-- Campos de Dirección -->
+        <div id="addressFieldsGroup">
+          <div class="form-group">
+            <label>Dirección del Domicilio</label>
+            <textarea id="custAddress" class="form-control" rows="2" placeholder="Barrio, colonia, pasaje, # de casa..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Punto de Referencia</label>
+            <input type="text" id="custRef" class="form-control" placeholder="Ej: Cerca de la tienda, portón negro...">
+          </div>
         </div>
 
         <!-- Selección de Método de Pago -->
         <div class="form-group">
           <label>Método de Pago</label>
           <select id="paymentMethod" class="form-control" required>
-            <option value="Pago Contra Entrega">💵 Pago Contra Entrega (Efectivo)</option>
-            <option value="Transferencia Bancaria">🏦 Transferencia Bancaria</option>
+            <option value="Pago Contra Entrega">Pago Contra Entrega / Al Recoger</option>
+            <option value="Transferencia Bancaria">Transferencia Bancaria</option>
           </select>
         </div>
 
@@ -753,7 +836,6 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // Credenciales de Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyCV3NF4d-vUWmbUVcGDB3oDTgcEcxEQ2AA",
       authDomain: "mitiendaonline-bc1f7.firebaseapp.com",
@@ -770,13 +852,13 @@
     const ADMIN_USER = "FrankR";
     const ADMIN_PASS = "199818";
     const WHATSAPP_NUMBER = "50370092996";
-    const SHIPPING_COST = 4.00;
+    let currentShippingFee = 4.00;
 
     let cart = [];
     let currentUser = null;
     let allProducts = [];
+    let currentSelectedCategory = 'Todas';
 
-    // Conversion de URLs de Google Drive
     function fixDriveUrl(url) {
       if (!url) return '';
       if (url.includes('drive.google.com')) {
@@ -812,8 +894,13 @@
     const cartCount = document.getElementById('cartCount');
     const cartItems = document.getElementById('cartItems');
     const subtotalPrice = document.getElementById('subtotalPrice');
+    const shippingPrice = document.getElementById('shippingPrice');
     const totalPrice = document.getElementById('totalPrice');
+    
     const checkoutForm = document.getElementById('checkoutForm');
+    const deliveryType = document.getElementById('deliveryType');
+    const branchSelectGroup = document.getElementById('branchSelectGroup');
+    const addressFieldsGroup = document.getElementById('addressFieldsGroup');
     const paymentMethod = document.getElementById('paymentMethod');
     const bankDetailsBox = document.getElementById('bankDetailsBox');
     const sendOrderBtn = document.getElementById('sendOrderBtn');
@@ -839,7 +926,22 @@
       if (window.lucide) window.lucide.createIcons();
     }
 
-    // Mostrar/ocultar caja de banco según método de pago
+    // Opciones Recoger en Tienda vs Envío
+    deliveryType.addEventListener('change', (e) => {
+      if (e.target.value === 'Recoger en Tienda') {
+        currentShippingFee = 0.00;
+        branchSelectGroup.classList.remove('hidden');
+        addressFieldsGroup.classList.add('hidden');
+      } else {
+        currentShippingFee = 4.00;
+        branchSelectGroup.classList.add('hidden');
+        addressFieldsGroup.classList.remove('hidden');
+      }
+      shippingPrice.innerText = currentShippingFee.toFixed(2);
+      updateCart();
+    });
+
+    // Opciones Pago
     paymentMethod.addEventListener('change', (e) => {
       if (e.target.value === 'Transferencia Bancaria') {
         bankDetailsBox.classList.remove('hidden');
@@ -870,7 +972,6 @@
       userHeaderArea.classList.remove('hidden');
       openCartBtn.classList.add('hidden');
       userNameDisplay.innerText = "FrankR (Admin)";
-      
       switchAdminTab('orders');
       refreshIcons();
     }
@@ -902,7 +1003,7 @@
       refreshIcons();
     });
 
-    // Cambios de pestañas Cliente
+    // Pestañas Cliente
     tabClientCatalogBtn.addEventListener('click', () => switchClientTab('catalog'));
     tabClientOrdersBtn.addEventListener('click', () => switchClientTab('orders'));
 
@@ -922,7 +1023,7 @@
       }
     }
 
-    // Cambios de pestañas Admin
+    // Pestañas Admin
     tabAdminOrdersBtn.addEventListener('click', () => switchAdminTab('orders'));
     tabAdminProductsBtn.addEventListener('click', () => switchAdminTab('products'));
 
@@ -946,7 +1047,7 @@
     closeCartBtn.addEventListener('click', () => cartModal.classList.remove('active'));
     closeDetailBtn.addEventListener('click', () => productDetailModal.classList.remove('active'));
 
-    // Cargar Productos Catálogo
+    // Cargar Catálogo
     async function loadProducts() {
       productGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">Cargando catálogo...</p>';
       try {
@@ -955,37 +1056,65 @@
         querySnapshot.forEach((docSnap) => {
           allProducts.push({ id: docSnap.id, ...docSnap.data() });
         });
-        renderProducts(allProducts);
+        filterAndRenderProducts();
       } catch (error) {
         productGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Error al cargar productos.</p>';
       }
     }
 
-    // Renderizar Catálogo
+    // Filtrar por Categoría
+    window.filterByCategory = (category) => {
+      currentSelectedCategory = category;
+      document.querySelectorAll('.cat-chip').forEach(chip => {
+        if (chip.innerText === category) {
+          chip.classList.add('active');
+        } else {
+          chip.classList.remove('active');
+        }
+      });
+      filterAndRenderProducts();
+    };
+
+    function filterAndRenderProducts() {
+      const searchStr = searchInput.value.toLowerCase();
+      
+      const filtered = allProducts.filter(item => {
+        const matchesCategory = currentSelectedCategory === 'Todas' || (item.categoria || 'Otros') === currentSelectedCategory;
+        const matchesSearch = item.nombre.toLowerCase().includes(searchStr) || item.descripcion.toLowerCase().includes(searchStr);
+        return matchesCategory && matchesSearch;
+      });
+
+      renderProducts(filtered);
+    }
+
+    // Renderizar Productos
     function renderProducts(products) {
       productGrid.innerHTML = '';
       productCounter.innerText = `${products.length} productos`;
 
       if (products.length === 0) {
-        productGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">No se encontraron productos.</p>';
+        productGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">No hay productos en esta categoría.</p>';
         return;
       }
 
       products.forEach((item) => {
         const rawImg = item.imagenUrl1 || item.imagenUrl || '';
         const mainImg = fixDriveUrl(rawImg) || 'https://via.placeholder.com/200?text=Super+To%C3%B1ita';
+        const isOutOfStock = item.stock === 'Agotado';
         
         const card = document.createElement('div');
-        card.className = 'card';
+        card.className = `card ${isOutOfStock ? 'out-of-stock' : ''}`;
         card.innerHTML = `
+          ${isOutOfStock ? '<span class="out-tag">Agotado</span>' : ''}
           <div onclick="openProductDetail('${item.id}')">
             <img src="${mainImg}" alt="${item.nombre}">
+            <div class="category-label">${item.categoria || 'General'}</div>
             <h3>${item.nombre}</h3>
           </div>
           <div class="price-row">
             <span class="price">$${parseFloat(item.precio).toFixed(2)}</span>
-            <button class="btn btn-sm btn-emerald" onclick="event.stopPropagation(); addToCart('${item.id}', '${item.nombre}', ${item.precio})">
-              + Agregar
+            <button class="btn btn-sm btn-emerald" ${isOutOfStock ? 'disabled' : ''} onclick="event.stopPropagation(); addToCart('${item.id}', '${item.nombre}', ${item.precio})">
+              ${isOutOfStock ? 'Agotado' : '+ Agregar'}
             </button>
           </div>
         `;
@@ -994,13 +1123,14 @@
       refreshIcons();
     }
 
-    // Modal Producto Ampliado
+    // Modal Detalle
     window.openProductDetail = (id) => {
       const item = allProducts.find(p => p.id === id);
       if (!item) return;
 
       const img1 = fixDriveUrl(item.imagenUrl1 || item.imagenUrl) || 'https://via.placeholder.com/400?text=Super+To%C3%B1ita';
       const img2 = fixDriveUrl(item.imagenUrl2);
+      const isOutOfStock = item.stock === 'Agotado';
 
       detailContent.innerHTML = `
         <div class="product-detail-img-wrapper">
@@ -1015,8 +1145,9 @@
         ` : ''}
 
         <div>
+          <span style="font-size: 0.75rem; font-weight:700; color: var(--emerald-accent); text-transform: uppercase;">${item.categoria || 'General'}</span>
           <h2 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 0.25rem;">${item.nombre}</h2>
-          <p style="font-size: 1.4rem; font-weight: 800; color: var(--emerald-accent); margin-bottom: 1rem;">
+          <p style="font-size: 1.4rem; font-weight: 800; color: var(--brand-dark); margin-bottom: 0.75rem;">
             $${parseFloat(item.precio).toFixed(2)}
           </p>
           
@@ -1025,8 +1156,8 @@
             <p style="font-size: 0.95rem; color: var(--text-main); line-height: 1.4;">${item.descripcion}</p>
           </div>
 
-          <button class="btn btn-emerald" style="width: 100%; padding: 0.9rem;" onclick="addToCart('${item.id}', '${item.nombre}', ${item.precio}); productDetailModal.classList.remove('active');">
-            <i data-lucide="shopping-cart"></i> Agregar al Carrito
+          <button class="btn btn-emerald" style="width: 100%; padding: 0.9rem;" ${isOutOfStock ? 'disabled' : ''} onclick="addToCart('${item.id}', '${item.nombre}', ${item.precio}); productDetailModal.classList.remove('active');">
+            <i data-lucide="shopping-cart"></i> ${isOutOfStock ? 'Producto Agotado' : 'Agregar al Carrito'}
           </button>
         </div>
       `;
@@ -1042,14 +1173,7 @@
     };
 
     // Buscador
-    searchInput.addEventListener('input', (e) => {
-      const queryStr = e.target.value.toLowerCase();
-      const filtered = allProducts.filter(p => 
-        p.nombre.toLowerCase().includes(queryStr) || 
-        p.descripcion.toLowerCase().includes(queryStr)
-      );
-      renderProducts(filtered);
-    });
+    searchInput.addEventListener('input', filterAndRenderProducts);
 
     // Carrito
     window.addToCart = (id, nombre, precio) => {
@@ -1086,7 +1210,7 @@
         `;
       });
 
-      const total = subtotal > 0 ? subtotal + SHIPPING_COST : 0;
+      const total = subtotal > 0 ? subtotal + currentShippingFee : 0;
       subtotalPrice.innerText = subtotal.toFixed(2);
       totalPrice.innerText = total.toFixed(2);
     }
@@ -1096,7 +1220,7 @@
       updateCart();
     };
 
-    // Envío de Pedido a Firebase & WhatsApp
+    // Enviar Orden
     checkoutForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
@@ -1108,9 +1232,18 @@
       sendOrderBtn.disabled = true;
       sendOrderBtn.innerText = "Procesando pedido...";
 
+      const dType = deliveryType.value;
+      const branch = document.getElementById('pickupBranch').value;
       const address = document.getElementById('custAddress').value.trim();
       const reference = document.getElementById('custRef').value.trim();
       const method = paymentMethod.value;
+
+      if (dType === 'Envío a Domicilio' && (!address || !reference)) {
+        alert("Por favor completa la dirección y punto de referencia para el envío.");
+        sendOrderBtn.disabled = false;
+        sendOrderBtn.innerText = "Enviar Pedido por WhatsApp";
+        return;
+      }
 
       let subtotal = 0;
       let detailList = "";
@@ -1119,25 +1252,27 @@
         const itemTotal = item.precio * item.cantidad;
         subtotal += itemTotal;
         detailList += `• ${item.nombre} (x${item.cantidad}) - $${itemTotal.toFixed(2)}\n`;
-        return {
-          nombre: item.nombre,
-          cantidad: item.cantidad,
-          precio: item.precio
-        };
+        return { nombre: item.nombre, cantidad: item.cantidad, precio: item.precio };
       });
 
-      const total = subtotal + SHIPPING_COST;
+      const total = subtotal + currentShippingFee;
       const orderDate = new Date().toLocaleString('es-SV');
+
+      const deliveryInfo = dType === 'Recoger en Tienda' 
+        ? `Retiro en Sucursal: ${branch}` 
+        : `Dirección: ${address} (Ref: ${reference})`;
 
       const newOrder = {
         clienteNombre: currentUser.name,
         clienteTelefono: currentUser.phone,
-        direccion: address,
-        referencia: reference,
+        tipoEntrega: dType,
+        sucursal: dType === 'Recoger en Tienda' ? branch : 'N/A',
+        direccion: dType === 'Envío a Domicilio' ? address : 'N/A',
+        referencia: dType === 'Envío a Domicilio' ? reference : 'N/A',
         metodoPago: method,
         items: itemsPayload,
         subtotal: subtotal,
-        envio: SHIPPING_COST,
+        envio: currentShippingFee,
         total: total,
         estado: "Pendiente",
         fecha: orderDate,
@@ -1145,28 +1280,24 @@
       };
 
       try {
-        // Guardar en Firestore
         await addDoc(collection(db, "ordenes"), newOrder);
 
-        // Armar Mensaje de WhatsApp
         const msg = `🛍️ *SUPER TOÑITA ONLINE - NUEVO PEDIDO*\n\n` +
           `👤 *Cliente:* ${currentUser.name}\n` +
           `📞 *Teléfono:* ${currentUser.phone}\n` +
-          `📍 *Dirección:* ${address}\n` +
-          `📌 *Referencia:* ${reference}\n` +
+          `🚚 *Entrega:* ${dType}\n` +
+          `${dType === 'Recoger en Tienda' ? `🏪 *Sucursal:* ${branch}\n` : `📍 *Dirección:* ${address}\n📌 *Ref:* ${reference}\n`}` +
           `💳 *Método de Pago:* ${method}\n\n` +
           `🛒 *Detalle del Pedido:*\n${detailList}\n` +
           `💵 *Subtotal:* $${subtotal.toFixed(2)}\n` +
-          `🛵 *Envío:* $${SHIPPING_COST.toFixed(2)}\n` +
+          `🛵 *Costo Envío:* $${currentShippingFee.toFixed(2)}\n` +
           `💰 *TOTAL A PAGAR:* $${total.toFixed(2)}`;
 
-        // Limpiar Carrito y Cerrar Modal
         cart = [];
         updateCart();
         cartModal.classList.remove('active');
         checkoutForm.reset();
 
-        // Abrir WhatsApp
         window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
 
       } catch (err) {
@@ -1177,14 +1308,11 @@
       }
     });
 
-    // Cargar Historial de Órdenes del Cliente
+    // Historial Cliente
     async function loadClientOrders() {
       clientOrdersList.innerHTML = '<p style="text-align: center; color: var(--text-muted);">Cargando historial...</p>';
       try {
-        const q = query(
-          collection(db, "ordenes"),
-          where("clienteTelefono", "==", currentUser.phone)
-        );
+        const q = query(collection(db, "ordenes"), where("clienteTelefono", "==", currentUser.phone));
         const querySnapshot = await getDocs(q);
         clientOrdersList.innerHTML = '';
 
@@ -1194,11 +1322,7 @@
         }
 
         let orders = [];
-        querySnapshot.forEach(docSnap => {
-          orders.push({ id: docSnap.id, ...docSnap.data() });
-        });
-
-        // Ordenar por fecha más reciente
+        querySnapshot.forEach(docSnap => orders.push({ id: docSnap.id, ...docSnap.data() }));
         orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
         orders.forEach(order => {
@@ -1215,11 +1339,11 @@
               </div>
               <span class="status-badge ${statusClass}">${order.estado}</span>
             </div>
-            <div style="font-size: 0.88rem; margin-bottom: 0.5rem;">${itemsHtml}</div>
-            <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">
-              <strong>Método de pago:</strong> ${order.metodoPago}
+            <div style="font-size: 0.85rem; color: var(--emerald-accent); font-weight:700; margin-bottom: 0.3rem;">
+              ${order.tipoEntrega} ${order.sucursal !== 'N/A' ? `(${order.sucursal})` : ''}
             </div>
-            <div style="font-weight: 800; font-size: 1.05rem; color: var(--emerald-accent); text-align: right;">
+            <div style="font-size: 0.88rem; margin-bottom: 0.5rem;">${itemsHtml}</div>
+            <div style="font-weight: 800; font-size: 1.05rem; color: var(--brand-dark); text-align: right;">
               Total: $${parseFloat(order.total).toFixed(2)}
             </div>
           `;
@@ -1231,7 +1355,7 @@
       }
     }
 
-    // Cargar Órdenes para el Panel Administrador
+    // Órdenes Admin
     async function loadAdminOrders() {
       adminOrdersList.innerHTML = '<p style="text-align: center; color: var(--text-muted);">Cargando pedidos de clientes...</p>';
       try {
@@ -1244,10 +1368,7 @@
         }
 
         let orders = [];
-        querySnapshot.forEach(docSnap => {
-          orders.push({ id: docSnap.id, ...docSnap.data() });
-        });
-
+        querySnapshot.forEach(docSnap => orders.push({ id: docSnap.id, ...docSnap.data() }));
         orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
         orders.forEach(order => {
@@ -1266,8 +1387,9 @@
             </div>
 
             <div style="font-size: 0.88rem; margin-bottom: 0.5rem;">
-              <strong>Dirección:</strong> ${order.direccion}<br>
-              <strong>Ref:</strong> ${order.referencia}<br>
+              <strong>Tipo:</strong> ${order.tipoEntrega}<br>
+              ${order.sucursal !== 'N/A' ? `<strong>Sucursal:</strong> ${order.sucursal}<br>` : ''}
+              ${order.direccion !== 'N/A' ? `<strong>Dirección:</strong> ${order.direccion} (Ref: ${order.referencia})<br>` : ''}
               <strong>Pago:</strong> ${order.metodoPago}
             </div>
 
@@ -1299,12 +1421,9 @@
       }
     }
 
-    // Actualizar Estado de la Orden desde Admin
     window.updateOrderStatus = async (orderId, newStatus) => {
       try {
-        await updateDoc(doc(db, "ordenes", orderId), {
-          estado: newStatus
-        });
+        await updateDoc(doc(db, "ordenes", orderId), { estado: newStatus });
         loadAdminOrders();
       } catch (err) {
         alert("Error al actualizar estado.");
@@ -1321,7 +1440,7 @@
       }
     }
 
-    // Panel Administrador (Cargar, Guardar, Editar, Eliminar Productos)
+    // Admin Inventario
     async function loadAdminProducts() {
       adminProductGrid.innerHTML = 'Cargando...';
       const querySnapshot = await getDocs(collection(db, "productos"));
@@ -1331,18 +1450,21 @@
         const item = docSnap.data();
         const rawImg = item.imagenUrl1 || item.imagenUrl || '';
         const mainImg = fixDriveUrl(rawImg) || 'https://via.placeholder.com/100?text=Super+To%C3%B1ita';
-        
+        const isOutOfStock = item.stock === 'Agotado';
+
         const card = document.createElement('div');
-        card.className = 'card';
+        card.className = `card ${isOutOfStock ? 'out-of-stock' : ''}`;
         card.style.cursor = 'default';
         card.innerHTML = `
+          ${isOutOfStock ? '<span class="out-tag">Agotado</span>' : ''}
           <div>
             <img src="${mainImg}" alt="${item.nombre}" style="height: 120px; object-fit: contain;">
+            <div class="category-label">${item.categoria || 'General'}</div>
             <h3>${item.nombre}</h3>
             <p class="price">$${parseFloat(item.precio).toFixed(2)}</p>
           </div>
           <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
-            <button class="btn btn-sm btn-secondary" style="flex:1;" onclick="editProduct('${docSnap.id}', \`${item.nombre}\`, \`${item.descripcion}\`, ${item.precio}, '${item.imagenUrl1 || item.imagenUrl || ''}', '${item.imagenUrl2 || ''}')">
+            <button class="btn btn-sm btn-secondary" style="flex:1;" onclick="editProduct('${docSnap.id}', \`${item.nombre}\`, \`${item.categoria || 'Abarrotes'}\`, \`${item.stock || 'Disponible'}\`, \`${item.descripcion}\`, ${item.precio}, '${item.imagenUrl1 || item.imagenUrl || ''}', '${item.imagenUrl2 || ''}')">
               Editar
             </button>
             <button class="btn btn-sm btn-danger" onclick="deleteProduct('${docSnap.id}')">
@@ -1368,6 +1490,8 @@
 
       const payload = {
         nombre: document.getElementById('prodName').value.trim(),
+        categoria: document.getElementById('prodCategory').value,
+        stock: document.getElementById('prodStock').value,
         descripcion: document.getElementById('prodDesc').value.trim(),
         precio: parseFloat(document.getElementById('prodPrice').value),
         imagenUrl1: fixDriveUrl(rawImg1),
@@ -1390,9 +1514,11 @@
       }
     });
 
-    window.editProduct = (id, nombre, descripcion, precio, img1, img2) => {
+    window.editProduct = (id, nombre, categoria, stock, descripcion, precio, img1, img2) => {
       document.getElementById('prodId').value = id;
       document.getElementById('prodName').value = nombre;
+      document.getElementById('prodCategory').value = categoria;
+      document.getElementById('prodStock').value = stock;
       document.getElementById('prodDesc').value = descripcion;
       document.getElementById('prodPrice').value = precio;
       document.getElementById('prodImg1').value = img1;
