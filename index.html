@@ -46,7 +46,7 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(255, 255, 255, 0.9);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
       padding: 0.85rem 1.25rem;
@@ -69,10 +69,12 @@
       color: var(--emerald-accent);
     }
 
-    .user-greeting {
+    .user-info {
       font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--emerald-dark);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     /* Main Container */
@@ -88,7 +90,7 @@
       color: white;
       padding: 0.85rem 1rem;
       border-radius: var(--radius-md);
-      margin-bottom: 1rem;
+      margin-bottom: 1.25rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -116,33 +118,38 @@
       cursor: pointer;
     }
 
-    /* Banners Carousel */
-    .banners-container {
+    /* Tabs de Navegación */
+    .nav-tabs {
       display: flex;
-      gap: 1rem;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
+      gap: 0.5rem;
       margin-bottom: 1.25rem;
-      padding-bottom: 0.5rem;
-      -webkit-overflow-scrolling: touch;
+      background: #e2e8f0;
+      padding: 0.25rem;
+      border-radius: var(--radius-md);
     }
-    .banners-container::-webkit-scrollbar { display: none; }
 
-    .banner-card {
-      min-width: 85%;
-      scroll-snap-align: center;
-      background: linear-gradient(135deg, var(--emerald-accent), var(--brand-dark));
-      color: white;
-      border-radius: var(--radius-lg);
-      padding: 1.25rem;
+    .tab-btn {
+      flex: 1;
+      padding: 0.6rem 0.8rem;
+      border: none;
+      background: transparent;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      cursor: pointer;
       display: flex;
-      flex-direction: column;
+      align-items: center;
       justify-content: center;
-      box-shadow: var(--shadow-card);
+      gap: 0.4rem;
+      transition: all 0.2s;
     }
 
-    .banner-card h4 { font-size: 1.1rem; font-weight: 800; margin-bottom: 0.3rem; }
-    .banner-card p { font-size: 0.85rem; opacity: 0.9; }
+    .tab-btn.active {
+      background: var(--surface);
+      color: var(--brand-dark);
+      box-shadow: var(--shadow-sm);
+    }
 
     /* Buscador */
     .search-box {
@@ -219,7 +226,9 @@
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .card.out-of-stock { opacity: 0.65; }
+    .card.out-of-stock {
+      opacity: 0.65;
+    }
 
     .card img {
       width: 100%;
@@ -260,6 +269,7 @@
       color: var(--brand-dark);
     }
 
+    /* Tag Agotado */
     .out-tag {
       position: absolute;
       top: 1rem;
@@ -322,7 +332,11 @@
       transition: all 0.2s;
     }
 
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
     .btn-emerald { background: var(--emerald-accent); }
     .btn-emerald:hover { background: var(--emerald-dark); }
     .btn-sm { padding: 0.45rem 0.75rem; font-size: 0.8rem; border-radius: 10px; }
@@ -348,7 +362,10 @@
       .modal-overlay { align-items: center; justify-content: center; }
     }
 
-    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
 
     .modal-card {
       background: var(--surface);
@@ -363,7 +380,11 @@
       .modal-card { max-width: 500px; border-radius: 28px; }
     }
 
-    .product-detail-card { display: flex; flex-direction: column; gap: 1.25rem; }
+    .product-detail-card {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
 
     .product-detail-img-wrapper {
       position: relative;
@@ -381,8 +402,23 @@
       margin: 0 auto;
     }
 
-    .gallery-dots { display: flex; justify-content: center; gap: 0.5rem; margin-top: 0.75rem; }
-    .gallery-dot { width: 40px; height: 40px; border-radius: 10px; border: 2px solid transparent; object-fit: cover; cursor: pointer; opacity: 0.6; }
+    .gallery-dots {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+
+    .gallery-dot {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 2px solid transparent;
+      object-fit: cover;
+      cursor: pointer;
+      opacity: 0.6;
+    }
+
     .gallery-dot.active { border-color: var(--emerald-accent); opacity: 1; }
 
     /* Formulario */
@@ -409,70 +445,63 @@
 
     .form-control:focus { border-color: var(--emerald-accent); background: white; }
 
-    .price-grid-inputs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+    .price-grid-inputs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+    }
 
-    .cart-badge-floating {
-      position: absolute;
-      top: 4px;
-      right: 18px;
-      background: var(--danger);
+    .cart-badge {
+      background: var(--emerald-accent);
       color: white;
       border-radius: 99px;
-      padding: 0.15rem 0.4rem;
-      font-size: 0.68rem;
-      font-weight: 800;
-    }
-
-    .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--border); }
-    .cart-summary { background: var(--bg-primary); padding: 1rem; border-radius: var(--radius-md); margin: 1rem 0; }
-    .cart-summary div { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem; }
-    .cart-summary .total { font-weight: 800; font-size: 1.15rem; color: var(--emerald-accent); border-top: 1px dashed var(--border); padding-top: 0.5rem; margin-bottom: 0; }
-
-    .payment-info-box { background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0.85rem; margin-top: 0.5rem; font-size: 0.85rem; color: var(--brand-dark); }
-    .hidden { display: none !important; }
-
-    /* BARRA NAVEGACIÓN FLOTANTE INFERIOR */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 68px;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(12px);
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      z-index: 150;
-      box-shadow: 0 -4px 12px rgba(0,0,0,0.05);
-    }
-
-    .nav-item {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 3px;
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-size: 0.68rem;
+      padding: 0.15rem 0.45rem;
+      font-size: 0.75rem;
       font-weight: 700;
-      cursor: pointer;
-      position: relative;
-      padding: 6px 0;
     }
 
-    .nav-item.active {
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cart-summary {
+      background: var(--bg-primary);
+      padding: 1rem;
+      border-radius: var(--radius-md);
+      margin: 1rem 0;
+    }
+
+    .cart-summary div {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .cart-summary .total {
+      font-weight: 800;
+      font-size: 1.15rem;
       color: var(--emerald-accent);
+      border-top: 1px dashed var(--border);
+      padding-top: 0.5rem;
+      margin-bottom: 0;
     }
 
-    .nav-item i {
-      width: 20px;
-      height: 20px;
+    .payment-info-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.85rem;
+      margin-top: 0.5rem;
+      font-size: 0.85rem;
+      color: var(--brand-dark);
     }
+
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
@@ -483,7 +512,16 @@
       <i data-lucide="shopping-bag" style="color: var(--emerald-accent);"></i>
       SUPER <span>TOÑITA</span>
     </div>
-    <div id="userHeaderArea" class="user-greeting"></div>
+    <div id="userHeaderArea" class="user-info hidden">
+      <span id="userNameDisplay"></span>
+      <button class="btn btn-sm btn-secondary" id="logoutBtn" title="Cerrar Sesión">
+        <i data-lucide="log-out" style="width:14px;"></i>
+      </button>
+      <button class="btn btn-sm btn-emerald" id="openCartBtn">
+        <i data-lucide="shopping-cart" style="width:16px;"></i>
+        <span class="cart-badge" id="cartCount">0</span>
+      </button>
+    </div>
   </header>
 
   <main class="container">
@@ -505,8 +543,8 @@
             <input type="text" id="accessName" class="form-control" placeholder="Tu Nombre" required>
           </div>
           <div class="form-group">
-            <label>Teléfono</label>
-            <input type="tel" id="accessPass" class="form-control" placeholder="Tu Número" required>
+            <label>Teléfono </label>
+            <input type="password" id="accessPass" class="form-control" placeholder="Tu Numero" required>
           </div>
           <button type="submit" class="btn btn-emerald" style="width: 100%; margin-top: 0.5rem;">
             Ingresar a la Tienda <i data-lucide="arrow-right" style="width:16px;"></i>
@@ -521,7 +559,7 @@
       <!-- Selector de Sucursal Principal -->
       <div class="branch-selector-bar">
         <label for="globalBranchSelect">
-          <i data-lucide="map-pin" style="color: var(--emerald-accent);"></i> Sucursal:
+          <i data-lucide="map-pin" style="color: var(--emerald-accent);"></i> Sucursal de Compra:
         </label>
         <select id="globalBranchSelect" class="branch-select">
           <option value="Super Toñita Los Fuentes">Super Toñita Los Fuentes</option>
@@ -530,21 +568,18 @@
         </select>
       </div>
 
+      <!-- Tabs Navegación Cliente -->
+      <div class="nav-tabs">
+        <button class="tab-btn active" id="tabClientCatalogBtn">
+          <i data-lucide="grid" style="width: 16px;"></i> Catálogo
+        </button>
+        <button class="tab-btn" id="tabClientOrdersBtn">
+          <i data-lucide="package" style="width: 16px;"></i> Mis Órdenes
+        </button>
+      </div>
+
       <!-- Tab Catálogo -->
       <div id="clientCatalogTab">
-        
-        <!-- Carrusel de Banners Promocionales -->
-        <div class="banners-container">
-          <div class="banner-card">
-            <h4>🔥 Ofertas de la Semana</h4>
-            <p>Encuentra tus productos favoritos con precios especiales en todas las sucursales.</p>
-          </div>
-          <div class="banner-card" style="background: linear-gradient(135deg, #1e293b, #059669);">
-            <h4>🛵 Envíos Rápidos</h4>
-            <p>¡Realiza tu pedido y recíbelo en la puerta de tu casa por sólo $5.00!</p>
-          </div>
-        </div>
-
         <div class="search-box">
           <i data-lucide="search" style="color: var(--text-muted); width: 18px;"></i>
           <input type="text" id="searchInput" placeholder="Buscar productos en Super Toñita...">
@@ -571,18 +606,6 @@
         <div id="productGrid" class="grid"></div>
       </div>
 
-      <!-- Tab Promociones -->
-      <div id="clientPromosTab" class="hidden">
-        <h2 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-          <i data-lucide="tag" style="color: var(--emerald-accent);"></i> Promociones Especiales
-        </h2>
-        <div class="card" style="padding: 1.5rem; text-align: center;">
-          <i data-lucide="sparkles" style="width: 40px; height: 40px; color: var(--emerald-accent); margin: 0 auto 0.5rem auto;"></i>
-          <h3>¡Promociones Activas!</h3>
-          <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Disfruta de ofertas especiales en productos seleccionados.</p>
-        </div>
-      </div>
-
       <!-- Tab Mis Órdenes Cliente -->
       <div id="clientOrdersTab" class="hidden">
         <h2 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
@@ -590,43 +613,21 @@
         </h2>
         <div id="clientOrdersList"></div>
       </div>
-
-      <!-- Tab Mi Perfil -->
-      <div id="clientProfileTab" class="hidden">
-        <div class="card" style="padding: 1.5rem;">
-          <div style="background: var(--emerald-light); width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem auto;">
-            <i data-lucide="user" style="color: var(--emerald-accent); width: 32px; height: 32px;"></i>
-          </div>
-          <h3 id="profileNameDisplay" style="text-align: center;">---</h3>
-          <p id="profilePhoneDisplay" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; text-align: center;">---</p>
-
-          <!-- Formulario de Dirección Predeterminada -->
-          <form id="profileAddressForm" style="margin-bottom: 1.5rem; text-align: left;">
-            <h4 style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.75rem; font-weight: 700;">
-              📍 Dirección Predeterminada para Envíos
-            </h4>
-            <div class="form-group">
-              <label>Dirección exacta</label>
-              <textarea id="profileAddress" class="form-control" rows="2" placeholder=" "></textarea>
-            </div>
-            <div class="form-group">
-              <label>Punto de referencia</label>
-              <input type="text" id="profileRef" class="form-control" placeholder="">
-            </div>
-            <button type="submit" class="btn btn-emerald btn-sm" style="width: 100%;">
-              Guardar Dirección
-            </button>
-          </form>
-
-          <button class="btn btn-danger" id="logoutBtn" style="width: 100%;">
-            <i data-lucide="log-out"></i> Cerrar Sesión
-          </button>
-        </div>
-      </div>
     </section>
 
     <!-- 3. VISTA ADMINISTRADOR -->
     <section id="adminView" class="hidden">
+      <!-- Tabs Navegación Admin -->
+      <div class="nav-tabs">
+        <button class="tab-btn active" id="tabAdminOrdersBtn">
+          <i data-lucide="shopping-bag" style="width: 16px;"></i> Órdenes Recibidas
+        </button>
+        <button class="tab-btn" id="tabAdminProductsBtn">
+          <i data-lucide="boxes" style="width: 16px;"></i> Inventario
+        </button>
+      </div>
+
+      <!-- Tab Órdenes Admin -->
       <div id="adminOrdersTab">
         <h2 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
           <i data-lucide="list-checks" style="color: var(--emerald-accent);"></i> Gestión de Pedidos
@@ -634,6 +635,7 @@
         <div id="adminOrdersList"></div>
       </div>
 
+      <!-- Tab Productos Admin -->
       <div id="adminProductsTab" class="hidden">
         <div class="card" style="margin-bottom: 2rem; padding: 1.25rem; cursor: default;">
           <h4 id="formTitle" style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
@@ -642,30 +644,35 @@
           
           <form id="productForm">
             <input type="hidden" id="prodId">
+            
             <div class="form-group">
               <label>Nombre del Producto</label>
               <input type="text" id="prodName" class="form-control" placeholder="Ej: Salsa Chipotle" required>
             </div>
+
             <div class="form-group">
               <label>Categoría</label>
               <select id="prodCategory" class="form-control" required>
                 <option value="Productos Toñita">Productos Toñita</option>
                 <option value="Abarrotes">Abarrotes</option>
                 <option value="Bebidas">Bebidas</option>
-                <option value="Galletas / Snacks">Galletas / Snacks</option>
+                <option value="Botanas / Snacks">Botanas / Snacks</option>
                 <option value="Embutidos / Lácteos">Embutidos / Lácteos</option>
                 <option value="Limpieza">Limpieza</option>
                 <option value="Aseo Personal">Aseo Personal</option>
                 <option value="Otros">Otros</option>
               </select>
             </div>
+
             <div class="form-group">
               <label>Estado de Disponibilidad</label>
               <select id="prodStock" class="form-control" required>
-                <option value="Disponible">Disponible</option>
-                <option value="Agotado">Agotado</option>
+                <option value="Disponible"> Disponible</option>
+                <option value="Agotado"> Agotado</option>
               </select>
             </div>
+
+            <!-- PRECIOS DIFERENCIADOS POR SUCURSAL -->
             <div class="form-group">
               <label>Precios por Sucursal ($)</label>
               <div class="price-grid-inputs">
@@ -683,20 +690,26 @@
                 </div>
               </div>
             </div>
+
             <div class="form-group">
               <label>Descripción</label>
-              <textarea id="prodDesc" class="form-control" rows="2" placeholder="Detalles..." required></textarea>
+              <textarea id="prodDesc" class="form-control" rows="2" placeholder="Detalles o peso..." required></textarea>
             </div>
+
             <div class="form-group">
-              <label>Imagen Principal 1 (URL)</label>
-              <input type="url" id="prodImg1" class="form-control" placeholder="https://...">
+              <label>Imagen Principal 1 (URL Drive/Web)</label>
+              <input type="url" id="prodImg1" class="form-control" placeholder="https://drive.google.com/...">
             </div>
+
             <div class="form-group">
               <label>Imagen Secundaria 2 (URL Opcional)</label>
-              <input type="url" id="prodImg2" class="form-control" placeholder="https://...">
+              <input type="url" id="prodImg2" class="form-control" placeholder="https://drive.google.com/...">
             </div>
+
             <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
-              <button type="submit" class="btn btn-emerald" id="saveProdBtn" style="flex: 1;">Guardar Producto</button>
+              <button type="submit" class="btn btn-emerald" id="saveProdBtn" style="flex: 1;">
+                Guardar Producto
+              </button>
               <button type="button" class="btn btn-secondary" id="cancelFormBtn">Cancelar</button>
             </div>
           </form>
@@ -711,37 +724,13 @@
 
   </main>
 
-  <!-- NAVEGACIÓN FLOTANTE INFERIOR -->
-  <nav id="bottomNav" class="bottom-nav hidden">
-    <button class="nav-item active" id="navCatalogBtn">
-      <i data-lucide="grid"></i>
-      <span>Catálogo</span>
-    </button>
-    <button class="nav-item" id="navPromosBtn">
-      <i data-lucide="tag"></i>
-      <span>Promos</span>
-    </button>
-    <button class="nav-item" id="navCartBtn">
-      <i data-lucide="shopping-cart"></i>
-      <span>Carrito</span>
-      <span class="cart-badge-floating" id="cartCount">0</span>
-    </button>
-    <button class="nav-item" id="navOrdersBtn">
-      <i data-lucide="package"></i>
-      <span>Mis Órdenes</span>
-    </button>
-    <button class="nav-item" id="navProfileBtn">
-      <i data-lucide="user"></i>
-      <span>Mi Perfil</span>
-    </button>
-  </nav>
-
-  <!-- Modal Detalle del Producto -->
+  <!-- Modal Detalle del Producto Ampliado -->
   <div class="modal-overlay" id="productDetailModal">
     <div class="modal-card">
       <div style="display: flex; justify-content: flex-end; margin-bottom: 0.5rem;">
         <button class="btn btn-sm btn-secondary" id="closeDetailBtn">✕</button>
       </div>
+
       <div class="product-detail-card" id="detailContent"></div>
     </div>
   </div>
@@ -765,11 +754,11 @@
         </div>
         <div id="shippingRow">
           <span>Costo de Envío:</span>
-          <span>$<span id="shippingPrice">5.00</span></span>
+          <span>$<span id="shippingPrice">4.00</span></span>
         </div>
         <div class="total">
           <span>Total a Pagar:</span>
-          <span>$<span id="totalPrice">5.00</span></span>
+          <span>$<span id="totalPrice">4.00</span></span>
         </div>
       </div>
 
@@ -788,38 +777,46 @@
           <input type="tel" id="custPhone" class="form-control" required readonly>
         </div>
 
+        <!-- Tipo de Entrega -->
         <div class="form-group">
           <label>Tipo de Entrega</label>
           <select id="deliveryType" class="form-control" required>
-            <option value="Envío a Domicilio">Envío a Domicilio (+$5.00)</option>
-            <option value="Recoger en Tienda">Recoger en Tienda (Gratis)</option>
+            <option value="Envío a Domicilio"> Envío a Domicilio (+$4.00)</option>
+            <option value="Recoger en Tienda"> Recoger en Tienda (Gratis)</option>
           </select>
         </div>
 
+        <!-- Campos de Dirección -->
         <div id="addressFieldsGroup">
           <div class="form-group">
             <label>Dirección del Domicilio</label>
-            <textarea id="custAddress" class="form-control" rows="2" placeholder="Dirección completa..."></textarea>
+            <textarea id="custAddress" class="form-control" rows="2" placeholder=""></textarea>
           </div>
+
           <div class="form-group">
             <label>Punto de Referencia</label>
-            <input type="text" id="custRef" class="form-control" placeholder="Ej: Frente al parque...">
+            <input type="text" id="custRef" class="form-control" placeholder=""></input>
           </div>
         </div>
 
+        <!-- Selección de Método de Pago -->
         <div class="form-group">
           <label>Método de Pago</label>
           <select id="paymentMethod" class="form-control" required>
-            <option value="Pago Contra Entrega">Pago Contra Entrega / Al Recoger</option>
-            <option value="Transferencia Bancaria">Transferencia Bancaria</option>
+            <option value="Pago Contra Entrega"> Pago Contra Entrega / Al Recoger</option>
+            <option value="Transferencia Bancaria"> Transferencia Bancaria</option>
           </select>
         </div>
 
+        <!-- Detalles de Transferencia -->
         <div id="bankDetailsBox" class="payment-info-box hidden">
           <strong>Datos para Transferencia:</strong><br>
-          • <b>Banco:</b> Banco Promerica<br>
+          • <b>Banco:</b> Banco promerica <br>
           • <b>Nº de Cuenta:</b> 0000000000<br>
           • <b>A nombre de:</b> Super Toñita<br>
+          <small style="color: var(--text-muted); font-size: 0.78rem; display: block; margin-top: 0.3rem;">
+            * Realiza la transferencia y envía el comprobante por WhatsApp al confirmar.
+          </small>
         </div>
 
         <button type="submit" class="btn btn-whatsapp" id="sendOrderBtn">
@@ -850,7 +847,7 @@
     const ADMIN_USER = "FrankR";
     const ADMIN_PASS = "199818";
     const WHATSAPP_NUMBER = "50370092996";
-    let currentShippingFee = 5.00;
+    let currentShippingFee = 4.00;
 
     let cart = [];
     let currentUser = null;
@@ -869,6 +866,7 @@
       return url;
     }
 
+    // Helper para obtener el precio dinámico de un producto según sucursal
     function getProductPrice(item, branch = currentBranch) {
       if (branch === 'Super Toñita Corinto') {
         return parseFloat(item.precioCorinto ?? item.precio ?? 0);
@@ -884,12 +882,13 @@
     const clientView = document.getElementById('clientView');
     const adminView = document.getElementById('adminView');
     const userHeaderArea = document.getElementById('userHeaderArea');
+    const userNameDisplay = document.getElementById('userNameDisplay');
     const logoutBtn = document.getElementById('logoutBtn');
-    const bottomNav = document.getElementById('bottomNav');
     
     const globalBranchSelect = document.getElementById('globalBranchSelect');
     const accessForm = document.getElementById('accessForm');
     const productGrid = document.getElementById('productGrid');
+    const adminProductGrid = document.getElementById('adminProductGrid');
     const searchInput = document.getElementById('searchInput');
     const productCounter = document.getElementById('productCounter');
 
@@ -898,6 +897,7 @@
     const detailContent = document.getElementById('detailContent');
 
     const cartModal = document.getElementById('cartModal');
+    const openCartBtn = document.getElementById('openCartBtn');
     const closeCartBtn = document.getElementById('closeCartBtn');
     const cartCount = document.getElementById('cartCount');
     const cartItems = document.getElementById('cartItems');
@@ -912,25 +912,32 @@
     const bankDetailsBox = document.getElementById('bankDetailsBox');
     const sendOrderBtn = document.getElementById('sendOrderBtn');
 
-    // Bottom Nav Items
-    const navCatalogBtn = document.getElementById('navCatalogBtn');
-    const navPromosBtn = document.getElementById('navPromosBtn');
-    const navCartBtn = document.getElementById('navCartBtn');
-    const navOrdersBtn = document.getElementById('navOrdersBtn');
-    const navProfileBtn = document.getElementById('navProfileBtn');
+    const productForm = document.getElementById('productForm');
+    const saveProdBtn = document.getElementById('saveProdBtn');
+    const cancelFormBtn = document.getElementById('cancelFormBtn');
 
+    // Tabs DOM Elements
+    const tabClientCatalogBtn = document.getElementById('tabClientCatalogBtn');
+    const tabClientOrdersBtn = document.getElementById('tabClientOrdersBtn');
     const clientCatalogTab = document.getElementById('clientCatalogTab');
-    const clientPromosTab = document.getElementById('clientPromosTab');
     const clientOrdersTab = document.getElementById('clientOrdersTab');
-    const clientProfileTab = document.getElementById('clientProfileTab');
     const clientOrdersList = document.getElementById('clientOrdersList');
+
+    const tabAdminOrdersBtn = document.getElementById('tabAdminOrdersBtn');
+    const tabAdminProductsBtn = document.getElementById('tabAdminProductsBtn');
+    const adminOrdersTab = document.getElementById('adminOrdersTab');
+    const adminProductsTab = document.getElementById('adminProductsTab');
+    const adminOrdersList = document.getElementById('adminOrdersList');
 
     function refreshIcons() {
       if (window.lucide) window.lucide.createIcons();
     }
 
+    // Cambio de Sucursal Global por el cliente
     globalBranchSelect.addEventListener('change', (e) => {
       currentBranch = e.target.value;
+      
+      // Actualiza precios en el carrito según la nueva sucursal
       cart = cart.map(cartItem => {
         const originalProd = allProducts.find(p => p.id === cartItem.id);
         if (originalProd) {
@@ -938,22 +945,25 @@
         }
         return cartItem;
       });
+
       filterAndRenderProducts();
       updateCart();
     });
 
+    // Opciones Recoger en Tienda vs Envío
     deliveryType.addEventListener('change', (e) => {
       if (e.target.value === 'Recoger en Tienda') {
         currentShippingFee = 0.00;
         addressFieldsGroup.classList.add('hidden');
       } else {
-        currentShippingFee = 5.00;
+        currentShippingFee = 4.00;
         addressFieldsGroup.classList.remove('hidden');
       }
       shippingPrice.innerText = currentShippingFee.toFixed(2);
       updateCart();
     });
 
+    // Opciones Pago
     paymentMethod.addEventListener('change', (e) => {
       if (e.target.value === 'Transferencia Bancaria') {
         bankDetailsBox.classList.remove('hidden');
@@ -962,7 +972,7 @@
       }
     });
 
-    // LOGIN CON BIENVENIDA PERSONALIZADA Y AUTO-LLENADO DE DIRECCIÓN
+    // Login
     accessForm.addEventListener('submit', (e) => {
       e.preventDefault();
       const name = document.getElementById('accessName').value.trim();
@@ -973,17 +983,6 @@
       if (name === ADMIN_USER && pass === ADMIN_PASS) {
         showAdminView();
       } else {
-        const registeredUsers = JSON.parse(localStorage.getItem('st_registered_clients') || '[]');
-        const isReturning = registeredUsers.includes(pass);
-
-        if (isReturning) {
-          userHeaderArea.innerText = `¡Qué alegría verte de nuevo, ${name}!`;
-        } else {
-          userHeaderArea.innerText = `¡Bienvenido a Super Toñita, ${name}!`;
-          registeredUsers.push(pass);
-          localStorage.setItem('st_registered_clients', JSON.stringify(registeredUsers));
-        }
-
         showClientView();
       }
     });
@@ -992,8 +991,10 @@
       loginScreen.classList.add('hidden');
       clientView.classList.add('hidden');
       adminView.classList.remove('hidden');
-      userHeaderArea.innerText = "FrankR (Admin)";
-      bottomNav.classList.add('hidden');
+      userHeaderArea.classList.remove('hidden');
+      openCartBtn.classList.add('hidden');
+      userNameDisplay.innerText = "FrankR (Admin)";
+      switchAdminTab('orders');
       refreshIcons();
     }
 
@@ -1001,44 +1002,16 @@
       loginScreen.classList.add('hidden');
       adminView.classList.add('hidden');
       clientView.classList.remove('hidden');
-      bottomNav.classList.remove('hidden');
+      userHeaderArea.classList.remove('hidden');
+      openCartBtn.classList.remove('hidden');
+      userNameDisplay.innerText = currentUser.name;
 
       document.getElementById('custName').value = currentUser.name;
       document.getElementById('custPhone').value = currentUser.phone;
-      document.getElementById('profileNameDisplay').innerText = currentUser.name;
-      document.getElementById('profilePhoneDisplay').innerText = currentUser.phone;
-
-      // Cargar dirección del cliente guardada previamente por su teléfono
-      const savedAddressData = JSON.parse(localStorage.getItem(`st_address_${currentUser.phone}`) || '{}');
-      
-      if (savedAddressData.address) {
-        document.getElementById('profileAddress').value = savedAddressData.address;
-        document.getElementById('profileRef').value = savedAddressData.ref || '';
-        
-        // Auto-llenar campos del checkout en el carrito
-        document.getElementById('custAddress').value = savedAddressData.address;
-        document.getElementById('custRef').value = savedAddressData.ref || '';
-      }
 
       switchClientTab('catalog');
       refreshIcons();
     }
-
-    // Guardar Dirección desde la pestaña de Perfil
-    document.getElementById('profileAddressForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const address = document.getElementById('profileAddress').value.trim();
-      const ref = document.getElementById('profileRef').value.trim();
-
-      const addressData = { address, ref };
-      localStorage.setItem(`st_address_${currentUser.phone}`, JSON.stringify(addressData));
-
-      // Sincronizar también con el modal del carrito
-      document.getElementById('custAddress').value = address;
-      document.getElementById('custRef').value = ref;
-
-      alert('¡Dirección guardada con éxito! Se usará en tus próximos pedidos.');
-    });
 
     logoutBtn.addEventListener('click', () => {
       currentUser = null;
@@ -1047,40 +1020,52 @@
       loginScreen.classList.remove('hidden');
       clientView.classList.add('hidden');
       adminView.classList.add('hidden');
-      bottomNav.classList.add('hidden');
-      userHeaderArea.innerText = "";
+      userHeaderArea.classList.add('hidden');
       accessForm.reset();
       refreshIcons();
     });
 
-    // CONTROL DE NAVEGACIÓN FLOTANTE INFERIOR
-    navCatalogBtn.addEventListener('click', () => switchClientTab('catalog'));
-    navPromosBtn.addEventListener('click', () => switchClientTab('promos'));
-    navCartBtn.addEventListener('click', () => cartModal.classList.add('active'));
-    navOrdersBtn.addEventListener('click', () => switchClientTab('orders'));
-    navProfileBtn.addEventListener('click', () => switchClientTab('profile'));
+    // Pestañas Cliente
+    tabClientCatalogBtn.addEventListener('click', () => switchClientTab('catalog'));
+    tabClientOrdersBtn.addEventListener('click', () => switchClientTab('orders'));
 
     function switchClientTab(tab) {
-      [navCatalogBtn, navPromosBtn, navOrdersBtn, navProfileBtn].forEach(b => b.classList.remove('active'));
-      [clientCatalogTab, clientPromosTab, clientOrdersTab, clientProfileTab].forEach(t => t.classList.add('hidden'));
-
       if (tab === 'catalog') {
-        navCatalogBtn.classList.add('active');
+        tabClientCatalogBtn.classList.add('active');
+        tabClientOrdersBtn.classList.remove('active');
         clientCatalogTab.classList.remove('hidden');
+        clientOrdersTab.classList.add('hidden');
         loadProducts();
-      } else if (tab === 'promos') {
-        navPromosBtn.classList.add('active');
-        clientPromosTab.classList.remove('hidden');
-      } else if (tab === 'orders') {
-        navOrdersBtn.classList.add('active');
+      } else {
+        tabClientOrdersBtn.classList.add('active');
+        tabClientCatalogBtn.classList.remove('active');
         clientOrdersTab.classList.remove('hidden');
+        clientCatalogTab.classList.add('hidden');
         loadClientOrders();
-      } else if (tab === 'profile') {
-        navProfileBtn.classList.add('active');
-        clientProfileTab.classList.remove('hidden');
       }
     }
 
+    // Pestañas Admin
+    tabAdminOrdersBtn.addEventListener('click', () => switchAdminTab('orders'));
+    tabAdminProductsBtn.addEventListener('click', () => switchAdminTab('products'));
+
+    function switchAdminTab(tab) {
+      if (tab === 'orders') {
+        tabAdminOrdersBtn.classList.add('active');
+        tabAdminProductsBtn.classList.remove('active');
+        adminOrdersTab.classList.remove('hidden');
+        adminProductsTab.classList.add('hidden');
+        loadAdminOrders();
+      } else {
+        tabAdminProductsBtn.classList.add('active');
+        tabAdminOrdersBtn.classList.remove('active');
+        adminProductsTab.classList.remove('hidden');
+        adminOrdersTab.classList.add('hidden');
+        loadAdminProducts();
+      }
+    }
+
+    openCartBtn.addEventListener('click', () => cartModal.classList.add('active'));
     closeCartBtn.addEventListener('click', () => cartModal.classList.remove('active'));
     closeDetailBtn.addEventListener('click', () => productDetailModal.classList.remove('active'));
 
@@ -1099,24 +1084,32 @@
       }
     }
 
+    // Filtrar por Categoría
     window.filterByCategory = (category) => {
       currentSelectedCategory = category;
       document.querySelectorAll('.cat-chip').forEach(chip => {
-        chip.classList.toggle('active', chip.innerText === category);
+        if (chip.innerText === category) {
+          chip.classList.add('active');
+        } else {
+          chip.classList.remove('active');
+        }
       });
       filterAndRenderProducts();
     };
 
     function filterAndRenderProducts() {
       const searchStr = searchInput.value.toLowerCase();
+      
       const filtered = allProducts.filter(item => {
         const matchesCategory = currentSelectedCategory === 'Todas' || (item.categoria || 'Otros') === currentSelectedCategory;
-        const matchesSearch = item.nombre.toLowerCase().includes(searchStr) || (item.descripcion || '').toLowerCase().includes(searchStr);
+        const matchesSearch = item.nombre.toLowerCase().includes(searchStr) || item.descripcion.toLowerCase().includes(searchStr);
         return matchesCategory && matchesSearch;
       });
+
       renderProducts(filtered);
     }
 
+    // Renderizar Productos
     function renderProducts(products) {
       productGrid.innerHTML = '';
       productCounter.innerText = `${products.length} productos`;
@@ -1153,6 +1146,7 @@
       refreshIcons();
     }
 
+    // Modal Detalle
     window.openProductDetail = (id) => {
       const item = allProducts.find(p => p.id === id);
       if (!item) return;
@@ -1202,8 +1196,10 @@
       element.classList.add('active');
     };
 
+    // Buscador
     searchInput.addEventListener('input', filterAndRenderProducts);
 
+    // Carrito
     window.addToCart = (id, nombre, precio) => {
       const existing = cart.find(p => p.id === id);
       if (existing) {
@@ -1248,7 +1244,7 @@
       updateCart();
     };
 
-    // ENVÍO DE PEDIDO Y AUTO-GUARDADO DE DIRECCIÓN AL COMPRAR
+    // Enviar Orden
     checkoutForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
@@ -1257,26 +1253,20 @@
         return;
       }
 
+      sendOrderBtn.disabled = true;
+      sendOrderBtn.innerText = "Procesando pedido...";
+
       const dType = deliveryType.value;
       const address = document.getElementById('custAddress').value.trim();
       const reference = document.getElementById('custRef').value.trim();
       const method = paymentMethod.value;
 
-      if (dType === 'Envío a Domicilio') {
-        if (!address || !reference) {
-          alert("Por favor completa la dirección y punto de referencia para el envío.");
-          return;
-        }
-
-        // Auto-guardar la dirección en Perfil para futuras compras
-        const autoSaveAddress = { address, ref: reference };
-        localStorage.setItem(`st_address_${currentUser.phone}`, JSON.stringify(autoSaveAddress));
-        document.getElementById('profileAddress').value = address;
-        document.getElementById('profileRef').value = reference;
+      if (dType === 'Envío a Domicilio' && (!address || !reference)) {
+        alert("Por favor completa la dirección y punto de referencia para el envío.");
+        sendOrderBtn.disabled = false;
+        sendOrderBtn.innerText = "Enviar Pedido por WhatsApp";
+        return;
       }
-
-      sendOrderBtn.disabled = true;
-      sendOrderBtn.innerText = "Procesando pedido...";
 
       let subtotal = 0;
       let detailList = "";
@@ -1328,8 +1318,15 @@
         cartModal.classList.remove('active');
         checkoutForm.reset();
 
+        // CORRECCIÓN PARA DISPOSITIVOS MÓVILES Y NAVEGADORES WEB:
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         const waUrl = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodeURIComponent(msg)}`;
-        window.open(waUrl, '_blank');
+
+        if (isMobile) {
+          window.location.href = waUrl;
+        } else {
+          window.open(waUrl, '_blank');
+        }
 
       } catch (err) {
         alert("Ocurrió un error al registrar el pedido.");
@@ -1339,7 +1336,7 @@
       }
     });
 
-    // Cargar Historial Cliente
+    // Historial Cliente
     async function loadClientOrders() {
       clientOrdersList.innerHTML = '<p style="text-align: center; color: var(--text-muted);">Cargando historial...</p>';
       try {
@@ -1386,6 +1383,81 @@
       }
     }
 
+    // Órdenes Admin
+    async function loadAdminOrders() {
+      adminOrdersList.innerHTML = '<p style="text-align: center; color: var(--text-muted);">Cargando pedidos de clientes...</p>';
+      try {
+        const querySnapshot = await getDocs(collection(db, "ordenes"));
+        adminOrdersList.innerHTML = '';
+
+        if (querySnapshot.empty) {
+          adminOrdersList.innerHTML = '<p style="text-align: center; color: var(--text-muted);">No hay pedidos registrados.</p>';
+          return;
+        }
+
+        let orders = [];
+        querySnapshot.forEach(docSnap => orders.push({ id: docSnap.id, ...docSnap.data() }));
+        orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        orders.forEach(order => {
+          const statusClass = getStatusClass(order.estado);
+          let itemsHtml = order.items.map(i => `<div>- ${i.nombre} (x${i.cantidad})</div>`).join('');
+
+          const card = document.createElement('div');
+          card.className = 'order-card';
+          card.innerHTML = `
+            <div class="order-header">
+              <div>
+                <strong>${order.clienteNombre} (${order.clienteTelefono})</strong>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">${order.fecha}</div>
+              </div>
+              <span class="status-badge ${statusClass}">${order.estado}</span>
+            </div>
+
+            <div style="font-size: 0.88rem; margin-bottom: 0.5rem;">
+              <strong>Sucursal:</strong> ${order.sucursal}<br>
+              <strong>Tipo:</strong> ${order.tipoEntrega}<br>
+              ${order.direccion !== 'N/A' ? `<strong>Dirección:</strong> ${order.direccion} (Ref: ${order.referencia})<br>` : ''}
+              <strong>Pago:</strong> ${order.metodoPago}
+            </div>
+
+            <div style="background: var(--bg-primary); padding: 0.6rem; border-radius: 8px; font-size: 0.85rem; margin-bottom: 0.75rem;">
+              ${itemsHtml}
+              <div style="font-weight: 800; margin-top: 0.4rem; text-align: right; color: var(--emerald-accent);">
+                Total: $${parseFloat(order.total).toFixed(2)}
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
+              <select style="padding: 0.4rem; border-radius: 8px; font-size: 0.8rem; border: 1px solid var(--border);" onchange="updateOrderStatus('${order.id}', this.value)">
+                <option value="Pendiente" ${order.estado === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
+                <option value="En camino" ${order.estado === 'En camino' ? 'selected' : ''}>En camino</option>
+                <option value="Entregado" ${order.estado === 'Entregado' ? 'selected' : ''}>Entregado</option>
+                <option value="Cancelado" ${order.estado === 'Cancelado' ? 'selected' : ''}>Cancelado</option>
+              </select>
+
+              <button class="btn btn-sm btn-emerald" onclick="window.open('https://api.whatsapp.com/send?phone=503${order.clienteTelefono}', '_blank')">
+                WhatsApp Cliente
+              </button>
+            </div>
+          `;
+          adminOrdersList.appendChild(card);
+        });
+
+      } catch (err) {
+        adminOrdersList.innerHTML = '<p style="text-align: center;">Error al cargar las órdenes.</p>';
+      }
+    }
+
+    window.updateOrderStatus = async (orderId, newStatus) => {
+      try {
+        await updateDoc(doc(db, "ordenes", orderId), { estado: newStatus });
+        loadAdminOrders();
+      } catch (err) {
+        alert("Error al actualizar estado.");
+      }
+    };
+
     function getStatusClass(status) {
       switch (status) {
         case 'Pendiente': return 'status-pendiente';
@@ -1395,6 +1467,127 @@
         default: return 'status-pendiente';
       }
     }
+
+    // Admin Inventario
+    async function loadAdminProducts() {
+      adminProductGrid.innerHTML = 'Cargando...';
+      const querySnapshot = await getDocs(collection(db, "productos"));
+      adminProductGrid.innerHTML = '';
+
+      querySnapshot.forEach((docSnap) => {
+        const item = docSnap.data();
+        const rawImg = item.imagenUrl1 || item.imagenUrl || '';
+        const mainImg = fixDriveUrl(rawImg) || 'https://via.placeholder.com/100?text=Super+To%C3%B1ita';
+        const isOutOfStock = item.stock === 'Agotado';
+
+        const pFuentes = parseFloat(item.precioLosFuentes ?? item.precio ?? 0).toFixed(2);
+        const pCorinto = parseFloat(item.precioCorinto ?? item.precio ?? 0).toFixed(2);
+        const pMetapan = parseFloat(item.precioMetapan ?? item.precio ?? 0).toFixed(2);
+
+        const card = document.createElement('div');
+        card.className = `card ${isOutOfStock ? 'out-of-stock' : ''}`;
+        card.style.cursor = 'default';
+        card.innerHTML = `
+          ${isOutOfStock ? '<span class="out-tag">Agotado</span>' : ''}
+          <div>
+            <img src="${mainImg}" alt="${item.nombre}" style="height: 120px; object-fit: contain;">
+            <div class="category-label">${item.categoria || 'General'}</div>
+            <h3>${item.nombre}</h3>
+            
+            <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.4rem; background: var(--bg-primary); padding: 0.4rem; border-radius: 8px;">
+              <div>• <b>Los Fuentes:</b> $${pFuentes}</div>
+              <div>• <b>Corinto:</b> $${pCorinto}</div>
+              <div>• <b>Metapán:</b> $${pMetapan}</div>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+            <button class="btn btn-sm btn-secondary" style="flex:1;" onclick="editProduct('${docSnap.id}', \`${item.nombre}\`, \`${item.categoria || 'Abarrotes'}\`, \`${item.stock || 'Disponible'}\`, \`${item.descripcion}\`, ${pFuentes}, ${pCorinto}, ${pMetapan}, '${item.imagenUrl1 || item.imagenUrl || ''}', '${item.imagenUrl2 || ''}')">
+              Editar
+            </button>
+            <button class="btn btn-sm btn-danger" onclick="deleteProduct('${docSnap.id}')">
+              Eliminar
+            </button>
+          </div>
+        `;
+        adminProductGrid.appendChild(card);
+      });
+      refreshIcons();
+    }
+
+    // Guardar / Editar Producto
+    productForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      saveProdBtn.disabled = true;
+      saveProdBtn.innerText = "Guardando...";
+
+      const id = document.getElementById('prodId').value;
+      const rawImg1 = document.getElementById('prodImg1').value.trim();
+      const rawImg2 = document.getElementById('prodImg2').value.trim();
+
+      const pLosFuentes = parseFloat(document.getElementById('prodPriceLosFuentes').value);
+      const pCorinto = parseFloat(document.getElementById('prodPriceCorinto').value);
+      const pMetapan = parseFloat(document.getElementById('prodPriceMetapan').value);
+
+      const payload = {
+        nombre: document.getElementById('prodName').value.trim(),
+        categoria: document.getElementById('prodCategory').value,
+        stock: document.getElementById('prodStock').value,
+        descripcion: document.getElementById('prodDesc').value.trim(),
+        precioLosFuentes: pLosFuentes,
+        precioCorinto: pCorinto,
+        precioMetapan: pMetapan,
+        precio: pLosFuentes, // Respaldo para mantener compatibilidad
+        imagenUrl1: fixDriveUrl(rawImg1),
+        imagenUrl2: fixDriveUrl(rawImg2)
+      };
+
+      try {
+        if (id) {
+          await updateDoc(doc(db, "productos", id), payload);
+        } else {
+          await addDoc(collection(db, "productos"), payload);
+        }
+        resetForm();
+        await loadAdminProducts();
+      } catch (err) {
+        alert("Error al guardar el producto.");
+      } finally {
+        saveProdBtn.disabled = false;
+        saveProdBtn.innerText = "Guardar Producto";
+      }
+    });
+
+    window.editProduct = (id, nombre, categoria, stock, descripcion, pFuentes, pCorinto, pMetapan, img1, img2) => {
+      document.getElementById('prodId').value = id;
+      document.getElementById('prodName').value = nombre;
+      document.getElementById('prodCategory').value = categoria;
+      document.getElementById('prodStock').value = stock;
+      document.getElementById('prodDesc').value = descripcion;
+      document.getElementById('prodPriceLosFuentes').value = pFuentes;
+      document.getElementById('prodPriceCorinto').value = pCorinto;
+      document.getElementById('prodPriceMetapan').value = pMetapan;
+      document.getElementById('prodImg1').value = img1;
+      document.getElementById('prodImg2').value = img2;
+      document.getElementById('formTitle').innerText = "Editar Producto";
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    function resetForm() {
+      productForm.reset();
+      document.getElementById('prodId').value = '';
+      document.getElementById('formTitle').innerText = "Agregar Nuevo Producto";
+    }
+
+    cancelFormBtn.addEventListener('click', resetForm);
+
+    window.deleteProduct = async (id) => {
+      if (confirm("¿Estás seguro de eliminar este producto?")) {
+        await deleteDoc(doc(db, "productos", id));
+        loadAdminProducts();
+      }
+    };
 
     refreshIcons();
   </script>
