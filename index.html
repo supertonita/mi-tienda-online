@@ -327,6 +327,7 @@
     .btn-emerald:hover { background: var(--emerald-dark); }
     .btn-sm { padding: 0.45rem 0.75rem; font-size: 0.8rem; border-radius: 10px; }
     .btn-whatsapp { background: var(--whatsapp); color: white; width: 100%; padding: 1rem; font-size: 1rem; border-radius: var(--radius-md); margin-top: 1rem; }
+    .btn-whatsapp-sm { background: var(--whatsapp); color: white; }
     .btn-danger { background: var(--danger); }
     .btn-secondary { background: #e2e8f0; color: var(--text-main); }
 
@@ -803,7 +804,7 @@
           </div>
           <div class="form-group">
             <label>Punto de Referencia</label>
-            <input type="text" id="custRef" class="form-control" placeholder="Ej: Frente al parque..."></input>
+            <input type="text" id="custRef" class="form-control" placeholder="Ej: Frente al parque...">
           </div>
         </div>
 
@@ -924,6 +925,7 @@
     const clientOrdersTab = document.getElementById('clientOrdersTab');
     const clientProfileTab = document.getElementById('clientProfileTab');
     const clientOrdersList = document.getElementById('clientOrdersList');
+    const adminOrdersList = document.getElementById('adminOrdersList');
 
     function refreshIcons() {
       if (window.lucide) window.lucide.createIcons();
@@ -994,6 +996,7 @@
       adminView.classList.remove('hidden');
       userHeaderArea.innerText = "FrankR (Admin)";
       bottomNav.classList.add('hidden');
+      loadAdminOrders();
       refreshIcons();
     }
 
@@ -1248,7 +1251,7 @@
       updateCart();
     };
 
-    // ENVÍO DE PEDIDO MULTIPLATAFORMA (iOS / Android / Web)
+    // ENVÍO DE PEDIDO Y AUTO-GUARDADO DE DIRECCIÓN AL COMPRAR
     checkoutForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
@@ -1268,6 +1271,7 @@
           return;
         }
 
+        // Auto-guardar la dirección en Perfil para futuras compras
         const autoSaveAddress = { address, ref: reference };
         localStorage.setItem(`st_address_${currentUser.phone}`, JSON.stringify(autoSaveAddress));
         document.getElementById('profileAddress').value = address;
@@ -1327,25 +1331,8 @@
         cartModal.classList.remove('active');
         checkoutForm.reset();
 
-        // CONSTRUCCIÓN DE ENLACE MULTIPLATAFORMA OPTIMIZADO PARA iOS / ANDROID / WEB
-        const encodedText = encodeURIComponent(msg);
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-        let waUrl = "";
-        if (isIOS) {
-          // Formato preferido por iOS Safari/App para redirección nativa limpia
-          waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedText}`;
-        } else if (isMobile) {
-          // Formato estándar universal de Android
-          waUrl = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodedText}`;
-        } else {
-          // Web / Escritorio
-          waUrl = `https://web.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodedText}`;
-        }
-
-        // Redirección por redirección directa para saltar bloqueos de pop-up post-async en iOS
-        window.location.href = waUrl;
+        const waUrl = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodeURIComponent(msg)}`;
+        window.open(waUrl, '_blank');
 
       } catch (err) {
         alert("Ocurrió un error al registrar el pedido.");
@@ -1399,6 +1386,88 @@
 
       } catch (err) {
         clientOrdersList.innerHTML = '<p style="text-align: center;">Error al obtener tus pedidos.</p>';
+      }
+    }
+
+    // Cargar Pedidos para Administrador con botón de WhatsApp por pedido
+    async function loadAdminOrders() {
+      adminOrdersList.innerHTML = '<p style="text-align: center; color: var(--text-muted);">Cargando pedidos de la tienda...</p>';
+      try {
+        const querySnapshot = await getDocs(collection(db, "ordenes"));
+        adminOrdersList.innerHTML = '';
+
+        if (querySnapshot.empty) {
+          adminOrdersList.innerHTML = '<p style="text-align: center; color: var(--text-muted);">No hay pedidos registrados.</p>';
+          return;
+        }
+
+        let orders = [];
+        querySnapshot.forEach(docSnap => orders.push({ id: docSnap.id, ...docSnap.data() }));
+        orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        orders.forEach(order => {
+          const statusClass = getStatusClass(order.estado);
+          let itemsListStr = "";
+          let itemsHtml = order.items.map(i => {
+            const iTotal = (parseFloat(i.precio || 0) * parseInt(i.cantidad || 1)).toFixed(2);
+            itemsListStr += `• ${i.nombre} (x${i.cantidad}) - $${iTotal}\n`;
+            return `<div>- ${i.nombre} (x${i.cantidad}) - $${iTotal}</div>`;
+          }).join('');
+
+          const msg = `🛍️ *DETALLE DE PEDIDO - SUPER TOÑITA*\n\n` +
+            `🆔 *Pedido ID:* #${order.id.slice(-5).toUpperCase()}\n` +
+            `👤 *Cliente:* ${order.clienteNombre}\n` +
+            `📞 *Teléfono:* ${order.clienteTelefono}\n` +
+            `🏪 *Sucursal:* ${order.sucursal || 'N/A'}\n` +
+            `🚚 *Entrega:* ${order.tipoEntrega}\n` +
+            `${order.tipoEntrega === 'Envío a Domicilio' ? `📍 *Dirección:* ${order.direccion}\n📌 *Ref:* ${order.referencia}\n` : ''}` +
+            `💳 *Método de Pago:* ${order.metodoPago}\n\n` +
+            `🛒 *Productos:*\n${itemsListStr}\n` +
+            `💵 *Subtotal:* $${parseFloat(order.subtotal || 0).toFixed(2)}\n` +
+            `🛵 *Envío:* $${parseFloat(order.envio || 0).toFixed(2)}\n` +
+            `💰 *TOTAL:* $${parseFloat(order.total).toFixed(2)}\n` +
+            `📌 *Estado:* ${order.estado}`;
+
+          const waUrl = `https://api.whatsapp.com/send?phone=${order.clienteTelefono || WHATSAPP_NUMBER}&text=${encodeURIComponent(msg)}`;
+
+          const card = document.createElement('div');
+          card.className = 'order-card';
+          card.innerHTML = `
+            <div class="order-header">
+              <div>
+                <strong>Pedido #${order.id.slice(-5).toUpperCase()}</strong>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">${order.fecha}</div>
+              </div>
+              <span class="status-badge ${statusClass}">${order.estado}</span>
+            </div>
+            <div style="font-size: 0.88rem; font-weight:700; margin-bottom: 0.2rem;">
+              👤 ${order.clienteNombre} (${order.clienteTelefono})
+            </div>
+            <div style="font-size: 0.82rem; color: var(--emerald-accent); font-weight:700; margin-bottom: 0.4rem;">
+              ${order.tipoEntrega} - ${order.sucursal}
+            </div>
+            ${order.tipoEntrega === 'Envío a Domicilio' ? `
+              <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem;">
+                📍 ${order.direccion} (Ref: ${order.referencia})
+              </div>
+            ` : ''}
+            <div style="font-size: 0.85rem; margin-bottom: 0.5rem; background: var(--bg-primary); padding: 0.5rem; border-radius: 8px;">
+              ${itemsHtml}
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem;">
+              <a href="${waUrl}" target="_blank" class="btn btn-sm btn-whatsapp-sm" style="text-decoration: none;">
+                <i data-lucide="message-circle" style="width:14px; height:14px;"></i> Abrir WhatsApp
+              </a>
+              <div style="font-weight: 800; font-size: 1.05rem; color: var(--brand-dark);">
+                Total: $${parseFloat(order.total).toFixed(2)}
+              </div>
+            </div>
+          `;
+          adminOrdersList.appendChild(card);
+        });
+
+      } catch (err) {
+        adminOrdersList.innerHTML = '<p style="text-align: center;">Error al obtener pedidos.</p>';
       }
     }
 
