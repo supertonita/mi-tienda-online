@@ -65,22 +65,11 @@
       gap: 0.4rem;
     }
 
-    .brand-title span {
-      color: var(--emerald-accent);
-    }
-
-    .user-greeting {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--emerald-dark);
-    }
+    .brand-title span { color: var(--emerald-accent); }
+    .user-greeting { font-size: 0.85rem; font-weight: 700; color: var(--emerald-dark); }
 
     /* Main Container */
-    .container {
-      max-width: 1000px;
-      margin: 1rem auto;
-      padding: 0 1rem;
-    }
+    .container { max-width: 1000px; margin: 1rem auto; padding: 0 1rem; }
 
     /* Branch Banner Bar */
     .branch-selector-bar {
@@ -254,11 +243,7 @@
       margin-top: 0.5rem;
     }
 
-    .price {
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: var(--brand-dark);
-    }
+    .price { font-size: 1.1rem; font-weight: 800; color: var(--brand-dark); }
 
     .out-tag {
       position: absolute;
@@ -327,7 +312,7 @@
     .btn-emerald:hover { background: var(--emerald-dark); }
     .btn-sm { padding: 0.45rem 0.75rem; font-size: 0.8rem; border-radius: 10px; }
     .btn-whatsapp { background: var(--whatsapp); color: white; width: 100%; padding: 1rem; font-size: 1rem; border-radius: var(--radius-md); margin-top: 1rem; }
-    .btn-whatsapp-sm { background: var(--whatsapp); color: white; }
+    .btn-whatsapp-sm { background: var(--whatsapp); color: white; text-decoration: none; }
     .btn-danger { background: var(--danger); }
     .btn-secondary { background: #e2e8f0; color: var(--text-main); }
 
@@ -466,13 +451,14 @@
       padding: 6px 0;
     }
 
-    .nav-item.active {
-      color: var(--emerald-accent);
-    }
+    .nav-item.active { color: var(--emerald-accent); }
+    .nav-item i { width: 20px; height: 20px; }
 
-    .nav-item i {
-      width: 20px;
-      height: 20px;
+    .admin-subnav {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+      overflow-x: auto;
     }
   </style>
 </head>
@@ -535,14 +521,10 @@
       <div id="clientCatalogTab">
         
         <!-- Carrusel de Banners Promocionales -->
-        <div class="banners-container">
+        <div class="banners-container" id="clientBannersContainer">
           <div class="banner-card">
             <h4>🔥 Ofertas de la Semana</h4>
             <p>Encuentra tus productos favoritos con precios especiales en todas las sucursales.</p>
-          </div>
-          <div class="banner-card" style="background: linear-gradient(135deg, #1e293b, #059669);">
-            <h4>🛵 Envíos Rápidos</h4>
-            <p>¡Realiza tu pedido y recíbelo en la puerta de tu casa por sólo $5.00!</p>
           </div>
         </div>
 
@@ -577,11 +559,7 @@
         <h2 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
           <i data-lucide="tag" style="color: var(--emerald-accent);"></i> Promociones Especiales
         </h2>
-        <div class="card" style="padding: 1.5rem; text-align: center;">
-          <i data-lucide="sparkles" style="width: 40px; height: 40px; color: var(--emerald-accent); margin: 0 auto 0.5rem auto;"></i>
-          <h3>¡Promociones Activas!</h3>
-          <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Disfruta de ofertas especiales en productos seleccionados.</p>
-        </div>
+        <div id="clientPromosList"></div>
       </div>
 
       <!-- Tab Mis Órdenes Cliente -->
@@ -601,14 +579,13 @@
           <h3 id="profileNameDisplay" style="text-align: center;">---</h3>
           <p id="profilePhoneDisplay" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; text-align: center;">---</p>
 
-          <!-- Formulario de Dirección Predeterminada -->
           <form id="profileAddressForm" style="margin-bottom: 1.5rem; text-align: left;">
             <h4 style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.75rem; font-weight: 700;">
               📍 Dirección Predeterminada para Envíos
             </h4>
             <div class="form-group">
               <label>Dirección exacta</label>
-              <textarea id="profileAddress" class="form-control" rows="2" placeholder=" "></textarea>
+              <textarea id="profileAddress" class="form-control" rows="2" placeholder=""></textarea>
             </div>
             <div class="form-group">
               <label>Punto de referencia</label>
@@ -626,8 +603,17 @@
       </div>
     </section>
 
-    <!-- 3. VISTA ADMINISTRADOR -->
+    <!-- 3. VISTA ADMINISTRADOR RESTAURADA Y MEJORADA -->
     <section id="adminView" class="hidden">
+      <!-- Subnavegación del Admin -->
+      <div class="admin-subnav">
+        <button class="btn btn-sm btn-emerald" id="adminTabOrdersBtn">Órdenes</button>
+        <button class="btn btn-sm btn-secondary" id="adminTabProductsBtn">Gestionar Productos</button>
+        <button class="btn btn-sm btn-secondary" id="adminTabPromosBtn">Promos por Sucursal</button>
+        <button class="btn btn-sm btn-danger" id="adminLogoutBtn">Salir</button>
+      </div>
+
+      <!-- 3.1 Pestaña Órdenes Admin -->
       <div id="adminOrdersTab">
         <h2 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
           <i data-lucide="list-checks" style="color: var(--emerald-accent);"></i> Gestión de Pedidos
@@ -635,6 +621,7 @@
         <div id="adminOrdersList"></div>
       </div>
 
+      <!-- 3.2 Pestaña Gestión de Productos (Restaurada con Editar/Eliminar) -->
       <div id="adminProductsTab" class="hidden">
         <div class="card" style="margin-bottom: 2rem; padding: 1.25rem; cursor: default;">
           <h4 id="formTitle" style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
@@ -708,11 +695,45 @@
         </h4>
         <div id="adminProductGrid" class="grid"></div>
       </div>
+
+      <!-- 3.3 NUEVA Pestaña Promociones Independientes por Sucursal -->
+      <div id="adminPromosTab" class="hidden">
+        <div class="card" style="margin-bottom: 2rem; padding: 1.25rem; cursor: default;">
+          <h4 style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+            <i data-lucide="tag" style="color: var(--emerald-accent);"></i> Crear Promoción por Sucursal
+          </h4>
+          <form id="promoForm">
+            <div class="form-group">
+              <label>Sucursal Destino</label>
+              <select id="promoBranch" class="form-control" required>
+                <option value="Todas">Todas las Sucursales</option>
+                <option value="Super Toñita Los Fuentes">Super Toñita Los Fuentes</option>
+                <option value="Super Toñita Corinto">Super Toñita Corinto</option>
+                <option value="Super Toñita Metapán">Super Toñita Metapán</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Título de la Promo</label>
+              <input type="text" id="promoTitle" class="form-control" placeholder="Ej: 2x1 en Bebidas" required>
+            </div>
+            <div class="form-group">
+              <label>Descripción / Detalle de la Oferta</label>
+              <textarea id="promoDesc" class="form-control" rows="2" placeholder="Ej: Válido sólo en tienda Corinto al presentar tu pedido app." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-emerald" style="width: 100%;">Publicar Promoción</button>
+          </form>
+        </div>
+
+        <h4 style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+          <i data-lucide="sparkles" style="width: 18px;"></i> Promociones Activas
+        </h4>
+        <div id="adminPromosList"></div>
+      </div>
     </section>
 
   </main>
 
-  <!-- NAVEGACIÓN FLOTANTE INFERIOR -->
+  <!-- NAVEGACIÓN FLOTANTE INFERIOR CLIENTE -->
   <nav id="bottomNav" class="bottom-nav hidden">
     <button class="nav-item active" id="navCatalogBtn">
       <i data-lucide="grid"></i>
@@ -856,6 +877,7 @@
     let cart = [];
     let currentUser = null;
     let allProducts = [];
+    let allPromos = [];
     let currentSelectedCategory = 'Todas';
     let currentBranch = 'Super Toñita Los Fuentes';
 
@@ -925,7 +947,18 @@
     const clientOrdersTab = document.getElementById('clientOrdersTab');
     const clientProfileTab = document.getElementById('clientProfileTab');
     const clientOrdersList = document.getElementById('clientOrdersList');
+    
+    // Elements Admin
+    const adminOrdersTab = document.getElementById('adminOrdersTab');
+    const adminProductsTab = document.getElementById('adminProductsTab');
+    const adminPromosTab = document.getElementById('adminPromosTab');
     const adminOrdersList = document.getElementById('adminOrdersList');
+    const adminProductGrid = document.getElementById('adminProductGrid');
+    const adminPromosList = document.getElementById('adminPromosList');
+    const productForm = document.getElementById('productForm');
+    const formTitle = document.getElementById('formTitle');
+    const cancelFormBtn = document.getElementById('cancelFormBtn');
+    const promoForm = document.getElementById('promoForm');
 
     function refreshIcons() {
       if (window.lucide) window.lucide.createIcons();
@@ -941,6 +974,7 @@
         return cartItem;
       });
       filterAndRenderProducts();
+      renderBranchPromos();
       updateCart();
     });
 
@@ -964,7 +998,7 @@
       }
     });
 
-    // LOGIN CON BIENVENIDA PERSONALIZADA Y AUTO-LLENADO DE DIRECCIÓN
+    // LOGIN
     accessForm.addEventListener('submit', (e) => {
       e.preventDefault();
       const name = document.getElementById('accessName').value.trim();
@@ -996,7 +1030,7 @@
       adminView.classList.remove('hidden');
       userHeaderArea.innerText = "FrankR (Admin)";
       bottomNav.classList.add('hidden');
-      loadAdminOrders();
+      switchAdminSubTab('orders');
       refreshIcons();
     }
 
@@ -1011,23 +1045,48 @@
       document.getElementById('profileNameDisplay').innerText = currentUser.name;
       document.getElementById('profilePhoneDisplay').innerText = currentUser.phone;
 
-      // Cargar dirección del cliente guardada previamente por su teléfono
       const savedAddressData = JSON.parse(localStorage.getItem(`st_address_${currentUser.phone}`) || '{}');
-      
       if (savedAddressData.address) {
         document.getElementById('profileAddress').value = savedAddressData.address;
         document.getElementById('profileRef').value = savedAddressData.ref || '';
-        
-        // Auto-llenar campos del checkout en el carrito
         document.getElementById('custAddress').value = savedAddressData.address;
         document.getElementById('custRef').value = savedAddressData.ref || '';
       }
 
       switchClientTab('catalog');
+      loadPromos();
       refreshIcons();
     }
 
-    // Guardar Dirección desde la pestaña de Perfil
+    // SUB-NAVEGACIÓN DE ADMINISTRADOR
+    document.getElementById('adminTabOrdersBtn').addEventListener('click', () => switchAdminSubTab('orders'));
+    document.getElementById('adminTabProductsBtn').addEventListener('click', () => switchAdminSubTab('products'));
+    document.getElementById('adminTabPromosBtn').addEventListener('click', () => switchAdminSubTab('promos'));
+    document.getElementById('adminLogoutBtn').addEventListener('click', () => logoutBtn.click());
+
+    function switchAdminSubTab(tab) {
+      [adminOrdersTab, adminProductsTab, adminPromosTab].forEach(t => t.classList.add('hidden'));
+      document.getElementById('adminTabOrdersBtn').className = 'btn btn-sm btn-secondary';
+      document.getElementById('adminTabProductsBtn').className = 'btn btn-sm btn-secondary';
+      document.getElementById('adminTabPromosBtn').className = 'btn btn-sm btn-secondary';
+
+      if (tab === 'orders') {
+        adminOrdersTab.classList.remove('hidden');
+        document.getElementById('adminTabOrdersBtn').className = 'btn btn-sm btn-emerald';
+        loadAdminOrders();
+      } else if (tab === 'products') {
+        adminProductsTab.classList.remove('hidden');
+        document.getElementById('adminTabProductsBtn').className = 'btn btn-sm btn-emerald';
+        loadAdminProducts();
+      } else if (tab === 'promos') {
+        adminPromosTab.classList.remove('hidden');
+        document.getElementById('adminTabPromosBtn').className = 'btn btn-sm btn-emerald';
+        loadAdminPromos();
+      }
+      refreshIcons();
+    }
+
+    // Guardar Dirección desde Perfil
     document.getElementById('profileAddressForm').addEventListener('submit', (e) => {
       e.preventDefault();
       const address = document.getElementById('profileAddress').value.trim();
@@ -1036,11 +1095,10 @@
       const addressData = { address, ref };
       localStorage.setItem(`st_address_${currentUser.phone}`, JSON.stringify(addressData));
 
-      // Sincronizar también con el modal del carrito
       document.getElementById('custAddress').value = address;
       document.getElementById('custRef').value = ref;
 
-      alert('¡Dirección guardada con éxito! Se usará en tus próximos pedidos.');
+      alert('¡Dirección guardada con éxito!');
     });
 
     logoutBtn.addEventListener('click', () => {
@@ -1056,7 +1114,7 @@
       refreshIcons();
     });
 
-    // CONTROL DE NAVEGACIÓN FLOTANTE INFERIOR
+    // NAVEGACIÓN CLIENTE
     navCatalogBtn.addEventListener('click', () => switchClientTab('catalog'));
     navPromosBtn.addEventListener('click', () => switchClientTab('promos'));
     navCartBtn.addEventListener('click', () => cartModal.classList.add('active'));
@@ -1074,6 +1132,7 @@
       } else if (tab === 'promos') {
         navPromosBtn.classList.add('active');
         clientPromosTab.classList.remove('hidden');
+        renderBranchPromos();
       } else if (tab === 'orders') {
         navOrdersBtn.classList.add('active');
         clientOrdersTab.classList.remove('hidden');
@@ -1251,7 +1310,7 @@
       updateCart();
     };
 
-    // ENVÍO DE PEDIDO Y AUTO-GUARDADO DE DIRECCIÓN AL COMPRAR
+    // ENVÍO DE PEDIDO (CORREGIDO COMPATIBILIDAD iOS CHROME/SAFARI)
     checkoutForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
@@ -1271,7 +1330,6 @@
           return;
         }
 
-        // Auto-guardar la dirección en Perfil para futuras compras
         const autoSaveAddress = { address, ref: reference };
         localStorage.setItem(`st_address_${currentUser.phone}`, JSON.stringify(autoSaveAddress));
         document.getElementById('profileAddress').value = address;
@@ -1331,8 +1389,9 @@
         cartModal.classList.remove('active');
         checkoutForm.reset();
 
-        const waUrl = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodeURIComponent(msg)}`;
-        window.open(waUrl, '_blank');
+        // CONEXIÓN DIRECTA CORREGIDA PARA iOS Y CHROME
+        const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+        window.location.href = waUrl;
 
       } catch (err) {
         alert("Ocurrió un error al registrar el pedido.");
@@ -1389,7 +1448,106 @@
       }
     }
 
-    // Cargar Pedidos para Administrador con botón de WhatsApp por pedido
+    // GESTIÓN COMPLETA ADMINISTRADOR: PRODUCTOS RESTAURADA
+    async function loadAdminProducts() {
+      adminProductGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Cargando productos del catálogo...</p>';
+      try {
+        const querySnapshot = await getDocs(collection(db, "productos"));
+        allProducts = [];
+        querySnapshot.forEach(docSnap => allProducts.push({ id: docSnap.id, ...docSnap.data() }));
+        renderAdminProducts(allProducts);
+      } catch (e) {
+        adminProductGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Error al cargar productos.</p>';
+      }
+    }
+
+    function renderAdminProducts(products) {
+      adminProductGrid.innerHTML = '';
+      products.forEach(item => {
+        const rawImg = item.imagenUrl1 || item.imagenUrl || '';
+        const mainImg = fixDriveUrl(rawImg) || 'https://via.placeholder.com/200?text=Super+To%C3%B1ita';
+
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <img src="${mainImg}" alt="${item.nombre}">
+          <div class="category-label">${item.categoria || 'General'}</div>
+          <h3>${item.nombre}</h3>
+          <div style="font-size: 0.75rem; color: var(--text-muted); margin: 0.3rem 0;">
+            L. Fuentes: $${parseFloat(item.precioLosFuentes ?? item.precio ?? 0).toFixed(2)} | Corinto: $${parseFloat(item.precioCorinto ?? item.precio ?? 0).toFixed(2)} | Metapán: $${parseFloat(item.precioMetapan ?? item.precio ?? 0).toFixed(2)}
+          </div>
+          <div style="display: flex; gap: 0.3rem; margin-top: 0.5rem;">
+            <button class="btn btn-sm btn-secondary" style="flex: 1;" onclick="editProduct('${item.id}')">Editar</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteProduct('${item.id}')">✕</button>
+          </div>
+        `;
+        adminProductGrid.appendChild(card);
+      });
+      refreshIcons();
+    }
+
+    productForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('prodId').value;
+      const data = {
+        nombre: document.getElementById('prodName').value.trim(),
+        categoria: document.getElementById('prodCategory').value,
+        stock: document.getElementById('prodStock').value,
+        precioLosFuentes: parseFloat(document.getElementById('prodPriceLosFuentes').value || 0),
+        precioCorinto: parseFloat(document.getElementById('prodPriceCorinto').value || 0),
+        precioMetapan: parseFloat(document.getElementById('prodPriceMetapan').value || 0),
+        descripcion: document.getElementById('prodDesc').value.trim(),
+        imagenUrl1: document.getElementById('prodImg1').value.trim(),
+        imagenUrl2: document.getElementById('prodImg2').value.trim()
+      };
+
+      try {
+        if (id) {
+          await updateDoc(doc(db, "productos", id), data);
+        } else {
+          await addDoc(collection(db, "productos"), data);
+        }
+        resetForm();
+        loadAdminProducts();
+      } catch (err) {
+        alert("Error al guardar producto.");
+      }
+    });
+
+    window.editProduct = (id) => {
+      const item = allProducts.find(p => p.id === id);
+      if (!item) return;
+
+      document.getElementById('prodId').value = item.id;
+      document.getElementById('prodName').value = item.nombre;
+      document.getElementById('prodCategory').value = item.categoria || 'Productos Toñita';
+      document.getElementById('prodStock').value = item.stock || 'Disponible';
+      document.getElementById('prodPriceLosFuentes').value = item.precioLosFuentes ?? item.precio ?? 0;
+      document.getElementById('prodPriceCorinto').value = item.precioCorinto ?? item.precio ?? 0;
+      document.getElementById('prodPriceMetapan').value = item.precioMetapan ?? item.precio ?? 0;
+      document.getElementById('prodDesc').value = item.descripcion || '';
+      document.getElementById('prodImg1').value = item.imagenUrl1 || item.imagenUrl || '';
+      document.getElementById('prodImg2').value = item.imagenUrl2 || '';
+
+      formTitle.innerText = "Editar Producto";
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.deleteProduct = async (id) => {
+      if (confirm("¿Estás seguro de eliminar este producto?")) {
+        await deleteDoc(doc(db, "productos", id));
+        loadAdminProducts();
+      }
+    };
+
+    function resetForm() {
+      document.getElementById('prodId').value = '';
+      productForm.reset();
+      formTitle.innerText = "Agregar Nuevo Producto";
+    }
+    cancelFormBtn.addEventListener('click', resetForm);
+
+    // GESTIÓN DE PEDIDOS ADMIN
     async function loadAdminOrders() {
       adminOrdersList.innerHTML = '<p style="text-align: center; color: var(--text-muted);">Cargando pedidos de la tienda...</p>';
       try {
@@ -1428,7 +1586,7 @@
             `💰 *TOTAL:* $${parseFloat(order.total).toFixed(2)}\n` +
             `📌 *Estado:* ${order.estado}`;
 
-          const waUrl = `https://api.whatsapp.com/send?phone=${order.clienteTelefono || WHATSAPP_NUMBER}&text=${encodeURIComponent(msg)}`;
+          const waUrl = `https://wa.me/${order.clienteTelefono || WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 
           const card = document.createElement('div');
           card.className = 'order-card';
@@ -1438,7 +1596,12 @@
                 <strong>Pedido #${order.id.slice(-5).toUpperCase()}</strong>
                 <div style="font-size: 0.75rem; color: var(--text-muted);">${order.fecha}</div>
               </div>
-              <span class="status-badge ${statusClass}">${order.estado}</span>
+              <select onchange="updateOrderStatus('${order.id}', this.value)" class="branch-select" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">
+                <option value="Pendiente" ${order.estado === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
+                <option value="En camino" ${order.estado === 'En camino' ? 'selected' : ''}>En camino</option>
+                <option value="Entregado" ${order.estado === 'Entregado' ? 'selected' : ''}>Entregado</option>
+                <option value="Cancelado" ${order.estado === 'Cancelado' ? 'selected' : ''}>Cancelado</option>
+              </select>
             </div>
             <div style="font-size: 0.88rem; font-weight:700; margin-bottom: 0.2rem;">
               👤 ${order.clienteNombre} (${order.clienteTelefono})
@@ -1455,7 +1618,7 @@
               ${itemsHtml}
             </div>
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem;">
-              <a href="${waUrl}" target="_blank" class="btn btn-sm btn-whatsapp-sm" style="text-decoration: none;">
+              <a href="${waUrl}" target="_blank" class="btn btn-sm btn-whatsapp-sm">
                 <i data-lucide="message-circle" style="width:14px; height:14px;"></i> Abrir WhatsApp
               </a>
               <div style="font-weight: 800; font-size: 1.05rem; color: var(--brand-dark);">
@@ -1470,6 +1633,133 @@
         adminOrdersList.innerHTML = '<p style="text-align: center;">Error al obtener pedidos.</p>';
       }
     }
+
+    window.updateOrderStatus = async (orderId, newStatus) => {
+      try {
+        await updateDoc(doc(db, "ordenes", orderId), { estado: newStatus });
+        loadAdminOrders();
+      } catch (err) {
+        alert("No se pudo actualizar el estado de la orden.");
+      }
+    };
+
+    // GESTIÓN DE PROMOCIONES INDEPENDIENTES POR SUCURSAL
+    async function loadPromos() {
+      try {
+        const querySnapshot = await getDocs(collection(db, "promociones"));
+        allPromos = [];
+        querySnapshot.forEach(docSnap => allPromos.push({ id: docSnap.id, ...docSnap.data() }));
+        renderBranchPromos();
+      } catch (e) {}
+    }
+
+    function renderBranchPromos() {
+      const activePromos = allPromos.filter(p => p.sucursal === 'Todas' || p.sucursal === currentBranch);
+      
+      // Banners superiores del Catálogo
+      const bannersContainer = document.getElementById('clientBannersContainer');
+      if (activePromos.length > 0) {
+        bannersContainer.innerHTML = activePromos.map(p => `
+          <div class="banner-card">
+            <h4>🔥 ${p.titulo}</h4>
+            <p>${p.descripcion}</p>
+            <small style="font-size: 0.7rem; opacity: 0.8; margin-top: 0.3rem;">Válido en: ${p.sucursal}</small>
+          </div>
+        `).join('');
+      } else {
+        bannersContainer.innerHTML = `
+          <div class="banner-card">
+            <h4>🔥 Ofertas de la Semana</h4>
+            <p>Encuentra tus productos favoritos con precios especiales en ${currentBranch}.</p>
+          </div>
+        `;
+      }
+
+      // Tab Promociones Cliente
+      const clientPromosList = document.getElementById('clientPromosList');
+      if (activePromos.length === 0) {
+        clientPromosList.innerHTML = `
+          <div class="card" style="padding: 1.5rem; text-align: center;">
+            <i data-lucide="sparkles" style="width: 40px; height: 40px; color: var(--emerald-accent); margin: 0 auto 0.5rem auto;"></i>
+            <h3>¡Sin promos específicas hoy!</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Explora nuestro catálogo con los mejores precios en ${currentBranch}.</p>
+          </div>
+        `;
+      } else {
+        clientPromosList.innerHTML = activePromos.map(p => `
+          <div class="card" style="padding: 1.25rem; margin-bottom: 1rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="category-label" style="color: var(--emerald-accent); font-weight:800;">${p.sucursal}</span>
+              <i data-lucide="tag" style="color: var(--emerald-accent); width:18px;"></i>
+            </div>
+            <h3 style="font-size: 1.1rem; margin: 0.3rem 0;">${p.titulo}</h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted);">${p.descripcion}</p>
+          </div>
+        `).join('');
+      }
+      refreshIcons();
+    }
+
+    async function loadAdminPromos() {
+      adminPromosList.innerHTML = '<p style="text-align: center;">Cargando promociones...</p>';
+      try {
+        const querySnapshot = await getDocs(collection(db, "promociones"));
+        allPromos = [];
+        querySnapshot.forEach(docSnap => allPromos.push({ id: docSnap.id, ...docSnap.data() }));
+        
+        adminPromosList.innerHTML = '';
+        if (allPromos.length === 0) {
+          adminPromosList.innerHTML = '<p style="text-align: center; color: var(--text-muted);">No hay promociones activas.</p>';
+          return;
+        }
+
+        allPromos.forEach(p => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.style.marginBottom = '0.75rem';
+          card.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <div>
+                <span class="category-label" style="color: var(--emerald-accent); font-weight: 800;">${p.sucursal}</span>
+                <h3 style="font-size: 1rem; margin: 0.2rem 0;">${p.titulo}</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">${p.descripcion}</p>
+              </div>
+              <button class="btn btn-sm btn-danger" onclick="deletePromo('${p.id}')">Eliminar</button>
+            </div>
+          `;
+          adminPromosList.appendChild(card);
+        });
+      } catch (err) {
+        adminPromosList.innerHTML = '<p style="text-align: center;">Error al cargar ofertas.</p>';
+      }
+    }
+
+    promoForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const newPromo = {
+        sucursal: document.getElementById('promoBranch').value,
+        titulo: document.getElementById('promoTitle').value.trim(),
+        descripcion: document.getElementById('promoDesc').value.trim(),
+        createdAt: new Date().toISOString()
+      };
+
+      try {
+        await addDoc(collection(db, "promociones"), newPromo);
+        promoForm.reset();
+        loadAdminPromos();
+        loadPromos();
+      } catch (err) {
+        alert("Error al guardar la promoción.");
+      }
+    });
+
+    window.deletePromo = async (id) => {
+      if (confirm("¿Deseas eliminar esta promoción?")) {
+        await deleteDoc(doc(db, "promociones", id));
+        loadAdminPromos();
+        loadPromos();
+      }
+    };
 
     function getStatusClass(status) {
       switch (status) {
