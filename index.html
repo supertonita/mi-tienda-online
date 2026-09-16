@@ -84,6 +84,40 @@
       padding: 0 1rem;
     }
 
+    /* Branch Banner Bar */
+    .branch-selector-bar {
+      background: var(--brand-dark);
+      color: white;
+      padding: 0.85rem 1rem;
+      border-radius: var(--radius-md);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .branch-selector-bar label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .branch-select {
+      background: #334155;
+      color: white;
+      border: 1px solid #475569;
+      padding: 0.45rem 0.75rem;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      outline: none;
+      cursor: pointer;
+    }
+
     /* Tabs de Navegación */
     .nav-tabs {
       display: flex;
@@ -167,50 +201,6 @@
       background: var(--brand-dark);
       color: white;
       border-color: var(--brand-dark);
-    }
-
-    /* Banner Carrusel */
-    .promo-carousel {
-      display: flex;
-      gap: 1rem;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      padding-bottom: 0.5rem;
-      margin-bottom: 1.5rem;
-      -webkit-overflow-scrolling: touch;
-    }
-    .promo-carousel::-webkit-scrollbar { display: none; }
-
-    .banner-card {
-      min-width: 82%;
-      scroll-snap-align: center;
-      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-      color: white;
-      border-radius: var(--radius-lg);
-      padding: 1.25rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: var(--shadow-card);
-    }
-    @media (min-width: 640px) { .banner-card { min-width: 48%; } }
-
-    .banner-card.accent {
-      background: linear-gradient(135deg, #059669 0%, #047857 100%);
-    }
-
-    .banner-text h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.25rem; }
-    .banner-text p { font-size: 0.8rem; opacity: 0.9; }
-
-    .banner-tag {
-      background: rgba(255, 255, 255, 0.2);
-      padding: 0.25rem 0.6rem;
-      border-radius: 99px;
-      font-size: 0.7rem;
-      font-weight: 600;
-      display: inline-block;
-      margin-bottom: 0.5rem;
-      text-transform: uppercase;
     }
 
     /* Grid Limpio */
@@ -455,6 +445,12 @@
 
     .form-control:focus { border-color: var(--emerald-accent); background: white; }
 
+    .price-grid-inputs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+    }
+
     .cart-badge {
       background: var(--emerald-accent);
       color: white;
@@ -544,7 +540,7 @@
         <form id="accessForm">
           <div class="form-group">
             <label>Nombre Completo</label>
-            <input type="text" id="accessName" class="form-control" placeholder="Tu Nombre" required>
+            <input type="text" id="accessName" class="form-control" placeholder="Tu Noombre" required>
           </div>
           <div class="form-group">
             <label>Teléfono </label>
@@ -559,6 +555,19 @@
 
     <!-- 2. VISTA CLIENTE -->
     <section id="clientView" class="hidden">
+
+      <!-- Selector de Sucursal Principal -->
+      <div class="branch-selector-bar">
+        <label for="globalBranchSelect">
+          <i data-lucide="map-pin" style="color: var(--emerald-accent);"></i> Sucursal de Compra:
+        </label>
+        <select id="globalBranchSelect" class="branch-select">
+          <option value="Super Toñita Los Fuentes">Super Toñita Los Fuentes</option>
+          <option value="Super Toñita Corinto">Super Toñita Corinto</option>
+          <option value="Super Toñita Metapán">Super Toñita Metapán</option>
+        </select>
+      </div>
+
       <!-- Tabs Navegación Cliente -->
       <div class="nav-tabs">
         <button class="tab-btn active" id="tabClientCatalogBtn">
@@ -579,34 +588,14 @@
         <!-- Barra de Categorías -->
         <div class="categories-bar" id="categoriesBar">
           <button class="cat-chip active" onclick="filterByCategory('Todas')">Todas</button>
-          <button class="cat-chip" onclick="filterByCategory('Productos Toñita')">Productos Toñita</button>
+          <button class="cat-chip" onclick="filterByCategory('Productos Toñita')">Prouctos Toñita</button>
           <button class="cat-chip" onclick="filterByCategory('Abarrotes')">Abarrotes</button>
           <button class="cat-chip" onclick="filterByCategory('Bebidas')">Bebidas</button>
-          <button class="cat-chip" onclick="filterByCategory('Galletas / Snacks')">galletas  / Snacks</button>
+          <button class="cat-chip" onclick="filterByCategory('Galletas / Snacks')">Galletas / Snacks</button>
           <button class="cat-chip" onclick="filterByCategory('Embutidos / Lácteos')">Embutidos / Lácteos</button>
           <button class="cat-chip" onclick="filterByCategory('Limpieza')">Limpieza</button>
+          <button class="cat-chip" onclick="filterByCategory('Aseo personal')">Aseo Personal</button>
           <button class="cat-chip" onclick="filterByCategory('Otros')">Otros</button>
-          <button class="cat-chip" onclick="filterByCategory('Aseo Personal')">Aseo Personal</button>
-        </div>
-
-        <div class="promo-carousel">
-          <div class="banner-card accent">
-            <div class="banner-text">
-              <span class="banner-tag">Opción de Recoger</span>
-              <h3>Sin Cobro de Envío</h3>
-              <p>Retira en Los Fuentes, Corinto o Metapán</p>
-            </div>
-            <i data-lucide="store" style="width: 42px; height: 42px; opacity: 0.8;"></i>
-          </div>
-
-          <div class="banner-card">
-            <div class="banner-text">
-              <span class="banner-tag">Envíos Rápidos</span>
-              <h3>A Domicilio</h3>
-              <p>Solo $4.00 directo hasta tu casa</p>
-            </div>
-            <i data-lucide="truck" style="width: 42px; height: 42px; color: var(--emerald-accent);"></i>
-          </div>
         </div>
 
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
@@ -667,30 +656,44 @@
                 <option value="Productos Toñita">Productos Toñita</option>
                 <option value="Abarrotes">Abarrotes</option>
                 <option value="Bebidas">Bebidas</option>
-                <option value="Galletas / Snacks">Galletas / Snacks</option>
+                <option value="Botanas / Snacks">Botanas / Snacks</option>
                 <option value="Embutidos / Lácteos">Embutidos / Lácteos</option>
                 <option value="Limpieza">Limpieza</option>
-                <option value="Otros">Otros</option>
                 <option value="Aseo Personal">Aseo Personal</option>
+                <option value="Otros">Otros</option>
               </select>
             </div>
 
             <div class="form-group">
               <label>Estado de Disponibilidad</label>
               <select id="prodStock" class="form-control" required>
-                <option value="Disponible">Disponible</option>
-                <option value="Agotado">Agotado</option>
+                <option value="Disponible"> Disponible</option>
+                <option value="Agotado"> Agotado</option>
               </select>
+            </div>
+
+            <!-- PRECIOS DIFERENCIADOS POR SUCURSAL -->
+            <div class="form-group">
+              <label>Precios por Sucursal ($)</label>
+              <div class="price-grid-inputs">
+                <div>
+                  <small style="color: var(--text-muted); font-size: 0.7rem; font-weight: 700;">LOS FUENTES</small>
+                  <input type="number" step="0.01" id="prodPriceLosFuentes" class="form-control" placeholder="0.00" required>
+                </div>
+                <div>
+                  <small style="color: var(--text-muted); font-size: 0.7rem; font-weight: 700;">CORINTO</small>
+                  <input type="number" step="0.01" id="prodPriceCorinto" class="form-control" placeholder="0.00" required>
+                </div>
+                <div>
+                  <small style="color: var(--text-muted); font-size: 0.7rem; font-weight: 700;">METAPÁN</small>
+                  <input type="number" step="0.01" id="prodPriceMetapan" class="form-control" placeholder="0.00" required>
+                </div>
+              </div>
             </div>
 
             <div class="form-group">
               <label>Descripción</label>
               <textarea id="prodDesc" class="form-control" rows="2" placeholder="Detalles o peso..." required></textarea>
-            </div>
-
-            <div class="form-group">
-              <label>Precio ($)</label>
-              <input type="number" step="0.01" id="prodPrice" class="form-control" placeholder="0.00" required>
             </div>
 
             <div class="form-group">
@@ -754,7 +757,7 @@
           <span>$<span id="shippingPrice">4.00</span></span>
         </div>
         <div class="total">
-          <span>Total a Pagas:</span>
+          <span>Total a Pagar:</span>
           <span>$<span id="totalPrice">4.00</span></span>
         </div>
       </div>
@@ -783,26 +786,16 @@
           </select>
         </div>
 
-        <!-- Selección Sucursal -->
-        <div class="form-group hidden" id="branchSelectGroup">
-          <label>Sucursal para Retiro</label>
-          <select id="pickupBranch" class="form-control">
-            <option value="Super Toñita Los Fuentes">Super Toñita Los Fuentes</option>
-            <option value="Super Toñita Corinto">Super Toñita Corinto</option>
-            <option value="Super Toñita Metapán">Super Toñita Metapán</option>
-          </select>
-        </div>
-
         <!-- Campos de Dirección -->
         <div id="addressFieldsGroup">
           <div class="form-group">
             <label>Dirección del Domicilio</label>
-            <textarea id="custAddress" class="form-control" rows="2" placeholder="Barrio, colonia, pasaje, # de casa..."></textarea>
+            <textarea id="custAddress" class="form-control" rows="2" placeholder=""></textarea>
           </div>
 
           <div class="form-group">
             <label>Punto de Referencia</label>
-            <input type="text" id="custRef" class="form-control" placeholder="Ej: Cerca de la tienda, portón negro...">
+            <input type="text" id="custRef" class="form-control" placeholder=""></input>
           </div>
         </div>
 
@@ -810,16 +803,16 @@
         <div class="form-group">
           <label>Método de Pago</label>
           <select id="paymentMethod" class="form-control" required>
-            <option value="Pago Contra Entrega">Pago Contra Entrega / Al Recoger</option>
-            <option value="Transferencia Bancaria">Transferencia Bancaria</option>
+            <option value="Pago Contra Entrega"> Pago Contra Entrega / Al Recoger</option>
+            <option value="Transferencia Bancaria"> Transferencia Bancaria</option>
           </select>
         </div>
 
         <!-- Detalles de Transferencia -->
         <div id="bankDetailsBox" class="payment-info-box hidden">
           <strong>Datos para Transferencia:</strong><br>
-          • <b>Banco:</b> Banco Agrícola / Cuscatlán<br>
-          • <b>Nº de Cuenta:</b> 003001234567<br>
+          • <b>Banco:</b> Banco promerica <br>
+          • <b>Nº de Cuenta:</b> 0000000000<br>
           • <b>A nombre de:</b> Super Toñita<br>
           <small style="color: var(--text-muted); font-size: 0.78rem; display: block; margin-top: 0.3rem;">
             * Realiza la transferencia y envía el comprobante por WhatsApp al confirmar.
@@ -860,6 +853,7 @@
     let currentUser = null;
     let allProducts = [];
     let currentSelectedCategory = 'Todas';
+    let currentBranch = 'Super Toñita Los Fuentes';
 
     function fixDriveUrl(url) {
       if (!url) return '';
@@ -872,6 +866,17 @@
       return url;
     }
 
+    // Helper para obtener el precio dinámico de un producto según sucursal
+    function getProductPrice(item, branch = currentBranch) {
+      if (branch === 'Super Toñita Corinto') {
+        return parseFloat(item.precioCorinto ?? item.precio ?? 0);
+      } else if (branch === 'Super Toñita Metapán') {
+        return parseFloat(item.precioMetapan ?? item.precio ?? 0);
+      } else {
+        return parseFloat(item.precioLosFuentes ?? item.precio ?? 0);
+      }
+    }
+
     // DOM Elements
     const loginScreen = document.getElementById('loginScreen');
     const clientView = document.getElementById('clientView');
@@ -880,6 +885,7 @@
     const userNameDisplay = document.getElementById('userNameDisplay');
     const logoutBtn = document.getElementById('logoutBtn');
     
+    const globalBranchSelect = document.getElementById('globalBranchSelect');
     const accessForm = document.getElementById('accessForm');
     const productGrid = document.getElementById('productGrid');
     const adminProductGrid = document.getElementById('adminProductGrid');
@@ -901,7 +907,6 @@
     
     const checkoutForm = document.getElementById('checkoutForm');
     const deliveryType = document.getElementById('deliveryType');
-    const branchSelectGroup = document.getElementById('branchSelectGroup');
     const addressFieldsGroup = document.getElementById('addressFieldsGroup');
     const paymentMethod = document.getElementById('paymentMethod');
     const bankDetailsBox = document.getElementById('bankDetailsBox');
@@ -928,15 +933,30 @@
       if (window.lucide) window.lucide.createIcons();
     }
 
+    // Cambio de Sucursal Global por el cliente
+    globalBranchSelect.addEventListener('change', (e) => {
+      currentBranch = e.target.value;
+      
+      // Actualiza precios en el carrito según la nueva sucursal
+      cart = cart.map(cartItem => {
+        const originalProd = allProducts.find(p => p.id === cartItem.id);
+        if (originalProd) {
+          return { ...cartItem, precio: getProductPrice(originalProd) };
+        }
+        return cartItem;
+      });
+
+      filterAndRenderProducts();
+      updateCart();
+    });
+
     // Opciones Recoger en Tienda vs Envío
     deliveryType.addEventListener('change', (e) => {
       if (e.target.value === 'Recoger en Tienda') {
         currentShippingFee = 0.00;
-        branchSelectGroup.classList.remove('hidden');
         addressFieldsGroup.classList.add('hidden');
       } else {
         currentShippingFee = 4.00;
-        branchSelectGroup.classList.add('hidden');
         addressFieldsGroup.classList.remove('hidden');
       }
       shippingPrice.innerText = currentShippingFee.toFixed(2);
@@ -1103,7 +1123,8 @@
         const rawImg = item.imagenUrl1 || item.imagenUrl || '';
         const mainImg = fixDriveUrl(rawImg) || 'https://via.placeholder.com/200?text=Super+To%C3%B1ita';
         const isOutOfStock = item.stock === 'Agotado';
-        
+        const dynamicPrice = getProductPrice(item);
+
         const card = document.createElement('div');
         card.className = `card ${isOutOfStock ? 'out-of-stock' : ''}`;
         card.innerHTML = `
@@ -1114,8 +1135,8 @@
             <h3>${item.nombre}</h3>
           </div>
           <div class="price-row">
-            <span class="price">$${parseFloat(item.precio).toFixed(2)}</span>
-            <button class="btn btn-sm btn-emerald" ${isOutOfStock ? 'disabled' : ''} onclick="event.stopPropagation(); addToCart('${item.id}', '${item.nombre}', ${item.precio})">
+            <span class="price">$${dynamicPrice.toFixed(2)}</span>
+            <button class="btn btn-sm btn-emerald" ${isOutOfStock ? 'disabled' : ''} onclick="event.stopPropagation(); addToCart('${item.id}', '${item.nombre}', ${dynamicPrice})">
               ${isOutOfStock ? 'Agotado' : '+ Agregar'}
             </button>
           </div>
@@ -1133,6 +1154,7 @@
       const img1 = fixDriveUrl(item.imagenUrl1 || item.imagenUrl) || 'https://via.placeholder.com/400?text=Super+To%C3%B1ita';
       const img2 = fixDriveUrl(item.imagenUrl2);
       const isOutOfStock = item.stock === 'Agotado';
+      const dynamicPrice = getProductPrice(item);
 
       detailContent.innerHTML = `
         <div class="product-detail-img-wrapper">
@@ -1150,7 +1172,7 @@
           <span style="font-size: 0.75rem; font-weight:700; color: var(--emerald-accent); text-transform: uppercase;">${item.categoria || 'General'}</span>
           <h2 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 0.25rem;">${item.nombre}</h2>
           <p style="font-size: 1.4rem; font-weight: 800; color: var(--brand-dark); margin-bottom: 0.75rem;">
-            $${parseFloat(item.precio).toFixed(2)}
+            $${dynamicPrice.toFixed(2)} <small style="font-size:0.75rem; color:var(--text-muted); font-weight:400;">(${currentBranch})</small>
           </p>
           
           <div style="margin-bottom: 1.25rem;">
@@ -1158,7 +1180,7 @@
             <p style="font-size: 0.95rem; color: var(--text-main); line-height: 1.4;">${item.descripcion}</p>
           </div>
 
-          <button class="btn btn-emerald" style="width: 100%; padding: 0.9rem;" ${isOutOfStock ? 'disabled' : ''} onclick="addToCart('${item.id}', '${item.nombre}', ${item.precio}); productDetailModal.classList.remove('active');">
+          <button class="btn btn-emerald" style="width: 100%; padding: 0.9rem;" ${isOutOfStock ? 'disabled' : ''} onclick="addToCart('${item.id}', '${item.nombre}', ${dynamicPrice}); productDetailModal.classList.remove('active');">
             <i data-lucide="shopping-cart"></i> ${isOutOfStock ? 'Producto Agotado' : 'Agregar al Carrito'}
           </button>
         </div>
@@ -1235,7 +1257,6 @@
       sendOrderBtn.innerText = "Procesando pedido...";
 
       const dType = deliveryType.value;
-      const branch = document.getElementById('pickupBranch').value;
       const address = document.getElementById('custAddress').value.trim();
       const reference = document.getElementById('custRef').value.trim();
       const method = paymentMethod.value;
@@ -1260,15 +1281,11 @@
       const total = subtotal + currentShippingFee;
       const orderDate = new Date().toLocaleString('es-SV');
 
-      const deliveryInfo = dType === 'Recoger en Tienda' 
-        ? `Retiro en Sucursal: ${branch}` 
-        : `Dirección: ${address} (Ref: ${reference})`;
-
       const newOrder = {
         clienteNombre: currentUser.name,
         clienteTelefono: currentUser.phone,
         tipoEntrega: dType,
-        sucursal: dType === 'Recoger en Tienda' ? branch : 'N/A',
+        sucursal: currentBranch,
         direccion: dType === 'Envío a Domicilio' ? address : 'N/A',
         referencia: dType === 'Envío a Domicilio' ? reference : 'N/A',
         metodoPago: method,
@@ -1287,8 +1304,9 @@
         const msg = `🛍️ *SUPER TOÑITA ONLINE - NUEVO PEDIDO*\n\n` +
           `👤 *Cliente:* ${currentUser.name}\n` +
           `📞 *Teléfono:* ${currentUser.phone}\n` +
+          `🏪 *Sucursal:* ${currentBranch}\n` +
           `🚚 *Entrega:* ${dType}\n` +
-          `${dType === 'Recoger en Tienda' ? `🏪 *Sucursal:* ${branch}\n` : `📍 *Dirección:* ${address}\n📌 *Ref:* ${reference}\n`}` +
+          `${dType === 'Envío a Domicilio' ? `📍 *Dirección:* ${address}\n📌 *Ref:* ${reference}\n` : ''}` +
           `💳 *Método de Pago:* ${method}\n\n` +
           `🛒 *Detalle del Pedido:*\n${detailList}\n` +
           `💵 *Subtotal:* $${subtotal.toFixed(2)}\n` +
@@ -1342,7 +1360,7 @@
               <span class="status-badge ${statusClass}">${order.estado}</span>
             </div>
             <div style="font-size: 0.85rem; color: var(--emerald-accent); font-weight:700; margin-bottom: 0.3rem;">
-              ${order.tipoEntrega} ${order.sucursal !== 'N/A' ? `(${order.sucursal})` : ''}
+              ${order.tipoEntrega} (${order.sucursal})
             </div>
             <div style="font-size: 0.88rem; margin-bottom: 0.5rem;">${itemsHtml}</div>
             <div style="font-weight: 800; font-size: 1.05rem; color: var(--brand-dark); text-align: right;">
@@ -1389,8 +1407,8 @@
             </div>
 
             <div style="font-size: 0.88rem; margin-bottom: 0.5rem;">
+              <strong>Sucursal:</strong> ${order.sucursal}<br>
               <strong>Tipo:</strong> ${order.tipoEntrega}<br>
-              ${order.sucursal !== 'N/A' ? `<strong>Sucursal:</strong> ${order.sucursal}<br>` : ''}
               ${order.direccion !== 'N/A' ? `<strong>Dirección:</strong> ${order.direccion} (Ref: ${order.referencia})<br>` : ''}
               <strong>Pago:</strong> ${order.metodoPago}
             </div>
@@ -1454,6 +1472,10 @@
         const mainImg = fixDriveUrl(rawImg) || 'https://via.placeholder.com/100?text=Super+To%C3%B1ita';
         const isOutOfStock = item.stock === 'Agotado';
 
+        const pFuentes = parseFloat(item.precioLosFuentes ?? item.precio ?? 0).toFixed(2);
+        const pCorinto = parseFloat(item.precioCorinto ?? item.precio ?? 0).toFixed(2);
+        const pMetapan = parseFloat(item.precioMetapan ?? item.precio ?? 0).toFixed(2);
+
         const card = document.createElement('div');
         card.className = `card ${isOutOfStock ? 'out-of-stock' : ''}`;
         card.style.cursor = 'default';
@@ -1463,10 +1485,16 @@
             <img src="${mainImg}" alt="${item.nombre}" style="height: 120px; object-fit: contain;">
             <div class="category-label">${item.categoria || 'General'}</div>
             <h3>${item.nombre}</h3>
-            <p class="price">$${parseFloat(item.precio).toFixed(2)}</p>
+            
+            <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.4rem; background: var(--bg-primary); padding: 0.4rem; border-radius: 8px;">
+              <div>• <b>Los Fuentes:</b> $${pFuentes}</div>
+              <div>• <b>Corinto:</b> $${pCorinto}</div>
+              <div>• <b>Metapán:</b> $${pMetapan}</div>
+            </div>
           </div>
+
           <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
-            <button class="btn btn-sm btn-secondary" style="flex:1;" onclick="editProduct('${docSnap.id}', \`${item.nombre}\`, \`${item.categoria || 'Abarrotes'}\`, \`${item.stock || 'Disponible'}\`, \`${item.descripcion}\`, ${item.precio}, '${item.imagenUrl1 || item.imagenUrl || ''}', '${item.imagenUrl2 || ''}')">
+            <button class="btn btn-sm btn-secondary" style="flex:1;" onclick="editProduct('${docSnap.id}', \`${item.nombre}\`, \`${item.categoria || 'Abarrotes'}\`, \`${item.stock || 'Disponible'}\`, \`${item.descripcion}\`, ${pFuentes}, ${pCorinto}, ${pMetapan}, '${item.imagenUrl1 || item.imagenUrl || ''}', '${item.imagenUrl2 || ''}')">
               Editar
             </button>
             <button class="btn btn-sm btn-danger" onclick="deleteProduct('${docSnap.id}')">
@@ -1490,12 +1518,19 @@
       const rawImg1 = document.getElementById('prodImg1').value.trim();
       const rawImg2 = document.getElementById('prodImg2').value.trim();
 
+      const pLosFuentes = parseFloat(document.getElementById('prodPriceLosFuentes').value);
+      const pCorinto = parseFloat(document.getElementById('prodPriceCorinto').value);
+      const pMetapan = parseFloat(document.getElementById('prodPriceMetapan').value);
+
       const payload = {
         nombre: document.getElementById('prodName').value.trim(),
         categoria: document.getElementById('prodCategory').value,
         stock: document.getElementById('prodStock').value,
         descripcion: document.getElementById('prodDesc').value.trim(),
-        precio: parseFloat(document.getElementById('prodPrice').value),
+        precioLosFuentes: pLosFuentes,
+        precioCorinto: pCorinto,
+        precioMetapan: pMetapan,
+        precio: pLosFuentes, // Respaldo para mantener compatibilidad
         imagenUrl1: fixDriveUrl(rawImg1),
         imagenUrl2: fixDriveUrl(rawImg2)
       };
@@ -1516,13 +1551,15 @@
       }
     });
 
-    window.editProduct = (id, nombre, categoria, stock, descripcion, precio, img1, img2) => {
+    window.editProduct = (id, nombre, categoria, stock, descripcion, pFuentes, pCorinto, pMetapan, img1, img2) => {
       document.getElementById('prodId').value = id;
       document.getElementById('prodName').value = nombre;
       document.getElementById('prodCategory').value = categoria;
       document.getElementById('prodStock').value = stock;
       document.getElementById('prodDesc').value = descripcion;
-      document.getElementById('prodPrice').value = precio;
+      document.getElementById('prodPriceLosFuentes').value = pFuentes;
+      document.getElementById('prodPriceCorinto').value = pCorinto;
+      document.getElementById('prodPriceMetapan').value = pMetapan;
       document.getElementById('prodImg1').value = img1;
       document.getElementById('prodImg2').value = img2;
       document.getElementById('formTitle').innerText = "Editar Producto";
