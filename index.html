@@ -265,13 +265,15 @@
 
     .card.out-of-stock { opacity: 0.65; }
 
+    /* Imagen Vista Previa Sin Recortes */
     .card img {
       width: 100%;
       aspect-ratio: 1;
-      object-fit: cover;
+      object-fit: contain !important;
       border-radius: var(--radius-md);
-      background: var(--bg-primary);
+      background: #f8fafc;
       margin-bottom: 0.75rem;
+      border: 1px solid var(--border);
     }
 
     /* Imagen Promos */
@@ -354,6 +356,33 @@
     .status-encamino { background: #e0f2fe; color: #0284c7; }
     .status-entregado { background: #d1fae5; color: #059669; }
     .status-cancelado { background: #fee2e2; color: #dc2626; }
+
+    /* Filtros de Órdenes Admin */
+    .order-filter-pills {
+      display: flex;
+      gap: 0.4rem;
+      margin-bottom: 1rem;
+      overflow-x: auto;
+      padding-bottom: 0.4rem;
+    }
+
+    .order-filter-pill {
+      padding: 0.45rem 0.85rem;
+      border-radius: 99px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .order-filter-pill.active {
+      background: var(--brand-dark);
+      color: white;
+      border-color: var(--brand-dark);
+    }
 
     /* Botones */
     .btn {
@@ -474,7 +503,54 @@
       font-weight: 800;
     }
 
-    .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--border); }
+    /* Carrito y Detalle con Control Numérico de Cantidad */
+    .cart-item { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      padding: 0.85rem 0; 
+      border-bottom: 1px solid var(--border); 
+      gap: 0.5rem;
+    }
+
+    .cart-qty-control {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: var(--bg-primary);
+      padding: 0.25rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+
+    .cart-qty-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: none;
+      background: var(--surface);
+      color: var(--text-main);
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .cart-qty-btn:active { transform: scale(0.95); }
+
+    .cart-qty-input {
+      width: 45px;
+      text-align: center;
+      border: none;
+      background: transparent;
+      font-weight: 800;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
     .cart-summary { background: var(--bg-primary); padding: 1rem; border-radius: var(--radius-md); margin: 1rem 0; }
     .cart-summary div { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem; }
     .cart-summary .total { font-weight: 800; font-size: 1.15rem; color: var(--emerald-accent); border-top: 1px dashed var(--border); padding-top: 0.5rem; margin-bottom: 0; }
@@ -669,11 +745,21 @@
         <button class="btn btn-sm btn-danger" id="adminLogoutBtn">Salir</button>
       </div>
 
-      <!-- 3.1 Pestaña Órdenes Admin -->
+      <!-- 3.1 Pestaña Órdenes Admin Organizadas -->
       <div id="adminOrdersTab">
-        <h2 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+        <h2 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
           <i data-lucide="list-checks" style="color: var(--emerald-accent);"></i> Gestión de Pedidos
         </h2>
+
+        <!-- Filtros por Estado -->
+        <div class="order-filter-pills">
+          <button class="order-filter-pill active" onclick="filterAdminOrders('Todos', this)">Todos</button>
+          <button class="order-filter-pill" onclick="filterAdminOrders('Pendiente', this)">🟡 Pendientes</button>
+          <button class="order-filter-pill" onclick="filterAdminOrders('En camino', this)">🔵 En Camino</button>
+          <button class="order-filter-pill" onclick="filterAdminOrders('Entregado', this)">🟢 Entregados</button>
+          <button class="order-filter-pill" onclick="filterAdminOrders('Cancelado', this)">🔴 Cancelados</button>
+        </div>
+
         <div id="adminOrdersList"></div>
       </div>
 
@@ -703,13 +789,35 @@
                 <option value="Otros">Otros</option>
               </select>
             </div>
+
+            <!-- Disponibilidad por Sucursal -->
             <div class="form-group">
-              <label>Estado de Disponibilidad</label>
-              <select id="prodStock" class="form-control" required>
-                <option value="Disponible">Disponible</option>
-                <option value="Agotado">Agotado</option>
-              </select>
+              <label>Disponibilidad por Sucursal</label>
+              <div class="price-grid-inputs">
+                <div>
+                  <small style="color: var(--text-muted); font-size: 0.68rem; font-weight: 700;">LOS FUENTES</small>
+                  <select id="prodStockLosFuentes" class="form-control" style="padding: 0.5rem; font-size: 0.8rem;">
+                    <option value="Disponible">Disponible</option>
+                    <option value="Agotado">Agotado</option>
+                  </select>
+                </div>
+                <div>
+                  <small style="color: var(--text-muted); font-size: 0.68rem; font-weight: 700;">CORINTO</small>
+                  <select id="prodStockCorinto" class="form-control" style="padding: 0.5rem; font-size: 0.8rem;">
+                    <option value="Disponible">Disponible</option>
+                    <option value="Agotado">Agotado</option>
+                  </select>
+                </div>
+                <div>
+                  <small style="color: var(--text-muted); font-size: 0.68rem; font-weight: 700;">METAPÁN</small>
+                  <select id="prodStockMetapan" class="form-control" style="padding: 0.5rem; font-size: 0.8rem;">
+                    <option value="Disponible">Disponible</option>
+                    <option value="Agotado">Agotado</option>
+                  </select>
+                </div>
+              </div>
             </div>
+
             <div class="form-group">
               <label>Precios por Sucursal ($)</label>
               <div class="price-grid-inputs">
@@ -851,11 +959,11 @@
         </div>
         <div id="shippingRow">
           <span>Costo de Envío:</span>
-          <span>$<span id="shippingPrice">5.00</span></span>
+          <span>$<span id="shippingPrice">0.00</span></span>
         </div>
         <div class="total">
           <span>Total a Pagar:</span>
-          <span>$<span id="totalPrice">5.00</span></span>
+          <span>$<span id="totalPrice">0.00</span></span>
         </div>
       </div>
 
@@ -877,7 +985,8 @@
         <div class="form-group">
           <label>Tipo de Entrega</label>
           <select id="deliveryType" class="form-control" required>
-            <option value="Envío a Domicilio">Envío a Domicilio (+$5.00)</option>
+            <option value="Envío Local">Envío Local (Gratis / Cercano)</option>
+            <option value="Envío Departamental">Envío Departamental (+$5.00)</option>
             <option value="Recoger en Tienda">Recoger en Tienda (Gratis)</option>
           </select>
         </div>
@@ -936,15 +1045,18 @@
     const ADMIN_USER = "FrankR";
     const ADMIN_PASS = "199818";
     const WHATSAPP_NUMBER = "50370092996";
-    let currentShippingFee = 5.00;
+    let currentShippingFee = 0.00;
 
     let cart = [];
     let currentUser = null;
     let allProducts = [];
     let allPromos = [];
+    let allOrders = [];
+    let currentAdminOrderFilter = 'Todos';
     let currentSelectedCategory = 'Todas';
     let currentBranch = 'Super Toñita Los Fuentes';
     let bannerInterval = null;
+    let detailSelectedQty = 1;
 
     function fixDriveUrl(url) {
       if (!url) return '';
@@ -964,6 +1076,16 @@
         return parseFloat(item.precioMetapan ?? item.precio ?? 0);
       } else {
         return parseFloat(item.precioLosFuentes ?? item.precio ?? 0);
+      }
+    }
+
+    function isProductAvailableInBranch(item, branch = currentBranch) {
+      if (branch === 'Super Toñita Corinto') {
+        return (item.stockCorinto ?? item.stock ?? 'Disponible') === 'Disponible';
+      } else if (branch === 'Super Toñita Metapán') {
+        return (item.stockMetapan ?? item.stock ?? 'Disponible') === 'Disponible';
+      } else {
+        return (item.stockLosFuentes ?? item.stock ?? 'Disponible') === 'Disponible';
       }
     }
 
@@ -1046,12 +1168,16 @@
     });
 
     deliveryType.addEventListener('change', (e) => {
-      if (e.target.value === 'Recoger en Tienda') {
-        currentShippingFee = 0.00;
-        addressFieldsGroup.classList.add('hidden');
-      } else {
+      const val = e.target.value;
+      if (val === 'Envío Departamental') {
         currentShippingFee = 5.00;
         addressFieldsGroup.classList.remove('hidden');
+      } else if (val === 'Envío Local') {
+        currentShippingFee = 0.00;
+        addressFieldsGroup.classList.remove('hidden');
+      } else {
+        currentShippingFee = 0.00;
+        addressFieldsGroup.classList.add('hidden');
       }
       shippingPrice.innerText = currentShippingFee.toFixed(2);
       updateCart();
@@ -1264,22 +1390,22 @@
       products.forEach((item) => {
         const rawImg = item.imagenUrl1 || item.imagenUrl || '';
         const mainImg = fixDriveUrl(rawImg) || 'https://via.placeholder.com/200?text=Super+To%C3%B1ita';
-        const isOutOfStock = item.stock === 'Agotado';
+        const availableInBranch = isProductAvailableInBranch(item);
         const dynamicPrice = getProductPrice(item);
 
         const card = document.createElement('div');
-        card.className = `card ${isOutOfStock ? 'out-of-stock' : ''}`;
+        card.className = `card ${!availableInBranch ? 'out-of-stock' : ''}`;
         card.innerHTML = `
-          ${isOutOfStock ? '<span class="out-tag">Agotado</span>' : ''}
-          <div onclick="openProductDetail('${item.id}')">
+          ${!availableInBranch ? '<span class="out-tag">Agotado</span>' : ''}
+          <div onclick="openProductDetail('${item.id}')" style="cursor: pointer;">
             <img src="${mainImg}" alt="${item.nombre}">
             <div class="category-label">${item.categoria || 'General'}</div>
             <h3>${item.nombre}</h3>
           </div>
           <div class="price-row">
             <span class="price">$${dynamicPrice.toFixed(2)}</span>
-            <button class="btn btn-sm btn-emerald" ${isOutOfStock ? 'disabled' : ''} onclick="event.stopPropagation(); addToCart('${item.id}', '${item.nombre}', ${dynamicPrice})">
-              ${isOutOfStock ? 'Agotado' : '+ Agregar'}
+            <button class="btn btn-sm btn-emerald" ${!availableInBranch ? 'disabled' : ''} onclick="event.stopPropagation(); addToCart('${item.id}', '${item.nombre}', ${dynamicPrice}, 1)">
+              ${!availableInBranch ? 'Agotado' : '+ Agregar'}
             </button>
           </div>
         `;
@@ -1288,13 +1414,15 @@
       refreshIcons();
     }
 
+    // Abrir Modal de Producto Ampliado con Control de Cantidad
     window.openProductDetail = (id) => {
       const item = allProducts.find(p => p.id === id);
       if (!item) return;
 
+      detailSelectedQty = 1;
       const img1 = fixDriveUrl(item.imagenUrl1 || item.imagenUrl) || 'https://via.placeholder.com/400?text=Super+To%C3%B1ita';
       const img2 = fixDriveUrl(item.imagenUrl2);
-      const isOutOfStock = item.stock === 'Agotado';
+      const availableInBranch = isProductAvailableInBranch(item);
       const dynamicPrice = getProductPrice(item);
 
       detailContent.innerHTML = `
@@ -1321,14 +1449,30 @@
             <p style="font-size: 0.95rem; color: var(--text-main); line-height: 1.4;">${item.descripcion}</p>
           </div>
 
-          <button class="btn btn-emerald" style="width: 100%; padding: 0.9rem;" ${isOutOfStock ? 'disabled' : ''} onclick="addToCart('${item.id}', '${item.nombre}', ${dynamicPrice}); productDetailModal.classList.remove('active');">
-            <i data-lucide="shopping-cart"></i> ${isOutOfStock ? 'Producto Agotado' : 'Agregar al Carrito'}
+          <!-- Selector Numérico de Cantidad en el Detalle -->
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; background: var(--bg-primary); padding: 0.75rem 1rem; border-radius: var(--radius-md);">
+            <span style="font-weight: 700; font-size: 0.9rem; color: var(--text-main);">Cantidad a llevar:</span>
+            <div class="cart-qty-control">
+              <button class="cart-qty-btn" onclick="updateDetailQty(detailSelectedQty - 1)">-</button>
+              <input type="number" min="1" id="detailQtyInput" class="cart-qty-input" value="1" onchange="updateDetailQty(parseInt(this.value) || 1)">
+              <button class="cart-qty-btn" onclick="updateDetailQty(detailSelectedQty + 1)">+</button>
+            </div>
+          </div>
+
+          <button class="btn btn-emerald" style="width: 100%; padding: 0.9rem;" ${!availableInBranch ? 'disabled' : ''} onclick="addToCart('${item.id}', '${item.nombre}', ${dynamicPrice}, detailSelectedQty); productDetailModal.classList.remove('active');">
+            <i data-lucide="shopping-cart"></i> ${!availableInBranch ? 'Producto Agotado en Sucursal' : 'Agregar al Carrito'}
           </button>
         </div>
       `;
 
       productDetailModal.classList.add('active');
       refreshIcons();
+    };
+
+    window.updateDetailQty = (newVal) => {
+      detailSelectedQty = Math.max(1, newVal);
+      const inputEl = document.getElementById('detailQtyInput');
+      if (inputEl) inputEl.value = detailSelectedQty;
     };
 
     window.switchDetailImg = (src, element) => {
@@ -1339,12 +1483,13 @@
 
     searchInput.addEventListener('input', filterAndRenderProducts);
 
-    window.addToCart = (id, nombre, precio, isPromo = false) => {
+    window.addToCart = (id, nombre, precio, cantidad = 1, isPromo = false) => {
+      const qtyToAdd = parseInt(cantidad) || 1;
       const existing = cart.find(p => p.id === id);
       if (existing) {
-        existing.cantidad++;
+        existing.cantidad += qtyToAdd;
       } else {
-        cart.push({ id, nombre, precio, cantidad: 1, isPromo });
+        cart.push({ id, nombre, precio, cantidad: qtyToAdd, isPromo });
       }
       updateCart();
     };
@@ -1361,14 +1506,23 @@
         subtotal += itemSubtotal;
         cartItems.innerHTML += `
           <div class="cart-item">
-            <div>
+            <div style="flex:1;">
               <strong>${item.isPromo ? '🔥 [PROMO] ' : ''}${item.nombre}</strong><br>
-              <small style="color: var(--text-muted)">$${item.precio.toFixed(2)} x ${item.cantidad}</small>
+              <small style="color: var(--text-muted)">$${item.precio.toFixed(2)} c/u</small>
             </div>
-            <div>
-              <span style="font-weight: 700; margin-right: 0.5rem;">$${itemSubtotal.toFixed(2)}</span>
-              <button class="btn btn-sm btn-secondary" onclick="removeFromCart('${item.id}')">✕</button>
+            
+            <!-- Selector de Cantidad con Input Numérico -->
+            <div class="cart-qty-control">
+              <button class="cart-qty-btn" onclick="changeCartQty('${item.id}', ${item.cantidad - 1})">-</button>
+              <input type="number" min="1" class="cart-qty-input" value="${item.cantidad}" onchange="changeCartQty('${item.id}', parseInt(this.value) || 1)">
+              <button class="cart-qty-btn" onclick="changeCartQty('${item.id}', ${item.cantidad + 1})">+</button>
             </div>
+
+            <div style="text-align: right; min-width: 60px;">
+              <span style="font-weight: 800; font-size: 0.95rem;">$${itemSubtotal.toFixed(2)}</span>
+            </div>
+
+            <button class="btn btn-sm btn-secondary" onclick="removeFromCart('${item.id}')" style="padding: 0.35rem 0.5rem;">✕</button>
           </div>
         `;
       });
@@ -1377,6 +1531,18 @@
       subtotalPrice.innerText = subtotal.toFixed(2);
       totalPrice.innerText = total.toFixed(2);
     }
+
+    window.changeCartQty = (id, newQty) => {
+      if (newQty <= 0) {
+        removeFromCart(id);
+        return;
+      }
+      const item = cart.find(p => p.id === id);
+      if (item) {
+        item.cantidad = newQty;
+        updateCart();
+      }
+    };
 
     window.removeFromCart = (id) => {
       cart = cart.filter(item => item.id !== id);
@@ -1397,7 +1563,7 @@
       const reference = document.getElementById('custRef').value.trim();
       const method = paymentMethod.value;
 
-      if (dType === 'Envío a Domicilio') {
+      if (dType !== 'Recoger en Tienda') {
         if (!address || !reference) {
           alert("Por favor completa la dirección y punto de referencia para el envío.");
           return;
@@ -1430,8 +1596,8 @@
         clienteTelefono: currentUser.phone,
         tipoEntrega: dType,
         sucursal: currentBranch,
-        direccion: dType === 'Envío a Domicilio' ? address : 'N/A',
-        referencia: dType === 'Envío a Domicilio' ? reference : 'N/A',
+        direccion: dType !== 'Recoger en Tienda' ? address : 'N/A',
+        referencia: dType !== 'Recoger en Tienda' ? reference : 'N/A',
         metodoPago: method,
         items: itemsPayload,
         subtotal: subtotal,
@@ -1450,7 +1616,7 @@
           `📞 *Teléfono:* ${currentUser.phone}\n` +
           `🏪 *Sucursal:* ${currentBranch}\n` +
           `🚚 *Entrega:* ${dType}\n` +
-          `${dType === 'Envío a Domicilio' ? `📍 *Dirección:* ${address}\n📌 *Ref:* ${reference}\n` : ''}` +
+          `${dType !== 'Recoger en Tienda' ? `📍 *Dirección:* ${address}\n📌 *Ref:* ${reference}\n` : ''}` +
           `💳 *Método de Pago:* ${method}\n\n` +
           `🛒 *Detalle del Pedido:*\n${detailList}\n` +
           `💵 *Subtotal:* $${subtotal.toFixed(2)}\n` +
@@ -1545,9 +1711,13 @@
           <img src="${mainImg}" alt="${item.nombre}">
           <div class="category-label">${item.categoria || 'General'}</div>
           <h3>${item.nombre}</h3>
-          <div style="font-size: 0.75rem; color: var(--text-muted); margin: 0.3rem 0;">
-            L. Fuentes: $${parseFloat(item.precioLosFuentes ?? item.precio ?? 0).toFixed(2)} | Corinto: $${parseFloat(item.precioCorinto ?? item.precio ?? 0).toFixed(2)} | Metapán: $${parseFloat(item.precioMetapan ?? item.precio ?? 0).toFixed(2)}
+          
+          <div style="font-size: 0.72rem; color: var(--text-muted); margin: 0.3rem 0; line-height: 1.3;">
+            <b>L. Fuentes:</b> $${parseFloat(item.precioLosFuentes ?? item.precio ?? 0).toFixed(2)} (${item.stockLosFuentes ?? 'Disp.'})<br>
+            <b>Corinto:</b> $${parseFloat(item.precioCorinto ?? item.precio ?? 0).toFixed(2)} (${item.stockCorinto ?? 'Disp.'})<br>
+            <b>Metapán:</b> $${parseFloat(item.precioMetapan ?? item.precio ?? 0).toFixed(2)} (${item.stockMetapan ?? 'Disp.'})
           </div>
+
           <div style="display: flex; gap: 0.3rem; margin-top: 0.5rem;">
             <button class="btn btn-sm btn-secondary" style="flex: 1;" onclick="editProduct('${item.id}')">Editar</button>
             <button class="btn btn-sm btn-danger" onclick="deleteProduct('${item.id}')">✕</button>
@@ -1564,7 +1734,9 @@
       const data = {
         nombre: document.getElementById('prodName').value.trim(),
         categoria: document.getElementById('prodCategory').value,
-        stock: document.getElementById('prodStock').value,
+        stockLosFuentes: document.getElementById('prodStockLosFuentes').value,
+        stockCorinto: document.getElementById('prodStockCorinto').value,
+        stockMetapan: document.getElementById('prodStockMetapan').value,
         precioLosFuentes: parseFloat(document.getElementById('prodPriceLosFuentes').value || 0),
         precioCorinto: parseFloat(document.getElementById('prodPriceCorinto').value || 0),
         precioMetapan: parseFloat(document.getElementById('prodPriceMetapan').value || 0),
@@ -1593,10 +1765,15 @@
       document.getElementById('prodId').value = item.id;
       document.getElementById('prodName').value = item.nombre;
       document.getElementById('prodCategory').value = item.categoria || 'Productos Toñita';
-      document.getElementById('prodStock').value = item.stock || 'Disponible';
+      
+      document.getElementById('prodStockLosFuentes').value = item.stockLosFuentes ?? item.stock ?? 'Disponible';
+      document.getElementById('prodStockCorinto').value = item.stockCorinto ?? item.stock ?? 'Disponible';
+      document.getElementById('prodStockMetapan').value = item.stockMetapan ?? item.stock ?? 'Disponible';
+
       document.getElementById('prodPriceLosFuentes').value = item.precioLosFuentes ?? item.precio ?? 0;
       document.getElementById('prodPriceCorinto').value = item.precioCorinto ?? item.precio ?? 0;
       document.getElementById('prodPriceMetapan').value = item.precioMetapan ?? item.precio ?? 0;
+
       document.getElementById('prodDesc').value = item.descripcion || '';
       document.getElementById('prodImg1').value = item.imagenUrl1 || item.imagenUrl || '';
       document.getElementById('prodImg2').value = item.imagenUrl2 || '';
@@ -1619,97 +1796,122 @@
     }
     cancelFormBtn.addEventListener('click', resetForm);
 
-    // GESTIÓN DE PEDIDOS ADMIN
+    // GESTIÓN DE PEDIDOS ADMIN CON FILTROS
     async function loadAdminOrders() {
       adminOrdersList.innerHTML = '<p style="text-align: center; color: var(--text-muted);">Cargando pedidos de la tienda...</p>';
       try {
         const querySnapshot = await getDocs(collection(db, "ordenes"));
         adminOrdersList.innerHTML = '';
+        allOrders = [];
 
         if (querySnapshot.empty) {
           adminOrdersList.innerHTML = '<p style="text-align: center; color: var(--text-muted);">No hay pedidos registrados.</p>';
           return;
         }
 
-        let orders = [];
-        querySnapshot.forEach(docSnap => orders.push({ id: docSnap.id, ...docSnap.data() }));
-        orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        querySnapshot.forEach(docSnap => allOrders.push({ id: docSnap.id, ...docSnap.data() }));
+        allOrders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-        orders.forEach(order => {
-          const statusClass = getStatusClass(order.estado);
-          let itemsListStr = "";
-          let itemsHtml = order.items.map(i => {
-            const iTotal = (parseFloat(i.precio || 0) * parseInt(i.cantidad || 1)).toFixed(2);
-            itemsListStr += `• ${i.isPromo ? '[PROMO] ' : ''}${i.nombre} (x${i.cantidad}) - $${iTotal}\n`;
-            return `<div>- ${i.isPromo ? '🔥 ' : ''}${i.nombre} (x${i.cantidad}) - $${iTotal}</div>`;
-          }).join('');
-
-          const msg = `🛍️ *DETALLE DE PEDIDO - SUPER TOÑITA*\n\n` +
-            `🆔 *Pedido ID:* #${order.id.slice(-5).toUpperCase()}\n` +
-            `👤 *Cliente:* ${order.clienteNombre}\n` +
-            `📞 *Teléfono:* ${order.clienteTelefono}\n` +
-            `🏪 *Sucursal:* ${order.sucursal || 'N/A'}\n` +
-            `🚚 *Entrega:* ${order.tipoEntrega}\n` +
-            `${order.tipoEntrega === 'Envío a Domicilio' ? `📍 *Dirección:* ${order.direccion}\n📌 *Ref:* ${order.referencia}\n` : ''}` +
-            `💳 *Método de Pago:* ${order.metodoPago}\n\n` +
-            `🛒 *Productos:*\n${itemsListStr}\n` +
-            `💵 *Subtotal:* $${parseFloat(order.subtotal || 0).toFixed(2)}\n` +
-            `🛵 *Envío:* $${parseFloat(order.envio || 0).toFixed(2)}\n` +
-            `💰 *TOTAL:* $${parseFloat(order.total).toFixed(2)}\n` +
-            `📌 *Estado:* ${order.estado}`;
-
-          const waUrl = `https://wa.me/${order.clienteTelefono || WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
-
-          const card = document.createElement('div');
-          card.className = 'order-card';
-          card.innerHTML = `
-            <div class="order-header">
-              <div>
-                <strong>Pedido #${order.id.slice(-5).toUpperCase()}</strong>
-                <div style="font-size: 0.75rem; color: var(--text-muted);">${order.fecha}</div>
-              </div>
-              <select onchange="updateOrderStatus('${order.id}', this.value)" class="branch-select" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">
-                <option value="Pendiente" ${order.estado === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
-                <option value="En camino" ${order.estado === 'En camino' ? 'selected' : ''}>En camino</option>
-                <option value="Entregado" ${order.estado === 'Entregado' ? 'selected' : ''}>Entregado</option>
-                <option value="Cancelado" ${order.estado === 'Cancelado' ? 'selected' : ''}>Cancelado</option>
-              </select>
-            </div>
-            <div style="font-size: 0.88rem; font-weight:700; margin-bottom: 0.2rem;">
-              👤 ${order.clienteNombre} (${order.clienteTelefono})
-            </div>
-            <div style="font-size: 0.82rem; color: var(--emerald-accent); font-weight:700; margin-bottom: 0.4rem;">
-              ${order.tipoEntrega} - ${order.sucursal}
-            </div>
-            ${order.tipoEntrega === 'Envío a Domicilio' ? `
-              <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem;">
-                📍 ${order.direccion} (Ref:${order.referencia})
-              </div>
-            ` : ''}
-            <div style="font-size: 0.85rem; margin-bottom: 0.5rem; background: var(--bg-primary); padding: 0.5rem; border-radius: 8px;">
-              ${itemsHtml}
-            </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem;">
-              <a href="${waUrl}" target="_blank" class="btn btn-sm btn-whatsapp-sm">
-                <i data-lucide="message-circle" style="width:14px; height:14px;"></i> Abrir WhatsApp
-              </a>
-              <div style="font-weight: 800; font-size: 1.05rem; color: var(--brand-dark);">
-                Total: $${parseFloat(order.total).toFixed(2)}
-              </div>
-            </div>
-          `;
-          adminOrdersList.appendChild(card);
-        });
+        renderAdminOrders();
 
       } catch (err) {
         adminOrdersList.innerHTML = '<p style="text-align: center;">Error al obtener pedidos.</p>';
       }
     }
 
+    window.filterAdminOrders = (status, btnElement) => {
+      currentAdminOrderFilter = status;
+      document.querySelectorAll('.order-filter-pill').forEach(pill => pill.classList.remove('active'));
+      btnElement.classList.add('active');
+      renderAdminOrders();
+    };
+
+    function renderAdminOrders() {
+      adminOrdersList.innerHTML = '';
+      
+      const filteredOrders = allOrders.filter(o => {
+        if (currentAdminOrderFilter === 'Todos') return true;
+        return o.estado === currentAdminOrderFilter;
+      });
+
+      if (filteredOrders.length === 0) {
+        adminOrdersList.innerHTML = `<p style="text-align: center; color: var(--text-muted); padding: 1.5rem;">No hay pedidos en la categoría "${currentAdminOrderFilter}".</p>`;
+        return;
+      }
+
+      filteredOrders.forEach(order => {
+        const statusClass = getStatusClass(order.estado);
+        let itemsListStr = "";
+        let itemsHtml = order.items.map(i => {
+          const iTotal = (parseFloat(i.precio || 0) * parseInt(i.cantidad || 1)).toFixed(2);
+          itemsListStr += `• ${i.isPromo ? '[PROMO] ' : ''}${i.nombre} (x${i.cantidad}) - $${iTotal}\n`;
+          return `<div>- ${i.isPromo ? '🔥 ' : ''}${i.nombre} (x${i.cantidad}) - $${iTotal}</div>`;
+        }).join('');
+
+        const msg = `🛍️ *DETALLE DE PEDIDO - SUPER TOÑITA*\n\n` +
+          `🆔 *Pedido ID:* #${order.id.slice(-5).toUpperCase()}\n` +
+          `👤 *Cliente:* ${order.clienteNombre}\n` +
+          `📞 *Teléfono:* ${order.clienteTelefono}\n` +
+          `🏪 *Sucursal:* ${order.sucursal || 'N/A'}\n` +
+          `🚚 *Entrega:* ${order.tipoEntrega}\n` +
+          `${order.tipoEntrega !== 'Recoger en Tienda' ? `📍 *Dirección:* ${order.direccion}\n📌 *Ref:* ${order.referencia}\n` : ''}` +
+          `💳 *Método de Pago:* ${order.metodoPago}\n\n` +
+          `🛒 *Productos:*\n${itemsListStr}\n` +
+          `💵 *Subtotal:* $${parseFloat(order.subtotal || 0).toFixed(2)}\n` +
+          `🛵 *Envío:* $${parseFloat(order.envio || 0).toFixed(2)}\n` +
+          `💰 *TOTAL:* $${parseFloat(order.total).toFixed(2)}\n` +
+          `📌 *Estado:* ${order.estado}`;
+
+        const waUrl = `https://wa.me/${order.clienteTelefono || WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+
+        const card = document.createElement('div');
+        card.className = 'order-card';
+        card.innerHTML = `
+          <div class="order-header">
+            <div>
+              <strong>Pedido #${order.id.slice(-5).toUpperCase()}</strong>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">${order.fecha}</div>
+            </div>
+            <select onchange="updateOrderStatus('${order.id}', this.value)" class="branch-select" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">
+              <option value="Pendiente" ${order.estado === 'Pendiente' ? 'selected' : ''}>🟡 Pendiente</option>
+              <option value="En camino" ${order.estado === 'En camino' ? 'selected' : ''}>🔵 En camino</option>
+              <option value="Entregado" ${order.estado === 'Entregado' ? 'selected' : ''}>🟢 Entregado</option>
+              <option value="Cancelado" ${order.estado === 'Cancelado' ? 'selected' : ''}>🔴 Cancelado</option>
+            </select>
+          </div>
+          <div style="font-size: 0.88rem; font-weight:700; margin-bottom: 0.2rem;">
+            👤 ${order.clienteNombre} (${order.clienteTelefono})
+          </div>
+          <div style="font-size: 0.82rem; color: var(--emerald-accent); font-weight:700; margin-bottom: 0.4rem;">
+            ${order.tipoEntrega} - ${order.sucursal}
+          </div>
+          ${order.tipoEntrega !== 'Recoger en Tienda' ? `
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem;">
+              📍 ${order.direccion} (Ref:${order.referencia})
+            </div>
+          ` : ''}
+          <div style="font-size: 0.85rem; margin-bottom: 0.5rem; background: var(--bg-primary); padding: 0.5rem; border-radius: 8px;">
+            ${itemsHtml}
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem;">
+            <a href="${waUrl}" target="_blank" class="btn btn-sm btn-whatsapp-sm">
+              <i data-lucide="message-circle" style="width:14px; height:14px;"></i> Abrir WhatsApp
+            </a>
+            <div style="font-weight: 800; font-size: 1.05rem; color: var(--brand-dark);">
+              Total: $${parseFloat(order.total).toFixed(2)}
+            </div>
+          </div>
+        `;
+        adminOrdersList.appendChild(card);
+      });
+    }
+
     window.updateOrderStatus = async (orderId, newStatus) => {
       try {
         await updateDoc(doc(db, "ordenes", orderId), { estado: newStatus });
-        loadAdminOrders();
+        const targetOrder = allOrders.find(o => o.id === orderId);
+        if (targetOrder) targetOrder.estado = newStatus;
+        renderAdminOrders();
       } catch (err) {
         alert("No se pudo actualizar el estado de la orden.");
       }
@@ -1808,7 +2010,7 @@
               
               <div class="price-row">
                 <span class="price">$${pPrice.toFixed(2)}</span>
-                <button class="btn btn-sm btn-emerald" onclick="addToCart('${p.id}', '${p.titulo}', ${pPrice}, true)">
+                <button class="btn btn-sm btn-emerald" onclick="addToCart('${p.id}', '${p.titulo}', ${pPrice}, 1, true)">
                   + Agregar Promo
                 </button>
               </div>
@@ -1824,6 +2026,7 @@
       const promo = allPromos.find(p => p.id === id);
       if (!promo) return;
 
+      detailSelectedQty = 1;
       const imgUrl = fixDriveUrl(promo.imagenUrl) || 'https://via.placeholder.com/400?text=Super+To%C3%B1ita+Promo';
       const pPrice = parseFloat(promo.precio || 0);
 
@@ -1844,7 +2047,17 @@
             <p style="font-size: 0.95rem; color: var(--text-main); line-height: 1.4;">${promo.descripcion}</p>
           </div>
 
-          <button class="btn btn-emerald" style="width: 100%; padding: 0.9rem;" onclick="addToCart('${promo.id}', '${promo.titulo}', ${pPrice}, true); productDetailModal.classList.remove('active');">
+          <!-- Selector Numérico de Cantidad en Promos -->
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; background: var(--bg-primary); padding: 0.75rem 1rem; border-radius: var(--radius-md);">
+            <span style="font-weight: 700; font-size: 0.9rem; color: var(--text-main);">Cantidad de Combos:</span>
+            <div class="cart-qty-control">
+              <button class="cart-qty-btn" onclick="updateDetailQty(detailSelectedQty - 1)">-</button>
+              <input type="number" min="1" id="detailQtyInput" class="cart-qty-input" value="1" onchange="updateDetailQty(parseInt(this.value) || 1)">
+              <button class="cart-qty-btn" onclick="updateDetailQty(detailSelectedQty + 1)">+</button>
+            </div>
+          </div>
+
+          <button class="btn btn-emerald" style="width: 100%; padding: 0.9rem;" onclick="addToCart('${promo.id}', '${promo.titulo}', ${pPrice}, detailSelectedQty, true); productDetailModal.classList.remove('active');">
             <i data-lucide="shopping-cart"></i> Agregar Promo al Carrito
           </button>
         </div>
