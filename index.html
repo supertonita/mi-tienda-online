@@ -3,16 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>MINI SUPER TOÑITA ONLINE</title>
+  <title>SUPER TOÑITA - ONLINE & PUNTOS</title>
 
-  <!-- Favicon y Metas para PWA / Acceso Directo Móvil -->
+  <!-- Favicon y Metas para PWA -->
   <link rel="icon" type="image/png" href="LOGO.png">
   <link rel="apple-touch-icon" href="LOGO.png">
   <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#1e293b">
 
-  <!-- Lucide Icons -->
+  <!-- Lucide Icons & FontAwesome -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+  <!-- HTML5 QR Code & QRCodeJS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
   <style>
     :root {
@@ -26,6 +31,7 @@
       --brand-dark: #1e293b;
       --whatsapp: #25d366;
       --danger: #ef4444;
+      --amber-accent: #d97706;
       --border: #e2e8f0;
       --radius-lg: 20px;
       --radius-md: 14px;
@@ -48,7 +54,6 @@
       overflow-x: hidden;
     }
 
-    /* Navbar Limpia con Nombre en Negro y Verde */
     .navbar {
       position: sticky;
       top: 0;
@@ -71,9 +76,7 @@
       text-transform: uppercase;
     }
 
-    .brand-title span {
-      color: var(--emerald-accent);
-    }
+    .brand-title span { color: var(--emerald-accent); }
 
     .user-greeting { 
       font-size: 0.82rem; 
@@ -82,10 +85,8 @@
       transition: opacity 0.5s ease;
     }
 
-    /* Contenedor Principal */
     .container { max-width: 1000px; margin: 1rem auto; padding: 0 1rem; }
 
-    /* Pantalla de Login Centrada Totalmente */
     .login-wrapper {
       min-height: calc(100vh - 120px);
       display: flex;
@@ -105,7 +106,6 @@
       box-shadow: var(--shadow-card);
     }
 
-    /* Branch Banner Bar */
     .branch-selector-bar {
       background: var(--brand-dark);
       color: white;
@@ -117,14 +117,6 @@
       justify-content: space-between;
       gap: 0.5rem;
       box-shadow: var(--shadow-sm);
-    }
-
-    .branch-selector-bar label {
-      font-size: 0.85rem;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
     }
 
     .branch-select {
@@ -139,7 +131,6 @@
       cursor: pointer;
     }
 
-    /* Banners Carousel Adaptable */
     .banners-container {
       display: flex;
       gap: 1rem;
@@ -169,26 +160,6 @@
       min-height: 100px;
     }
 
-    .banner-text { 
-      flex: 1; 
-      min-width: 0; 
-      overflow-wrap: break-word; 
-      word-break: break-word; 
-    }
-    .banner-text h4 { font-size: 1.05rem; font-weight: 800; margin-bottom: 0.25rem; }
-    .banner-text p { font-size: 0.8rem; opacity: 0.95; line-height: 1.25; }
-    
-    .banner-img {
-      width: 70px;
-      height: 75px;
-      object-fit: contain;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: var(--radius-md);
-      border: 1px solid rgba(255,255,255,0.3);
-      flex-shrink: 0;
-    }
-
-    /* Buscador */
     .search-box {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -210,7 +181,6 @@
       color: var(--text-main);
     }
 
-    /* Categorías Pills */
     .categories-bar {
       display: flex;
       gap: 0.5rem;
@@ -231,7 +201,6 @@
       color: var(--text-muted);
       white-space: nowrap;
       cursor: pointer;
-      transition: all 0.2s;
     }
 
     .cat-chip.active {
@@ -240,7 +209,6 @@
       border-color: var(--brand-dark);
     }
 
-    /* Grid Limpio */
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -260,12 +228,10 @@
       flex-direction: column;
       justify-content: space-between;
       position: relative;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     .card.out-of-stock { opacity: 0.65; }
 
-    /* Imagen Vista Previa Sin Recortes */
     .card img {
       width: 100%;
       aspect-ratio: 1;
@@ -276,41 +242,18 @@
       border: 1px solid var(--border);
     }
 
-    /* Imagen Promos */
-    .promo-card-img {
-      width: 100%;
-      height: 200px;
-      object-fit: contain !important;
-      background: #f8fafc;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border);
-    }
-
-    .card h3 {
-      font-size: 0.95rem;
-      font-weight: 700;
-      margin-bottom: 0.2rem;
-      color: var(--text-main);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .card .category-label {
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      font-weight: 600;
-      margin-bottom: 0.4rem;
-    }
-
-    .card .price-row {
-      display: flex;
-      justify-content: space-between;
+    .points-badge {
+      background: #fef3c7;
+      color: var(--amber-accent);
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      display: inline-flex;
       align-items: center;
-      margin-top: 0.5rem;
+      gap: 0.2rem;
+      margin-top: 0.2rem;
     }
-
-    .price { font-size: 1.1rem; font-weight: 800; color: var(--brand-dark); }
 
     .out-tag {
       position: absolute;
@@ -325,7 +268,6 @@
       text-transform: uppercase;
     }
 
-    /* Tarjetas de Órdenes */
     .order-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -357,7 +299,6 @@
     .status-entregado { background: #d1fae5; color: #059669; }
     .status-cancelado { background: #fee2e2; color: #dc2626; }
 
-    /* Filtros de Órdenes Admin */
     .order-filter-pills {
       display: flex;
       gap: 0.4rem;
@@ -384,7 +325,6 @@
       border-color: var(--brand-dark);
     }
 
-    /* Botones */
     .btn {
       background: var(--brand-dark);
       color: white;
@@ -398,19 +338,16 @@
       align-items: center;
       justify-content: center;
       gap: 0.4rem;
-      transition: all 0.2s;
     }
 
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
     .btn-emerald { background: var(--emerald-accent); }
     .btn-emerald:hover { background: var(--emerald-dark); }
+    .btn-amber { background: var(--amber-accent); color: white; }
     .btn-sm { padding: 0.45rem 0.75rem; font-size: 0.8rem; border-radius: 10px; }
     .btn-whatsapp { background: var(--whatsapp); color: white; width: 100%; padding: 1rem; font-size: 1rem; border-radius: var(--radius-md); margin-top: 1rem; }
-    .btn-whatsapp-sm { background: var(--whatsapp); color: white; text-decoration: none; }
     .btn-danger { background: var(--danger); }
     .btn-secondary { background: #e2e8f0; color: var(--text-main); }
 
-    /* Modales */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -443,29 +380,6 @@
       .modal-card { max-width: 500px; border-radius: 28px; }
     }
 
-    .product-detail-card { display: flex; flex-direction: column; gap: 1.25rem; }
-
-    .product-detail-img-wrapper {
-      position: relative;
-      background: #f8fafc;
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      border: 1px solid var(--border);
-    }
-
-    .product-detail-img-wrapper img {
-      width: 100%;
-      max-height: 340px;
-      object-fit: contain;
-      display: block;
-      margin: 0 auto;
-    }
-
-    .gallery-dots { display: flex; justify-content: center; gap: 0.5rem; margin-top: 0.75rem; }
-    .gallery-dot { width: 40px; height: 40px; border-radius: 10px; border: 2px solid transparent; object-fit: cover; cursor: pointer; opacity: 0.6; }
-    .gallery-dot.active { border-color: var(--emerald-accent); opacity: 1; }
-
-    /* Formulario */
     .form-group { margin-bottom: 1rem; }
     .form-group label {
       display: block;
@@ -474,7 +388,6 @@
       margin-bottom: 0.35rem;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
 
     .form-control {
@@ -485,32 +398,6 @@
       font-size: 0.95rem;
       background: var(--bg-primary);
       outline: none;
-    }
-
-    .form-control:focus { border-color: var(--emerald-accent); background: white; }
-
-    .price-grid-inputs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
-
-    .cart-badge-floating {
-      position: absolute;
-      top: 4px;
-      right: 18px;
-      background: var(--danger);
-      color: white;
-      border-radius: 99px;
-      padding: 0.15rem 0.4rem;
-      font-size: 0.68rem;
-      font-weight: 800;
-    }
-
-    /* Carrito y Detalle con Control Numérico de Cantidad */
-    .cart-item { 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center; 
-      padding: 0.85rem 0; 
-      border-bottom: 1px solid var(--border); 
-      gap: 0.5rem;
     }
 
     .cart-qty-control {
@@ -529,17 +416,9 @@
       border-radius: 8px;
       border: none;
       background: var(--surface);
-      color: var(--text-main);
       font-weight: 800;
-      font-size: 1rem;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: var(--shadow-sm);
     }
-
-    .cart-qty-btn:active { transform: scale(0.95); }
 
     .cart-qty-input {
       width: 45px;
@@ -547,18 +426,8 @@
       border: none;
       background: transparent;
       font-weight: 800;
-      font-size: 0.95rem;
-      outline: none;
     }
 
-    .cart-summary { background: var(--bg-primary); padding: 1rem; border-radius: var(--radius-md); margin: 1rem 0; }
-    .cart-summary div { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem; }
-    .cart-summary .total { font-weight: 800; font-size: 1.15rem; color: var(--emerald-accent); border-top: 1px dashed var(--border); padding-top: 0.5rem; margin-bottom: 0; }
-
-    .payment-info-box { background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0.85rem; margin-top: 0.5rem; font-size: 0.85rem; color: var(--brand-dark); }
-    .hidden { display: none !important; }
-
-    /* BARRA NAVEGACIÓN FLOTANTE INFERIOR */
     .bottom-nav {
       position: fixed !important;
       bottom: 0 !important;
@@ -572,8 +441,6 @@
       justify-content: space-around;
       align-items: center;
       z-index: 1000 !important;
-      box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
-      transform: translateZ(0);
     }
 
     .nav-item {
@@ -589,12 +456,21 @@
       font-size: 0.68rem;
       font-weight: 700;
       cursor: pointer;
-      position: relative;
-      padding: 6px 0;
     }
 
     .nav-item.active { color: var(--emerald-accent); }
-    .nav-item i { width: 20px; height: 20px; }
+
+    .cart-badge-floating {
+      position: absolute;
+      top: 4px;
+      right: 18px;
+      background: var(--danger);
+      color: white;
+      border-radius: 99px;
+      padding: 0.15rem 0.4rem;
+      font-size: 0.68rem;
+      font-weight: 800;
+    }
 
     .admin-subnav {
       display: flex;
@@ -602,26 +478,25 @@
       margin-bottom: 1.25rem;
       overflow-x: auto;
     }
+
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
 
-  <!-- Navbar Limpia -->
   <header class="navbar">
-    <div class="brand-title">
-      SUPER <span>TOÑITA</span>
-    </div>
+    <div class="brand-title">SUPER <span>TOÑITA</span></div>
     <div id="userHeaderArea" class="user-greeting"></div>
   </header>
 
   <main class="container">
     
-    <!-- 1. LOGIN / REGISTRO CENTRADO -->
+    <!-- 1. LOGIN CON RESTABLECIMIENTO EXCLUSIVO ADMIN POR WHATSAPP -->
     <section id="loginScreen" class="login-wrapper">
       <div class="login-card">
         <img src="LOGO.png" alt="Mini Super Toñita" style="width: 85px; height: 85px; object-fit: contain; margin-bottom: 1rem; border-radius: 16px;">
         <h3 style="font-size: 1.25rem; margin-bottom: 0.2rem; color: var(--brand-dark); font-weight: 800;">Super Toñita Online</h3>
-        <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.5rem;">Ingresa tus datos para continuar</p>
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.5rem;">Ingresa para comprar y acumular puntos</p>
 
         <form id="accessForm" style="text-align: left;">
           <div class="form-group">
@@ -636,13 +511,22 @@
             Ingresar a la Tienda <i data-lucide="arrow-right" style="width:16px;"></i>
           </button>
         </form>
+
+        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px dashed var(--border); text-align: center;">
+          <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+            ¿Problemas con tu cuenta o cambiaste de número?
+          </p>
+          <button type="button" onclick="requestAccountResetWhatsApp()" class="btn btn-sm btn-secondary" style="width: 100%; border: 1px solid #cbd5e1;">
+            <i data-lucide="shield-alert" style="color: var(--amber-accent); width: 16px;"></i> 
+            Solicitar Restablecimiento al Admin
+          </button>
+        </div>
       </div>
     </section>
 
     <!-- 2. VISTA CLIENTE -->
     <section id="clientView" class="hidden">
 
-      <!-- Selector de Sucursal Principal -->
       <div class="branch-selector-bar">
         <label for="globalBranchSelect">
           <i data-lucide="map-pin" style="color: var(--emerald-accent);"></i> Sucursal:
@@ -656,8 +540,6 @@
 
       <!-- Tab Catálogo -->
       <div id="clientCatalogTab">
-        
-        <!-- Carrusel de Banners Promocionales -->
         <div class="banners-container" id="clientBannersContainer"></div>
 
         <div class="search-box">
@@ -665,7 +547,6 @@
           <input type="text" id="searchInput" placeholder="Buscar productos en Super Toñita...">
         </div>
 
-        <!-- Barra de Categorías -->
         <div class="categories-bar" id="categoriesBar">
           <button class="cat-chip active" onclick="filterByCategory('Todas')">Todas</button>
           <button class="cat-chip" onclick="filterByCategory('Productos Toñita')">Productos Toñita</button>
@@ -694,10 +575,47 @@
         <div id="clientPromosList"></div>
       </div>
 
+      <!-- Tab Canjes / Puntos Fidelidad -->
+      <div id="clientRewardsTab" class="hidden">
+        <div class="card" style="padding: 1.25rem; margin-bottom: 1.25rem; background: linear-gradient(135deg, #fffbeb, #feefc3);">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <span style="font-size: 0.75rem; font-weight: 800; color: var(--amber-accent); text-transform: uppercase;">Saldo de Fidelización</span>
+              <h3 style="font-size: 1.8rem; font-weight: 900; color: var(--brand-dark);" id="rewardsPointsDisplay">0 Pts</h3>
+            </div>
+            <div style="background: var(--amber-accent); color: white; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+              <i data-lucide="gift" style="width: 24px; height: 24px;"></i>
+            </div>
+          </div>
+          <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.5rem;">
+            💡 Ganas 1 punto por cada $1.00 gastado en compras confirmadas + puntos extra según la sucursal.
+          </p>
+        </div>
+
+        <div class="card" style="padding: 1.25rem; margin-bottom: 1.25rem;">
+          <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+            <i data-lucide="qr-code" style="color: var(--emerald-accent);"></i> Canjear Puntos de Ticket Físico
+          </h3>
+          <button class="btn btn-emerald" onclick="startCameraScanner()" style="width: 100%; margin-bottom: 0.75rem;">
+            <i data-lucide="camera"></i> Abrir Cámara para Escanear QR
+          </button>
+          <div id="qr-reader" class="hidden" style="width: 100%; margin-bottom: 0.75rem; border-radius: 12px; overflow: hidden;"></div>
+          <div style="display: flex; gap: 0.5rem;">
+            <input type="text" id="qr-input" class="form-control" placeholder="Código de ticket manual..." style="font-size: 0.85rem;">
+            <button onclick="claimPoints()" class="btn btn-amber">Sumar</button>
+          </div>
+        </div>
+
+        <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+          <i data-lucide="gift" style="color: var(--amber-accent);"></i> Catálogo de Premios
+        </h3>
+        <div id="rewardsCatalogGrid" class="grid"></div>
+      </div>
+
       <!-- Tab Mis Órdenes Cliente -->
       <div id="clientOrdersTab" class="hidden">
         <h2 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-          <i data-lucide="history" style="color: var(--emerald-accent);"></i> Historial de Compras
+          <i data-lucide="history" style="color: var(--emerald-accent);"></i> Historial de Compras y Canjes
         </h2>
         <div id="clientOrdersList"></div>
       </div>
@@ -709,7 +627,12 @@
             <i data-lucide="user" style="color: var(--emerald-accent); width: 32px; height: 32px;"></i>
           </div>
           <h3 id="profileNameDisplay" style="text-align: center;">---</h3>
-          <p id="profilePhoneDisplay" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; text-align: center;">---</p>
+          <p id="profilePhoneDisplay" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem; text-align: center;">---</p>
+          
+          <div style="background: #fef3c7; border: 1px solid #fde68a; border-radius: 12px; padding: 0.75rem; text-align: center; margin-bottom: 1.5rem;">
+            <span style="font-size: 0.75rem; color: var(--amber-accent); font-weight: 800; text-transform: uppercase;">Puntos Acumulados</span>
+            <div style="font-size: 1.5rem; font-weight: 900; color: var(--brand-dark);" id="profilePointsDisplay">0 Pts</div>
+          </div>
 
           <form id="profileAddressForm" style="margin-bottom: 1.5rem; text-align: left;">
             <h4 style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.75rem; font-weight: 700;">
@@ -737,11 +660,12 @@
 
     <!-- 3. VISTA ADMINISTRADOR -->
     <section id="adminView" class="hidden">
-      <!-- Subnavegación del Admin -->
       <div class="admin-subnav">
         <button class="btn btn-sm btn-emerald" id="adminTabOrdersBtn">Órdenes</button>
-        <button class="btn btn-sm btn-secondary" id="adminTabProductsBtn">Gestionar Productos</button>
-        <button class="btn btn-sm btn-secondary" id="adminTabPromosBtn">Promos por Sucursal</button>
+        <button class="btn btn-sm btn-secondary" id="adminTabProductsBtn">Productos</button>
+        <button class="btn btn-sm btn-secondary" id="adminTabRewardsBtn">Premios Puntos</button>
+        <button class="btn btn-sm btn-secondary" id="adminTabClientsBtn">👥 Clientes & Puntos</button>
+        <button class="btn btn-sm btn-secondary" id="adminTabPromosBtn">Promos</button>
         <button class="btn btn-sm btn-danger" id="adminLogoutBtn">Salir</button>
       </div>
 
@@ -751,7 +675,6 @@
           <i data-lucide="list-checks" style="color: var(--emerald-accent);"></i> Gestión de Pedidos
         </h2>
 
-        <!-- Filtros por Estado -->
         <div class="order-filter-pills">
           <button class="order-filter-pill active" onclick="filterAdminOrders('Todos', this)">Todos</button>
           <button class="order-filter-pill" onclick="filterAdminOrders('Pendiente', this)">🟡 Pendientes</button>
@@ -763,11 +686,11 @@
         <div id="adminOrdersList"></div>
       </div>
 
-      <!-- 3.2 Pestaña Gestión de Productos -->
+      <!-- 3.2 Pestaña Productos con Puntos por Sucursal -->
       <div id="adminProductsTab" class="hidden">
-        <div class="card" style="margin-bottom: 2rem; padding: 1.25rem; cursor: default;">
+        <div class="card" style="margin-bottom: 2rem; padding: 1.25rem;">
           <h4 id="formTitle" style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-            <i data-lucide="plus-circle" style="color: var(--emerald-accent);"></i> Agregar Nuevo Producto
+            <i data-lucide="plus-circle" style="color: var(--emerald-accent);"></i> Agregar / Editar Producto
           </h4>
           
           <form id="productForm">
@@ -790,10 +713,9 @@
               </select>
             </div>
 
-            <!-- Disponibilidad por Sucursal -->
             <div class="form-group">
               <label>Disponibilidad por Sucursal</label>
-              <div class="price-grid-inputs">
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
                 <div>
                   <small style="color: var(--text-muted); font-size: 0.68rem; font-weight: 700;">LOS FUENTES</small>
                   <select id="prodStockLosFuentes" class="form-control" style="padding: 0.5rem; font-size: 0.8rem;">
@@ -820,7 +742,7 @@
 
             <div class="form-group">
               <label>Precios por Sucursal ($)</label>
-              <div class="price-grid-inputs">
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
                 <div>
                   <small style="color: var(--text-muted); font-size: 0.7rem; font-weight: 700;">LOS FUENTES</small>
                   <input type="number" step="0.01" id="prodPriceLosFuentes" class="form-control" placeholder="0.00" required>
@@ -835,6 +757,25 @@
                 </div>
               </div>
             </div>
+
+            <div class="form-group">
+              <label>Puntos Extra que otorga por Sucursal</label>
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
+                <div>
+                  <small style="color: var(--text-muted); font-size: 0.7rem; font-weight: 700;">LOS FUENTES (Pts)</small>
+                  <input type="number" id="prodPointsLosFuentes" class="form-control" placeholder="0" value="0">
+                </div>
+                <div>
+                  <small style="color: var(--text-muted); font-size: 0.7rem; font-weight: 700;">CORINTO (Pts)</small>
+                  <input type="number" id="prodPointsCorinto" class="form-control" placeholder="0" value="0">
+                </div>
+                <div>
+                  <small style="color: var(--text-muted); font-size: 0.7rem; font-weight: 700;">METAPÁN (Pts)</small>
+                  <input type="number" id="prodPointsMetapan" class="form-control" placeholder="0" value="0">
+                </div>
+              </div>
+            </div>
+
             <div class="form-group">
               <label>Descripción</label>
               <textarea id="prodDesc" class="form-control" rows="2" placeholder="Detalles..." required></textarea>
@@ -854,18 +795,55 @@
           </form>
         </div>
 
-        <h4 style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-          <i data-lucide="boxes" style="width: 18px;"></i> Productos en Tienda
-        </h4>
+        <h4 style="margin-bottom: 1rem;">Productos en Tienda</h4>
         <div id="adminProductGrid" class="grid"></div>
       </div>
 
-      <!-- 3.3 Promociones Comprables por Sucursal -->
-      <div id="adminPromosTab" class="hidden">
-        <div class="card" style="margin-bottom: 2rem; padding: 1.25rem; cursor: default;">
+      <!-- 3.3 Pestaña Admin Catálogo de Premios -->
+      <div id="adminRewardsTab" class="hidden">
+        <div class="card" style="margin-bottom: 2rem; padding: 1.25rem;">
           <h4 style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-            <i data-lucide="tag" style="color: var(--emerald-accent);"></i> Crear Promoción Comprable
+            <i data-lucide="gift" style="color: var(--amber-accent);"></i> Agregar Premio por Puntos
           </h4>
+          <form id="rewardForm">
+            <div class="form-group">
+              <label>Nombre del Premio</label>
+              <input type="text" id="rewardName" class="form-control" placeholder="Ej: Soda 1.25L Gratis" required>
+            </div>
+            <div class="form-group">
+              <label>Puntos Requeridos para Canjear</label>
+              <input type="number" id="rewardPointsCost" class="form-control" placeholder="Ej: 50" required>
+            </div>
+            <div class="form-group">
+              <label>Imagen del Premio (URL)</label>
+              <input type="url" id="rewardImg" class="form-control" placeholder="https://...">
+            </div>
+            <button type="submit" class="btn btn-amber" style="width: 100%;">Guardar Premio</button>
+          </form>
+        </div>
+
+        <h4 style="margin-bottom: 1rem;">Premios Configurados</h4>
+        <div id="adminRewardsList"></div>
+      </div>
+
+      <!-- 3.4 Pestaña Admin Clientes & Puntos Manuales -->
+      <div id="adminClientsTab" class="hidden">
+        <div class="card" style="padding: 1.25rem; margin-bottom: 1.5rem;">
+          <h4 style="margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+            <i data-lucide="users" style="color: var(--emerald-accent);"></i> Control de Clientes Registrados
+          </h4>
+          <div class="search-box" style="margin-bottom: 1rem;">
+            <i data-lucide="search" style="color: var(--text-muted); width: 18px;"></i>
+            <input type="text" id="adminClientSearchInput" placeholder="Buscar cliente por nombre o teléfono...">
+          </div>
+          <div id="adminClientsList" style="display: flex; flex-direction: column; gap: 0.75rem;"></div>
+        </div>
+      </div>
+
+      <!-- 3.5 Promociones -->
+      <div id="adminPromosTab" class="hidden">
+        <div class="card" style="margin-bottom: 2rem; padding: 1.25rem;">
+          <h4 style="margin-bottom: 1rem;">Crear Promoción Comprable por Sucursal</h4>
           <form id="promoForm">
             <div class="form-group">
               <label>Sucursal Destino</label>
@@ -881,7 +859,7 @@
               <input type="text" id="promoTitle" class="form-control" placeholder="Ej: Combo Familiar Snacks" required>
             </div>
             <div class="form-group">
-              <label>Precio Especial de la Promo ($)</label>
+              <label>Precio Especial ($)</label>
               <input type="number" step="0.01" id="promoPrice" class="form-control" placeholder="Ej: 4.50" required>
             </div>
             <div class="form-group">
@@ -889,16 +867,14 @@
               <input type="url" id="promoImg" class="form-control" placeholder="https://..." required>
             </div>
             <div class="form-group">
-              <label>Descripción / Detalle de la Oferta</label>
-              <textarea id="promoDesc" class="form-control" rows="2" placeholder="Ej: Incluye 2 papas + 1 soda de 1.25L" required></textarea>
+              <label>Descripción</label>
+              <textarea id="promoDesc" class="form-control" rows="2" placeholder="Detalles..." required></textarea>
             </div>
             <button type="submit" class="btn btn-emerald" style="width: 100%;">Publicar Promoción</button>
           </form>
         </div>
 
-        <h4 style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-          <i data-lucide="sparkles" style="width: 18px;"></i> Promociones Activas
-        </h4>
+        <h4 style="margin-bottom: 1rem;">Promociones Activas</h4>
         <div id="adminPromosList"></div>
       </div>
     </section>
@@ -915,7 +891,11 @@
       <i data-lucide="tag"></i>
       <span>Promos</span>
     </button>
-    <button class="nav-item" id="navCartBtn">
+    <button class="nav-item" id="navRewardsBtn">
+      <i data-lucide="gift"></i>
+      <span>Canjes</span>
+    </button>
+    <button class="nav-item" id="navCartBtn" style="position: relative;">
       <i data-lucide="shopping-cart"></i>
       <span>Carrito</span>
       <span class="cart-badge-floating" id="cartCount">0</span>
@@ -930,7 +910,7 @@
     </button>
   </nav>
 
-  <!-- Modal Detalle del Producto / Promoción -->
+  <!-- Modal Detalle del Producto -->
   <div class="modal-overlay" id="productDetailModal">
     <div class="modal-card">
       <div style="display: flex; justify-content: flex-end; margin-bottom: 0.5rem;">
@@ -952,45 +932,42 @@
 
       <div id="cartItems"></div>
 
-      <div class="cart-summary">
-        <div>
+      <div class="cart-summary" style="background: var(--bg-primary); padding: 1rem; border-radius: var(--radius-md); margin: 1rem 0;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
           <span>Subtotal:</span>
           <span>$<span id="subtotalPrice">0.00</span></span>
         </div>
-        <div id="shippingRow">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: var(--amber-accent); font-weight: 700;">
+          <span>Puntos a ganar en esta compra:</span>
+          <span>+<span id="earnedPointsPreview">0</span> Pts</span>
+        </div>
+        <div id="shippingRow" style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
           <span>Costo de Envío:</span>
           <span>$<span id="shippingPrice">0.00</span></span>
         </div>
-        <div class="total">
+        <div class="total" style="font-weight: 800; font-size: 1.15rem; color: var(--emerald-accent); border-top: 1px dashed var(--border); padding-top: 0.5rem; display: flex; justify-content: space-between;">
           <span>Total a Pagar:</span>
           <span>$<span id="totalPrice">0.00</span></span>
         </div>
       </div>
 
       <form id="checkoutForm">
-        <h4 style="margin: 1.2rem 0 0.8rem 0; font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase;">
-          Opciones de Entrega y Pago
-        </h4>
-        
         <div class="form-group">
           <label>Cliente</label>
           <input type="text" id="custName" class="form-control" required readonly>
         </div>
-
         <div class="form-group">
           <label>Teléfono</label>
           <input type="tel" id="custPhone" class="form-control" required readonly>
         </div>
-
         <div class="form-group">
           <label>Tipo de Entrega</label>
           <select id="deliveryType" class="form-control" required>
-            <option value="Envío Local">Envío Local (Gratis)</option>
+            <option value="Envío Local">Envío Local (Gratis / Cercano)</option>
             <option value="Envío Departamental">Envío Departamental (+$5.00)</option>
             <option value="Recoger en Tienda">Recoger en Tienda (Gratis)</option>
           </select>
         </div>
-
         <div id="addressFieldsGroup">
           <div class="form-group">
             <label>Dirección del Domicilio</label>
@@ -1001,7 +978,6 @@
             <input type="text" id="custRef" class="form-control" placeholder="Ej: Frente al parque...">
           </div>
         </div>
-
         <div class="form-group">
           <label>Método de Pago</label>
           <select id="paymentMethod" class="form-control" required>
@@ -1009,14 +985,6 @@
             <option value="Transferencia Bancaria">Transferencia Bancaria</option>
           </select>
         </div>
-
-        <div id="bankDetailsBox" class="payment-info-box hidden">
-          <strong>Datos para Transferencia:</strong><br>
-          • <b>Banco:</b> Banco Promerica<br>
-          • <b>Nº de Cuenta:</b> 0000000000<br>
-          • <b>A nombre de:</b> Super Toñita<br>
-        </div>
-
         <button type="submit" class="btn btn-whatsapp" id="sendOrderBtn">
           Enviar Pedido por WhatsApp <i data-lucide="send" style="width:16px;"></i>
         </button>
@@ -1024,10 +992,9 @@
     </div>
   </div>
 
-  <!-- Firebase & Lógica JavaScript -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, onSnapshot, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCV3NF4d-vUWmbUVcGDB3oDTgcEcxEQ2AA",
@@ -1035,8 +1002,7 @@
       projectId: "mitiendaonline-bc1f7",
       storageBucket: "mitiendaonline-bc1f7.firebasestorage.app",
       messagingSenderId: "205538801900",
-      appId: "1:205538801900:web:beca12ac83f4a875664dc9",
-      measurementId: "G-JPXCKWF1VQ"
+      appId: "1:205538801900:web:beca12ac83f4a875664dc9"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -1045,17 +1011,19 @@
     const ADMIN_USER = "FrankR";
     const ADMIN_PASS = "199818";
     const WHATSAPP_NUMBER = "50370092996";
-    let currentShippingFee = 0.00;
 
+    let currentShippingFee = 0.00;
     let cart = [];
     let currentUser = null;
+    let currentClientDocId = null;
     let allProducts = [];
     let allPromos = [];
+    let allRewards = [];
     let allOrders = [];
-    let currentAdminOrderFilter = 'Todos';
-    let currentSelectedCategory = 'Todas';
+    let allClientsList = [];
     let currentBranch = 'Super Toñita Los Fuentes';
-    let bannerInterval = null;
+    let currentSelectedCategory = 'Todas';
+    let currentAdminOrderFilter = 'Todos';
 
     function fixDriveUrl(url) {
       if (!url) return '';
@@ -1068,329 +1036,219 @@
       return url;
     }
 
+    function cleanPhone(phoneStr) {
+      return (phoneStr || '').toString().replace(/\D/g, '');
+    }
+
     function getProductPrice(item, branch = currentBranch) {
-      if (branch === 'Super Toñita Corinto') {
-        return parseFloat(item.precioCorinto ?? item.precio ?? 0);
-      } else if (branch === 'Super Toñita Metapán') {
-        return parseFloat(item.precioMetapan ?? item.precio ?? 0);
-      } else {
-        return parseFloat(item.precioLosFuentes ?? item.precio ?? 0);
-      }
+      if (branch === 'Super Toñita Corinto') return parseFloat(item.precioCorinto ?? item.precio ?? 0);
+      if (branch === 'Super Toñita Metapán') return parseFloat(item.precioMetapan ?? item.precio ?? 0);
+      return parseFloat(item.precioLosFuentes ?? item.precio ?? 0);
+    }
+
+    function getProductPoints(item, branch = currentBranch) {
+      if (branch === 'Super Toñita Corinto') return parseInt(item.puntosCorinto ?? item.bonusPoints ?? 0);
+      if (branch === 'Super Toñita Metapán') return parseInt(item.puntosMetapan ?? item.bonusPoints ?? 0);
+      return parseInt(item.puntosLosFuentes ?? item.bonusPoints ?? 0);
     }
 
     function isProductAvailableInBranch(item, branch = currentBranch) {
-      if (branch === 'Super Toñita Corinto') {
-        return (item.stockCorinto ?? item.stock ?? 'Disponible') === 'Disponible';
-      } else if (branch === 'Super Toñita Metapán') {
-        return (item.stockMetapan ?? item.stock ?? 'Disponible') === 'Disponible';
-      } else {
-        return (item.stockLosFuentes ?? item.stock ?? 'Disponible') === 'Disponible';
+      if (branch === 'Super Toñita Corinto') return (item.stockCorinto ?? item.stock ?? 'Disponible') === 'Disponible';
+      if (branch === 'Super Toñita Metapán') return (item.stockMetapan ?? item.stock ?? 'Disponible') === 'Disponible';
+      return (item.stockLosFuentes ?? item.stock ?? 'Disponible') === 'Disponible';
+    }
+
+    // SOLICITUD DE RESTABLECIMIENTO EXCLUSIVA A ADMIN POR WHATSAPP
+    window.requestAccountResetWhatsApp = () => {
+      const inputName = document.getElementById('accessName').value.trim() || "Cliente";
+      const inputPhone = document.getElementById('accessPass').value.trim() || "No especificado";
+      const requestCode = "ST-REQ-" + Math.floor(1000 + Math.random() * 9000);
+
+      const message = `🔒 *SOLICITUD DE RESTABLECIMIENTO DE CUENTA*\n\n` +
+        `Hola *Super Toñita*, necesito ayuda para verificar o restablecer mi cuenta de puntos.\n\n` +
+        `👤 *Nombre:* ${inputName}\n` +
+        `📞 *Teléfono registrado:* ${inputPhone}\n` +
+        `🔑 *Código de seguridad:* \`${requestCode}\`\n\n` +
+        `_Por favor confirmar mis datos para habilitar mi acceso._`;
+
+      window.location.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    };
+
+    // LOGIN MIGRACIÓN DIRECTA CON BASE DE FIDELIZACIÓN
+    document.getElementById('accessForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('accessName').value.trim();
+      const rawPass = document.getElementById('accessPass').value.trim();
+      const cleanInputPhone = cleanPhone(rawPass);
+
+      if (name === ADMIN_USER && rawPass === ADMIN_PASS) {
+        showAdminView();
+        return;
       }
+
+      try {
+        const querySnapshot = await getDocs(collection(db, "clients"));
+        let matchedDoc = null;
+
+        querySnapshot.forEach(docSnap => {
+          const data = docSnap.data();
+          if (cleanPhone(data.phone) === cleanInputPhone || (data.phone && data.phone.trim() === rawPass)) {
+            matchedDoc = { id: docSnap.id, ...data };
+          }
+        });
+
+        if (matchedDoc) {
+          currentClientDocId = matchedDoc.id;
+          currentUser = matchedDoc;
+        } else {
+          const newDoc = await addDoc(collection(db, "clients"), {
+            name: name,
+            phone: rawPass,
+            points: 100
+          });
+          currentClientDocId = newDoc.id;
+          currentUser = { id: newDoc.id, name, phone: rawPass, points: 100 };
+          alert("¡Bienvenido a Super Toñita! Te regalamos 100 puntos de bienvenida.");
+        }
+
+        showClientView();
+      } catch (err) {
+        console.error(err);
+        alert("Error de inicio de sesión. Toca 'Solicitar Restablecimiento al Admin' para verificar tus datos.");
+      }
+    });
+
+    function showAdminView() {
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('clientView').classList.add('hidden');
+      document.getElementById('adminView').classList.remove('hidden');
+      document.getElementById('userHeaderArea').innerText = "FrankR (Admin)";
+      document.getElementById('bottomNav').classList.add('hidden');
+      switchAdminSubTab('orders');
     }
 
-    // DOM Elements
-    const loginScreen = document.getElementById('loginScreen');
-    const clientView = document.getElementById('clientView');
-    const adminView = document.getElementById('adminView');
-    const userHeaderArea = document.getElementById('userHeaderArea');
-    const logoutBtn = document.getElementById('logoutBtn');
-    const bottomNav = document.getElementById('bottomNav');
-    
-    const globalBranchSelect = document.getElementById('globalBranchSelect');
-    const accessForm = document.getElementById('accessForm');
-    const productGrid = document.getElementById('productGrid');
-    const searchInput = document.getElementById('searchInput');
-    const productCounter = document.getElementById('productCounter');
+    function showClientView() {
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('adminView').classList.add('hidden');
+      document.getElementById('clientView').classList.remove('hidden');
+      document.getElementById('bottomNav').classList.remove('hidden');
 
-    const productDetailModal = document.getElementById('productDetailModal');
-    const closeDetailBtn = document.getElementById('closeDetailBtn');
-    const detailContent = document.getElementById('detailContent');
+      document.getElementById('custName').value = currentUser.name;
+      document.getElementById('custPhone').value = currentUser.phone;
+      document.getElementById('profileNameDisplay').innerText = currentUser.name;
+      document.getElementById('profilePhoneDisplay').innerText = currentUser.phone;
+      document.getElementById('profilePointsDisplay').innerText = `${currentUser.points || 0} Pts`;
+      document.getElementById('rewardsPointsDisplay').innerText = `${currentUser.points || 0} Pts`;
 
-    const cartModal = document.getElementById('cartModal');
-    const closeCartBtn = document.getElementById('closeCartBtn');
-    const cartCount = document.getElementById('cartCount');
-    const cartItems = document.getElementById('cartItems');
-    const subtotalPrice = document.getElementById('subtotalPrice');
-    const shippingPrice = document.getElementById('shippingPrice');
-    const totalPrice = document.getElementById('totalPrice');
-    
-    const checkoutForm = document.getElementById('checkoutForm');
-    const deliveryType = document.getElementById('deliveryType');
-    const addressFieldsGroup = document.getElementById('addressFieldsGroup');
-    const paymentMethod = document.getElementById('paymentMethod');
-    const bankDetailsBox = document.getElementById('bankDetailsBox');
-    const sendOrderBtn = document.getElementById('sendOrderBtn');
-
-    // Bottom Nav Items
-    const navCatalogBtn = document.getElementById('navCatalogBtn');
-    const navPromosBtn = document.getElementById('navPromosBtn');
-    const navCartBtn = document.getElementById('navCartBtn');
-    const navOrdersBtn = document.getElementById('navOrdersBtn');
-    const navProfileBtn = document.getElementById('navProfileBtn');
-
-    const clientCatalogTab = document.getElementById('clientCatalogTab');
-    const clientPromosTab = document.getElementById('clientPromosTab');
-    const clientOrdersTab = document.getElementById('clientOrdersTab');
-    const clientProfileTab = document.getElementById('clientProfileTab');
-    const clientOrdersList = document.getElementById('clientOrdersList');
-    
-    // Elements Admin
-    const adminOrdersTab = document.getElementById('adminOrdersTab');
-    const adminProductsTab = document.getElementById('adminProductsTab');
-    const adminPromosTab = document.getElementById('adminPromosTab');
-    const adminOrdersList = document.getElementById('adminOrdersList');
-    const adminProductGrid = document.getElementById('adminProductGrid');
-    const adminPromosList = document.getElementById('adminPromosList');
-    const productForm = document.getElementById('productForm');
-    const formTitle = document.getElementById('formTitle');
-    const cancelFormBtn = document.getElementById('cancelFormBtn');
-    const promoForm = document.getElementById('promoForm');
-
-    function refreshIcons() {
-      if (window.lucide) window.lucide.createIcons();
+      switchClientTab('catalog');
+      listenToUserPoints();
+      loadPromos();
     }
 
-    globalBranchSelect.addEventListener('change', (e) => {
+    function listenToUserPoints() {
+      if (!currentClientDocId) return;
+      onSnapshot(doc(db, "clients", currentClientDocId), (docSnap) => {
+        if (docSnap.exists()) {
+          currentUser.points = docSnap.data().points || 0;
+          document.getElementById('profilePointsDisplay').innerText = `${currentUser.points} Pts`;
+          document.getElementById('rewardsPointsDisplay').innerText = `${currentUser.points} Pts`;
+        }
+      });
+    }
+
+    document.getElementById('globalBranchSelect').addEventListener('change', (e) => {
       currentBranch = e.target.value;
-      cart = cart.map(cartItem => {
-        if (!cartItem.isPromo) {
-          const originalProd = allProducts.find(p => p.id === cartItem.id);
-          if (originalProd) {
-            return { ...cartItem, precio: getProductPrice(originalProd) };
+      cart = cart.map(item => {
+        if (!item.isPromo) {
+          const orig = allProducts.find(p => p.id === item.id);
+          if (orig) {
+            return {
+              ...item,
+              precio: getProductPrice(orig),
+              bonusPoints: getProductPoints(orig)
+            };
           }
         }
-        return cartItem;
+        return item;
       });
       filterAndRenderProducts();
       renderBranchPromos();
       updateCart();
     });
 
-    deliveryType.addEventListener('change', (e) => {
-      const val = e.target.value;
-      if (val === 'Envío Departamental') {
-        currentShippingFee = 5.00;
-        addressFieldsGroup.classList.remove('hidden');
-      } else if (val === 'Envío Local') {
-        currentShippingFee = 0.00;
-        addressFieldsGroup.classList.remove('hidden');
-      } else {
-        currentShippingFee = 0.00;
-        addressFieldsGroup.classList.add('hidden');
-      }
-      shippingPrice.innerText = currentShippingFee.toFixed(2);
-      updateCart();
-    });
-
-    paymentMethod.addEventListener('change', (e) => {
-      if (e.target.value === 'Transferencia Bancaria') {
-        bankDetailsBox.classList.remove('hidden');
-      } else {
-        bankDetailsBox.classList.add('hidden');
-      }
-    });
-
-    // LOGIN
-    accessForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = document.getElementById('accessName').value.trim();
-      const pass = document.getElementById('accessPass').value.trim();
-
-      currentUser = { name, phone: pass };
-
-      if (name === ADMIN_USER && pass === ADMIN_PASS) {
-        showAdminView();
-      } else {
-        const registeredUsers = JSON.parse(localStorage.getItem('st_registered_clients') || '[]');
-        const isReturning = registeredUsers.includes(pass);
-
-        if (isReturning) {
-          userHeaderArea.innerText = `¡Hola, ${name}!`;
-        } else {
-          userHeaderArea.innerText = `¡Bienvenido, ${name}!`;
-          registeredUsers.push(pass);
-          localStorage.setItem('st_registered_clients', JSON.stringify(registeredUsers));
-        }
-
-        setTimeout(() => {
-          userHeaderArea.style.opacity = '0';
-          setTimeout(() => { userHeaderArea.innerText = ''; userHeaderArea.style.opacity = '1'; }, 500);
-        }, 15000);
-
-        showClientView();
-      }
-    });
-
-    function showAdminView() {
-      loginScreen.classList.add('hidden');
-      clientView.classList.add('hidden');
-      adminView.classList.remove('hidden');
-      userHeaderArea.innerText = "FrankR (Admin)";
-      bottomNav.classList.add('hidden');
-      switchAdminSubTab('orders');
-      refreshIcons();
-    }
-
-    function showClientView() {
-      loginScreen.classList.add('hidden');
-      adminView.classList.add('hidden');
-      clientView.classList.remove('hidden');
-      bottomNav.classList.remove('hidden');
-
-      document.getElementById('custName').value = currentUser.name;
-      document.getElementById('custPhone').value = currentUser.phone;
-      document.getElementById('profileNameDisplay').innerText = currentUser.name;
-      document.getElementById('profilePhoneDisplay').innerText = currentUser.phone;
-
-      const savedAddressData = JSON.parse(localStorage.getItem(`st_address_${currentUser.phone}`) || '{}');
-      if (savedAddressData.address) {
-        document.getElementById('profileAddress').value = savedAddressData.address;
-        document.getElementById('profileRef').value = savedAddressData.ref || '';
-        document.getElementById('custAddress').value = savedAddressData.address;
-        document.getElementById('custRef').value = savedAddressData.ref || '';
-      }
-
-      switchClientTab('catalog');
-      loadPromos();
-      refreshIcons();
-    }
-
-    // SUB-NAVEGACIÓN DE ADMINISTRADOR
-    document.getElementById('adminTabOrdersBtn').addEventListener('click', () => switchAdminSubTab('orders'));
-    document.getElementById('adminTabProductsBtn').addEventListener('click', () => switchAdminSubTab('products'));
-    document.getElementById('adminTabPromosBtn').addEventListener('click', () => switchAdminSubTab('promos'));
-    document.getElementById('adminLogoutBtn').addEventListener('click', () => logoutBtn.click());
-
-    function switchAdminSubTab(tab) {
-      [adminOrdersTab, adminProductsTab, adminPromosTab].forEach(t => t.classList.add('hidden'));
-      document.getElementById('adminTabOrdersBtn').className = 'btn btn-sm btn-secondary';
-      document.getElementById('adminTabProductsBtn').className = 'btn btn-sm btn-secondary';
-      document.getElementById('adminTabPromosBtn').className = 'btn btn-sm btn-secondary';
-
-      if (tab === 'orders') {
-        adminOrdersTab.classList.remove('hidden');
-        document.getElementById('adminTabOrdersBtn').className = 'btn btn-sm btn-emerald';
-        loadAdminOrders();
-      } else if (tab === 'products') {
-        adminProductsTab.classList.remove('hidden');
-        document.getElementById('adminTabProductsBtn').className = 'btn btn-sm btn-emerald';
-        loadAdminProducts();
-      } else if (tab === 'promos') {
-        adminPromosTab.classList.remove('hidden');
-        document.getElementById('adminTabPromosBtn').className = 'btn btn-sm btn-emerald';
-        loadAdminPromos();
-      }
-      refreshIcons();
-    }
-
-    // Guardar Dirección desde Perfil
-    document.getElementById('profileAddressForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const address = document.getElementById('profileAddress').value.trim();
-      const ref = document.getElementById('profileRef').value.trim();
-
-      const addressData = { address, ref };
-      localStorage.setItem(`st_address_${currentUser.phone}`, JSON.stringify(addressData));
-
-      document.getElementById('custAddress').value = address;
-      document.getElementById('custRef').value = ref;
-
-      alert('¡Dirección guardada con éxito!');
-    });
-
-    logoutBtn.addEventListener('click', () => {
-      currentUser = null;
-      cart = [];
-      updateCart();
-      if (bannerInterval) clearInterval(bannerInterval);
-      loginScreen.classList.remove('hidden');
-      clientView.classList.add('hidden');
-      adminView.classList.add('hidden');
-      bottomNav.classList.add('hidden');
-      userHeaderArea.innerText = "";
-      accessForm.reset();
-      refreshIcons();
-    });
-
     // NAVEGACIÓN CLIENTE
-    navCatalogBtn.addEventListener('click', () => switchClientTab('catalog'));
-    navPromosBtn.addEventListener('click', () => switchClientTab('promos'));
-    navCartBtn.addEventListener('click', () => cartModal.classList.add('active'));
-    navOrdersBtn.addEventListener('click', () => switchClientTab('orders'));
-    navProfileBtn.addEventListener('click', () => switchClientTab('profile'));
+    document.getElementById('navCatalogBtn').addEventListener('click', () => switchClientTab('catalog'));
+    document.getElementById('navPromosBtn').addEventListener('click', () => switchClientTab('promos'));
+    document.getElementById('navRewardsBtn').addEventListener('click', () => switchClientTab('rewards'));
+    document.getElementById('navCartBtn').addEventListener('click', () => document.getElementById('cartModal').classList.add('active'));
+    document.getElementById('navOrdersBtn').addEventListener('click', () => switchClientTab('orders'));
+    document.getElementById('navProfileBtn').addEventListener('click', () => switchClientTab('profile'));
 
     function switchClientTab(tab) {
-      [navCatalogBtn, navPromosBtn, navOrdersBtn, navProfileBtn].forEach(b => b.classList.remove('active'));
-      [clientCatalogTab, clientPromosTab, clientOrdersTab, clientProfileTab].forEach(t => t.classList.add('hidden'));
+      ['navCatalogBtn', 'navPromosBtn', 'navRewardsBtn', 'navOrdersBtn', 'navProfileBtn'].forEach(id => {
+        document.getElementById(id).classList.remove('active');
+      });
+      ['clientCatalogTab', 'clientPromosTab', 'clientRewardsTab', 'clientOrdersTab', 'clientProfileTab'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+      });
 
       if (tab === 'catalog') {
-        navCatalogBtn.classList.add('active');
-        clientCatalogTab.classList.remove('hidden');
+        document.getElementById('navCatalogBtn').classList.add('active');
+        document.getElementById('clientCatalogTab').classList.remove('hidden');
         loadProducts();
       } else if (tab === 'promos') {
-        navPromosBtn.classList.add('active');
-        clientPromosTab.classList.remove('hidden');
+        document.getElementById('navPromosBtn').classList.add('active');
+        document.getElementById('clientPromosTab').classList.remove('hidden');
         loadPromos();
+      } else if (tab === 'rewards') {
+        document.getElementById('navRewardsBtn').classList.add('active');
+        document.getElementById('clientRewardsTab').classList.remove('hidden');
+        loadRewards();
       } else if (tab === 'orders') {
-        navOrdersBtn.classList.add('active');
-        clientOrdersTab.classList.remove('hidden');
+        document.getElementById('navOrdersBtn').classList.add('active');
+        document.getElementById('clientOrdersTab').classList.remove('hidden');
         loadClientOrders();
       } else if (tab === 'profile') {
-        navProfileBtn.classList.add('active');
-        clientProfileTab.classList.remove('hidden');
+        document.getElementById('navProfileBtn').classList.add('active');
+        document.getElementById('clientProfileTab').classList.remove('hidden');
       }
+      refreshIcons();
     }
 
-    closeCartBtn.addEventListener('click', () => cartModal.classList.remove('active'));
-    closeDetailBtn.addEventListener('click', () => productDetailModal.classList.remove('active'));
+    document.getElementById('closeCartBtn').addEventListener('click', () => document.getElementById('cartModal').classList.remove('active'));
+    document.getElementById('closeDetailBtn').addEventListener('click', () => document.getElementById('productDetailModal').classList.remove('active'));
 
-    // Cargar Catálogo
     async function loadProducts() {
-      productGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">Cargando catálogo...</p>';
+      const grid = document.getElementById('productGrid');
+      grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Cargando productos...</p>';
       try {
         const querySnapshot = await getDocs(collection(db, "productos"));
         allProducts = [];
-        querySnapshot.forEach((docSnap) => {
-          allProducts.push({ id: docSnap.id, ...docSnap.data() });
-        });
+        querySnapshot.forEach((docSnap) => allProducts.push({ id: docSnap.id, ...docSnap.data() }));
         filterAndRenderProducts();
-      } catch (error) {
-        productGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Error al cargar productos.</p>';
+      } catch (err) {
+        grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Error al obtener productos.</p>';
       }
     }
-
-    window.filterByCategory = (category) => {
-      currentSelectedCategory = category;
-      document.querySelectorAll('.cat-chip').forEach(chip => {
-        chip.classList.toggle('active', chip.innerText === category);
-      });
-      filterAndRenderProducts();
-    };
 
     function filterAndRenderProducts() {
-      const searchStr = searchInput.value.toLowerCase();
+      const searchStr = document.getElementById('searchInput').value.toLowerCase();
       const filtered = allProducts.filter(item => {
         const matchesCategory = currentSelectedCategory === 'Todas' || (item.categoria || 'Otros') === currentSelectedCategory;
-        const matchesSearch = item.nombre.toLowerCase().includes(searchStr) || (item.descripcion || '').toLowerCase().includes(searchStr);
+        const matchesSearch = item.nombre.toLowerCase().includes(searchStr);
         return matchesCategory && matchesSearch;
       });
-      renderProducts(filtered);
-    }
 
-    function renderProducts(products) {
-      productGrid.innerHTML = '';
-      productCounter.innerText = `${products.length} productos`;
+      const grid = document.getElementById('productGrid');
+      grid.innerHTML = '';
+      document.getElementById('productCounter').innerText = `${filtered.length} productos`;
 
-      if (products.length === 0) {
-        productGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">No hay productos en esta categoría.</p>';
-        return;
-      }
-
-      products.forEach((item) => {
+      filtered.forEach(item => {
         const rawImg = item.imagenUrl1 || item.imagenUrl || '';
-        const mainImg = fixDriveUrl(rawImg) || 'https://via.placeholder.com/200?text=Super+To%C3%B1ita';
-        const availableInBranch = isProductAvailableInBranch(item);
+        const mainImg = fixDriveUrl(rawImg) || 'https://via.placeholder.com/200';
         const dynamicPrice = getProductPrice(item);
+        const availableInBranch = isProductAvailableInBranch(item);
+        const bonusPoints = getProductPoints(item);
 
         const card = document.createElement('div');
         card.className = `card ${!availableInBranch ? 'out-of-stock' : ''}`;
@@ -1398,264 +1256,189 @@
           ${!availableInBranch ? '<span class="out-tag">Agotado</span>' : ''}
           <div onclick="openProductDetail('${item.id}')" style="cursor: pointer;">
             <img src="${mainImg}" alt="${item.nombre}">
-            <div class="category-label">${item.categoria || 'General'}</div>
+            <div style="font-size:0.7rem; color:var(--text-muted);">${item.categoria || 'General'}</div>
             <h3>${item.nombre}</h3>
+            ${bonusPoints > 0 ? `<div class="points-badge"><i class="fa-solid fa-star"></i> +${bonusPoints} Pts Extra</div>` : ''}
           </div>
-          <div class="price-row">
-            <span class="price">$${dynamicPrice.toFixed(2)}</span>
-            <button class="btn btn-sm btn-emerald" ${!availableInBranch ? 'disabled' : ''} onclick="event.stopPropagation(); addToCart('${item.id}', '${item.nombre}', ${dynamicPrice}, 1)">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.5rem;">
+            <span style="font-weight:800;">$${dynamicPrice.toFixed(2)}</span>
+            <button class="btn btn-sm btn-emerald" ${!availableInBranch ? 'disabled' : ''} onclick="event.stopPropagation(); addToCart('${item.id}', '${item.nombre}', ${dynamicPrice}, 1, false, ${bonusPoints})">
               ${!availableInBranch ? 'Agotado' : '+ Agregar'}
             </button>
           </div>
         `;
-        productGrid.appendChild(card);
+        grid.appendChild(card);
       });
       refreshIcons();
     }
 
-    // Funciones globales para control de cantidad en la vista detallada
-    window.updateDetailQty = (newVal) => {
-      const targetVal = Math.max(1, parseInt(newVal) || 1);
-      const inputEl = document.getElementById('detailQtyInput');
-      if (inputEl) inputEl.value = targetVal;
+    window.filterByCategory = (cat) => {
+      currentSelectedCategory = cat;
+      document.querySelectorAll('.cat-chip').forEach(c => c.classList.toggle('active', c.innerText === cat));
+      filterAndRenderProducts();
     };
 
-    window.addFromDetailModal = (id, nombre, precio, isPromo = false) => {
-      const inputEl = document.getElementById('detailQtyInput');
-      const qty = inputEl ? Math.max(1, parseInt(inputEl.value) || 1) : 1;
-      addToCart(id, nombre, precio, qty, isPromo);
-      productDetailModal.classList.remove('active');
-    };
+    document.getElementById('searchInput').addEventListener('input', filterAndRenderProducts);
 
-    // Abrir Modal de Producto Ampliado con Control de Cantidad Funcional
     window.openProductDetail = (id) => {
       const item = allProducts.find(p => p.id === id);
       if (!item) return;
 
-      const img1 = fixDriveUrl(item.imagenUrl1 || item.imagenUrl) || 'https://via.placeholder.com/400?text=Super+To%C3%B1ita';
-      const img2 = fixDriveUrl(item.imagenUrl2);
+      const img1 = fixDriveUrl(item.imagenUrl1 || item.imagenUrl) || 'https://via.placeholder.com/400';
       const availableInBranch = isProductAvailableInBranch(item);
       const dynamicPrice = getProductPrice(item);
+      const bonusPoints = getProductPoints(item);
 
-      detailContent.innerHTML = `
-        <div class="product-detail-img-wrapper">
-          <img id="mainDetailImg" src="${img1}" alt="${item.nombre}">
-        </div>
-
-        ${img2 ? `
-          <div class="gallery-dots">
-            <img class="gallery-dot active" src="${img1}" onclick="switchDetailImg('${img1}', this)">
-            <img class="gallery-dot" src="${img2}" onclick="switchDetailImg('${img2}', this)">
-          </div>
-        ` : ''}
-
+      document.getElementById('detailContent').innerHTML = `
         <div>
-          <span style="font-size: 0.75rem; font-weight:700; color: var(--emerald-accent); text-transform: uppercase;">${item.categoria || 'General'}</span>
-          <h2 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 0.25rem;">${item.nombre}</h2>
-          <p style="font-size: 1.4rem; font-weight: 800; color: var(--brand-dark); margin-bottom: 0.75rem;">
-            $${dynamicPrice.toFixed(2)} <small style="font-size:0.75rem; color:var(--text-muted); font-weight:400;">(${currentBranch})</small>
-          </p>
+          <img src="${img1}" style="width:100%; max-height:300px; object-fit:contain; background:#f8fafc; border-radius:16px;">
+          <h2 style="font-size:1.2rem; font-weight:800; margin-top:0.75rem;">${item.nombre}</h2>
+          <div style="font-size:1.3rem; font-weight:800; color:var(--brand-dark);">$${dynamicPrice.toFixed(2)}</div>
+          <p style="color:var(--text-muted); font-size:0.9rem; margin:0.5rem 0;">${item.descripcion || ''}</p>
+          ${bonusPoints > 0 ? `<div class="points-badge"><i class="fa-solid fa-star"></i> Regala +${bonusPoints} Pts Extra en esta sucursal</div>` : ''}
           
-          <div style="margin-bottom: 1.25rem;">
-            <h4 style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem;">Descripción</h4>
-            <p style="font-size: 0.95rem; color: var(--text-main); line-height: 1.4;">${item.descripcion}</p>
-          </div>
-
-          <!-- Selector Numérico de Cantidad en el Detalle -->
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; background: var(--bg-primary); padding: 0.75rem 1rem; border-radius: var(--radius-md);">
-            <span style="font-weight: 700; font-size: 0.9rem; color: var(--text-main);">Cantidad a llevar:</span>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin:1rem 0; background:var(--bg-primary); padding:0.75rem; border-radius:12px;">
+            <span>Cantidad:</span>
             <div class="cart-qty-control">
-              <button class="cart-qty-btn" onclick="updateDetailQty(parseInt(document.getElementById('detailQtyInput').value || 1) - 1)">-</button>
-              <input type="number" min="1" id="detailQtyInput" class="cart-qty-input" value="1" onchange="updateDetailQty(this.value)">
-              <button class="cart-qty-btn" onclick="updateDetailQty(parseInt(document.getElementById('detailQtyInput').value || 1) + 1)">+</button>
+              <button class="cart-qty-btn" onclick="let input=document.getElementById('modalQty'); input.value=Math.max(1, parseInt(input.value)-1);">-</button>
+              <input type="number" id="modalQty" class="cart-qty-input" value="1" readonly>
+              <button class="cart-qty-btn" onclick="let input=document.getElementById('modalQty'); input.value=parseInt(input.value)+1;">+</button>
             </div>
           </div>
 
-          <button class="btn btn-emerald" style="width: 100%; padding: 0.9rem;" ${!availableInBranch ? 'disabled' : ''} onclick="addFromDetailModal('${item.id}', '${item.nombre}', ${dynamicPrice}, false)">
-            <i data-lucide="shopping-cart"></i> ${!availableInBranch ? 'Producto Agotado en Sucursal' : 'Agregar al Carrito'}
+          <button class="btn btn-emerald" style="width:100%;" ${!availableInBranch ? 'disabled' : ''} onclick="addToCart('${item.id}', '${item.nombre}', ${dynamicPrice}, parseInt(document.getElementById('modalQty').value), false, ${bonusPoints}); document.getElementById('productDetailModal').classList.remove('active');">
+            ${!availableInBranch ? 'Agotado' : 'Agregar al Carrito'}
           </button>
         </div>
       `;
 
-      productDetailModal.classList.add('active');
-      refreshIcons();
+      document.getElementById('productDetailModal').classList.add('active');
     };
 
-    window.switchDetailImg = (src, element) => {
-      document.getElementById('mainDetailImg').src = src;
-      document.querySelectorAll('.gallery-dot').forEach(dot => dot.classList.remove('active'));
-      element.classList.add('active');
-    };
-
-    searchInput.addEventListener('input', filterAndRenderProducts);
-
-    window.addToCart = (id, nombre, precio, cantidad = 1, isPromo = false) => {
-      const qtyToAdd = Math.max(1, parseInt(cantidad) || 1);
+    window.addToCart = (id, nombre, precio, cantidad = 1, isPromo = false, bonusPoints = 0) => {
       const existing = cart.find(p => p.id === id);
       if (existing) {
-        existing.cantidad += qtyToAdd;
+        existing.cantidad += cantidad;
       } else {
-        cart.push({ id, nombre, precio, cantidad: qtyToAdd, isPromo });
+        cart.push({ id, nombre, precio, cantidad, isPromo, bonusPoints });
       }
       updateCart();
     };
 
     function updateCart() {
       const totalCount = cart.reduce((acc, item) => acc + item.cantidad, 0);
-      cartCount.innerText = totalCount;
+      document.getElementById('cartCount').innerText = totalCount;
 
+      const cartItems = document.getElementById('cartItems');
       cartItems.innerHTML = '';
       let subtotal = 0;
+      let totalBonusPoints = 0;
 
       cart.forEach(item => {
         const itemSubtotal = item.precio * item.cantidad;
         subtotal += itemSubtotal;
+        totalBonusPoints += (item.bonusPoints || 0) * item.cantidad;
+
         cartItems.innerHTML += `
-          <div class="cart-item">
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem 0; border-bottom:1px solid var(--border);">
             <div style="flex:1;">
-              <strong>${item.isPromo ? '🔥 [PROMO] ' : ''}${item.nombre}</strong><br>
-              <small style="color: var(--text-muted)">$${item.precio.toFixed(2)} c/u</small>
+              <strong>${item.nombre}</strong><br>
+              <small style="color:var(--text-muted);">$${item.precio.toFixed(2)} c/u</small>
             </div>
-            
-            <!-- Selector de Cantidad con Input Numérico -->
             <div class="cart-qty-control">
               <button class="cart-qty-btn" onclick="changeCartQty('${item.id}', ${item.cantidad - 1})">-</button>
-              <input type="number" min="1" class="cart-qty-input" value="${item.cantidad}" onchange="changeCartQty('${item.id}', parseInt(this.value) || 1)">
+              <input type="number" class="cart-qty-input" value="${item.cantidad}" readonly>
               <button class="cart-qty-btn" onclick="changeCartQty('${item.id}', ${item.cantidad + 1})">+</button>
             </div>
-
-            <div style="text-align: right; min-width: 60px;">
-              <span style="font-weight: 800; font-size: 0.95rem;">$${itemSubtotal.toFixed(2)}</span>
-            </div>
-
-            <button class="btn btn-sm btn-secondary" onclick="removeFromCart('${item.id}')" style="padding: 0.35rem 0.5rem;">✕</button>
+            <span style="font-weight:800; text-align:right; min-width:60px;">$${itemSubtotal.toFixed(2)}</span>
           </div>
         `;
       });
 
-      const total = subtotal > 0 ? subtotal + currentShippingFee : 0;
-      subtotalPrice.innerText = subtotal.toFixed(2);
-      totalPrice.innerText = total.toFixed(2);
+      const earnedPoints = Math.floor(subtotal) + totalBonusPoints;
+      document.getElementById('subtotalPrice').innerText = subtotal.toFixed(2);
+      document.getElementById('earnedPointsPreview').innerText = earnedPoints;
+      document.getElementById('shippingPrice').innerText = currentShippingFee.toFixed(2);
+      document.getElementById('totalPrice').innerText = (subtotal + currentShippingFee).toFixed(2);
     }
 
     window.changeCartQty = (id, newQty) => {
-      const targetQty = parseInt(newQty);
-      if (isNaN(targetQty) || targetQty <= 0) {
-        removeFromCart(id);
-        return;
+      if (newQty <= 0) {
+        cart = cart.filter(i => i.id !== id);
+      } else {
+        const item = cart.find(i => i.id === id);
+        if (item) item.cantidad = newQty;
       }
-      const item = cart.find(p => p.id === id);
-      if (item) {
-        item.cantidad = targetQty;
-        updateCart();
-      }
-    };
-
-    window.removeFromCart = (id) => {
-      cart = cart.filter(item => item.id !== id);
       updateCart();
     };
 
-    // ENVÍO DE PEDIDO POR WHATSAPP
-    checkoutForm.addEventListener('submit', async (e) => {
+    document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-
-      if (cart.length === 0) {
-        alert("Agrega productos al carrito.");
-        return;
-      }
-
-      const dType = deliveryType.value;
-      const address = document.getElementById('custAddress').value.trim();
-      const reference = document.getElementById('custRef').value.trim();
-      const method = paymentMethod.value;
-
-      if (dType !== 'Recoger en Tienda') {
-        if (!address || !reference) {
-          alert("Por favor completa la dirección y punto de referencia para el envío.");
-          return;
-        }
-
-        const autoSaveAddress = { address, ref: reference };
-        localStorage.setItem(`st_address_${currentUser.phone}`, JSON.stringify(autoSaveAddress));
-        document.getElementById('profileAddress').value = address;
-        document.getElementById('profileRef').value = reference;
-      }
-
-      sendOrderBtn.disabled = true;
-      sendOrderBtn.innerText = "Procesando pedido...";
+      if (cart.length === 0) return alert("Tu carrito está vacío.");
 
       let subtotal = 0;
+      let totalBonus = 0;
       let detailList = "";
 
-      const itemsPayload = cart.map(item => {
-        const itemTotal = item.precio * item.cantidad;
-        subtotal += itemTotal;
-        detailList += `• ${item.isPromo ? '[PROMO] ' : ''}${item.nombre} (x${item.cantidad}) - $${itemTotal.toFixed(2)}\n`;
-        return { nombre: item.nombre, cantidad: item.cantidad, precio: item.precio, isPromo: !!item.isPromo };
+      cart.forEach(item => {
+        const t = item.precio * item.cantidad;
+        subtotal += t;
+        totalBonus += (item.bonusPoints || 0) * item.cantidad;
+        detailList += `• ${item.nombre} (x${item.cantidad}) - $${t.toFixed(2)}\n`;
       });
 
-      const total = subtotal + currentShippingFee;
-      const orderDate = new Date().toLocaleString('es-SV');
+      const pointsToEarn = Math.floor(subtotal) + totalBonus;
 
       const newOrder = {
         clienteNombre: currentUser.name,
         clienteTelefono: currentUser.phone,
-        tipoEntrega: dType,
         sucursal: currentBranch,
-        direccion: dType !== 'Recoger en Tienda' ? address : 'N/A',
-        referencia: dType !== 'Recoger en Tienda' ? reference : 'N/A',
-        metodoPago: method,
-        items: itemsPayload,
-        subtotal: subtotal,
-        envio: currentShippingFee,
-        total: total,
+        tipoEntrega: document.getElementById('deliveryType').value,
+        direccion: document.getElementById('custAddress').value || 'N/A',
+        referencia: document.getElementById('custRef').value || 'N/A',
+        metodoPago: document.getElementById('paymentMethod').value,
+        items: cart,
+        subtotal,
+        total: subtotal + currentShippingFee,
+        puntosAGanar: pointsToEarn,
+        puntosAcreditados: false,
         estado: "Pendiente",
-        fecha: orderDate,
+        fecha: new Date().toLocaleString('es-SV'),
         createdAt: new Date().toISOString()
       };
 
       try {
         await addDoc(collection(db, "ordenes"), newOrder);
 
-        const msg = `🛍️ *MINI SUPER TOÑITA ONLINE - NUEVO PEDIDO*\n\n` +
+        const msg = `🛍️ *SUPER TOÑITA ONLINE*\n\n` +
           `👤 *Cliente:* ${currentUser.name}\n` +
           `📞 *Teléfono:* ${currentUser.phone}\n` +
           `🏪 *Sucursal:* ${currentBranch}\n` +
-          `🚚 *Entrega:* ${dType}\n` +
-          `${dType !== 'Recoger en Tienda' ? `📍 *Dirección:* ${address}\n📌 *Ref:* ${reference}\n` : ''}` +
-          `💳 *Método de Pago:* ${method}\n\n` +
-          `🛒 *Detalle del Pedido:*\n${detailList}\n` +
-          `💵 *Subtotal:* $${subtotal.toFixed(2)}\n` +
-          `🛵 *Costo Envío:* $${currentShippingFee.toFixed(2)}\n` +
-          `💰 *TOTAL A PAGAR:* $${total.toFixed(2)}`;
+          `⭐ *Puntos a sumar al entregar:* +${pointsToEarn} Pts\n\n` +
+          `🛒 *Detalle:*\n${detailList}\n` +
+          `💰 *TOTAL:* $${(subtotal + currentShippingFee).toFixed(2)}`;
 
         cart = [];
         updateCart();
-        cartModal.classList.remove('active');
-        checkoutForm.reset();
+        document.getElementById('cartModal').classList.remove('active');
 
-        const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
-        window.location.href = waUrl;
-
+        window.location.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
       } catch (err) {
-        alert("Ocurrió un error al registrar el pedido.");
-      } finally {
-        sendOrderBtn.disabled = false;
-        sendOrderBtn.innerText = "Enviar Pedido por WhatsApp";
+        alert("Error al procesar pedido.");
       }
     });
 
-    // Cargar Historial Cliente
     async function loadClientOrders() {
-      clientOrdersList.innerHTML = '<p style="text-align: center; color: var(--text-muted);">Cargando historial...</p>';
+      const container = document.getElementById('clientOrdersList');
+      container.innerHTML = '<p style="text-align:center;">Cargando tus órdenes...</p>';
+
       try {
         const q = query(collection(db, "ordenes"), where("clienteTelefono", "==", currentUser.phone));
         const querySnapshot = await getDocs(q);
-        clientOrdersList.innerHTML = '';
+        container.innerHTML = '';
 
         if (querySnapshot.empty) {
-          clientOrdersList.innerHTML = '<p style="text-align: center; color: var(--text-muted);">Aún no tienes pedidos realizados.</p>';
+          container.innerHTML = '<p style="text-align:center; color:var(--text-muted);">No tienes órdenes registradas.</p>';
           return;
         }
 
@@ -1664,267 +1447,118 @@
         orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
         orders.forEach(order => {
-          const statusClass = getStatusClass(order.estado);
-          let itemsHtml = order.items.map(i => `<div>- ${i.isPromo ? '🔥 ' : ''}${i.nombre} (x${i.cantidad})</div>`).join('');
-
           const card = document.createElement('div');
           card.className = 'order-card';
           card.innerHTML = `
             <div class="order-header">
               <div>
                 <strong>Pedido #${order.id.slice(-5).toUpperCase()}</strong>
-                <div style="font-size: 0.75rem; color: var(--text-muted);">${order.fecha}</div>
+                <div style="font-size:0.75rem; color:var(--text-muted);">${order.fecha}</div>
               </div>
-              <span class="status-badge ${statusClass}">${order.estado}</span>
+              <span class="status-badge status-${(order.estado||'').toLowerCase().replace(' ','')}">${order.estado}</span>
             </div>
-            <div style="font-size: 0.85rem; color: var(--emerald-accent); font-weight:700; margin-bottom: 0.3rem;">
-              ${order.tipoEntrega} (${order.sucursal})
-            </div>
-            <div style="font-size: 0.88rem; margin-bottom: 0.5rem;">${itemsHtml}</div>
-            <div style="font-weight: 800; font-size: 1.05rem; color: var(--brand-dark); text-align: right;">
-              Total: $${parseFloat(order.total).toFixed(2)}
-            </div>
+            <div>Sucursal: ${order.sucursal}</div>
+            <div style="color:var(--amber-accent); font-weight:700;">⭐ Puntos: +${order.puntosAGanar || 0} Pts</div>
+            <div style="font-weight:800; font-size:1.05rem; text-align:right;">Total: $${parseFloat(order.total).toFixed(2)}</div>
           `;
-          clientOrdersList.appendChild(card);
+          container.appendChild(card);
         });
-
-      } catch (err) {
-        clientOrdersList.innerHTML = '<p style="text-align: center;">Error al obtener tus pedidos.</p>';
-      }
-    }
-
-    // GESTIÓN COMPLETA ADMINISTRADOR: PRODUCTOS
-    async function loadAdminProducts() {
-      adminProductGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Cargando productos del catálogo...</p>';
-      try {
-        const querySnapshot = await getDocs(collection(db, "productos"));
-        allProducts = [];
-        querySnapshot.forEach(docSnap => allProducts.push({ id: docSnap.id, ...docSnap.data() }));
-        renderAdminProducts(allProducts);
       } catch (e) {
-        adminProductGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Error al cargar productos.</p>';
+        container.innerHTML = '<p style="text-align:center;">Error al cargar historial.</p>';
       }
     }
 
-    function renderAdminProducts(products) {
-      adminProductGrid.innerHTML = '';
-      products.forEach(item => {
-        const rawImg = item.imagenUrl1 || item.imagenUrl || '';
-        const mainImg = fixDriveUrl(rawImg) || 'https://via.placeholder.com/200?text=Super+To%C3%B1ita';
-
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-          <img src="${mainImg}" alt="${item.nombre}">
-          <div class="category-label">${item.categoria || 'General'}</div>
-          <h3>${item.nombre}</h3>
-          
-          <div style="font-size: 0.72rem; color: var(--text-muted); margin: 0.3rem 0; line-height: 1.3;">
-            <b>L. Fuentes:</b> $${parseFloat(item.precioLosFuentes ?? item.precio ?? 0).toFixed(2)} (${item.stockLosFuentes ?? 'Disp.'})<br>
-            <b>Corinto:</b> $${parseFloat(item.precioCorinto ?? item.precio ?? 0).toFixed(2)} (${item.stockCorinto ?? 'Disp.'})<br>
-            <b>Metapán:</b> $${parseFloat(item.precioMetapan ?? item.precio ?? 0).toFixed(2)} (${item.stockMetapan ?? 'Disp.'})
-          </div>
-
-          <div style="display: flex; gap: 0.3rem; margin-top: 0.5rem;">
-            <button class="btn btn-sm btn-secondary" style="flex: 1;" onclick="editProduct('${item.id}')">Editar</button>
-            <button class="btn btn-sm btn-danger" onclick="deleteProduct('${item.id}')">✕</button>
-          </div>
-        `;
-        adminProductGrid.appendChild(card);
-      });
-      refreshIcons();
-    }
-
-    productForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const id = document.getElementById('prodId').value;
-      const data = {
-        nombre: document.getElementById('prodName').value.trim(),
-        categoria: document.getElementById('prodCategory').value,
-        stockLosFuentes: document.getElementById('prodStockLosFuentes').value,
-        stockCorinto: document.getElementById('prodStockCorinto').value,
-        stockMetapan: document.getElementById('prodStockMetapan').value,
-        precioLosFuentes: parseFloat(document.getElementById('prodPriceLosFuentes').value || 0),
-        precioCorinto: parseFloat(document.getElementById('prodPriceCorinto').value || 0),
-        precioMetapan: parseFloat(document.getElementById('prodPriceMetapan').value || 0),
-        descripcion: document.getElementById('prodDesc').value.trim(),
-        imagenUrl1: document.getElementById('prodImg1').value.trim(),
-        imagenUrl2: document.getElementById('prodImg2').value.trim()
-      };
-
+    async function loadRewards() {
+      const grid = document.getElementById('rewardsCatalogGrid');
+      grid.innerHTML = '<p style="grid-column:1/-1; text-align:center;">Cargando premios...</p>';
       try {
-        if (id) {
-          await updateDoc(doc(db, "productos", id), data);
-        } else {
-          await addDoc(collection(db, "productos"), data);
-        }
-        resetForm();
-        loadAdminProducts();
+        const querySnapshot = await getDocs(collection(db, "products"));
+        allRewards = [];
+        querySnapshot.forEach(docSnap => allRewards.push({ id: docSnap.id, ...docSnap.data() }));
+
+        grid.innerHTML = '';
+        allRewards.forEach(r => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `
+            <img src="${r.image || 'https://via.placeholder.com/150'}" alt="${r.name}">
+            <h3>${r.name}</h3>
+            <div style="font-weight:800; color:var(--amber-accent); margin:0.4rem 0;">${r.points} Puntos</div>
+            <button class="btn btn-sm btn-amber" onclick="redeemReward('${r.id}', '${r.name}', ${r.points})">Canjear Premio</button>
+          `;
+          grid.appendChild(card);
+        });
       } catch (err) {
-        alert("Error al guardar producto.");
-      }
-    });
-
-    window.editProduct = (id) => {
-      const item = allProducts.find(p => p.id === id);
-      if (!item) return;
-
-      document.getElementById('prodId').value = item.id;
-      document.getElementById('prodName').value = item.nombre;
-      document.getElementById('prodCategory').value = item.categoria || 'Productos Toñita';
-      
-      document.getElementById('prodStockLosFuentes').value = item.stockLosFuentes ?? item.stock ?? 'Disponible';
-      document.getElementById('prodStockCorinto').value = item.stockCorinto ?? item.stock ?? 'Disponible';
-      document.getElementById('prodStockMetapan').value = item.stockMetapan ?? item.stock ?? 'Disponible';
-
-      document.getElementById('prodPriceLosFuentes').value = item.precioLosFuentes ?? item.precio ?? 0;
-      document.getElementById('prodPriceCorinto').value = item.precioCorinto ?? item.precio ?? 0;
-      document.getElementById('prodPriceMetapan').value = item.precioMetapan ?? item.precio ?? 0;
-
-      document.getElementById('prodDesc').value = item.descripcion || '';
-      document.getElementById('prodImg1').value = item.imagenUrl1 || item.imagenUrl || '';
-      document.getElementById('prodImg2').value = item.imagenUrl2 || '';
-
-      formTitle.innerText = "Editar Producto";
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-
-    window.deleteProduct = async (id) => {
-      if (confirm("¿Estás seguro de eliminar este producto?")) {
-        await deleteDoc(doc(db, "productos", id));
-        loadAdminProducts();
-      }
-    };
-
-    function resetForm() {
-      document.getElementById('prodId').value = '';
-      productForm.reset();
-      formTitle.innerText = "Agregar Nuevo Producto";
-    }
-    cancelFormBtn.addEventListener('click', resetForm);
-
-    // GESTIÓN DE PEDIDOS ADMIN CON FILTROS
-    async function loadAdminOrders() {
-      adminOrdersList.innerHTML = '<p style="text-align: center; color: var(--text-muted);">Cargando pedidos de la tienda...</p>';
-      try {
-        const querySnapshot = await getDocs(collection(db, "ordenes"));
-        adminOrdersList.innerHTML = '';
-        allOrders = [];
-
-        if (querySnapshot.empty) {
-          adminOrdersList.innerHTML = '<p style="text-align: center; color: var(--text-muted);">No hay pedidos registrados.</p>';
-          return;
-        }
-
-        querySnapshot.forEach(docSnap => allOrders.push({ id: docSnap.id, ...docSnap.data() }));
-        allOrders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
-        renderAdminOrders();
-
-      } catch (err) {
-        adminOrdersList.innerHTML = '<p style="text-align: center;">Error al obtener pedidos.</p>';
+        grid.innerHTML = '<p style="grid-column:1/-1; text-align:center;">Error al cargar premios.</p>';
       }
     }
 
-    window.filterAdminOrders = (status, btnElement) => {
-      currentAdminOrderFilter = status;
-      document.querySelectorAll('.order-filter-pill').forEach(pill => pill.classList.remove('active'));
-      btnElement.classList.add('active');
-      renderAdminOrders();
-    };
-
-    function renderAdminOrders() {
-      adminOrdersList.innerHTML = '';
-      
-      const filteredOrders = allOrders.filter(o => {
-        if (currentAdminOrderFilter === 'Todos') return true;
-        return o.estado === currentAdminOrderFilter;
-      });
-
-      if (filteredOrders.length === 0) {
-        adminOrdersList.innerHTML = `<p style="text-align: center; color: var(--text-muted); padding: 1.5rem;">No hay pedidos en la categoría "${currentAdminOrderFilter}".</p>`;
+    window.redeemReward = async (id, name, pointsCost) => {
+      if ((currentUser.points || 0) < pointsCost) {
+        alert("No tienes suficientes puntos acumulados.");
         return;
       }
 
-      filteredOrders.forEach(order => {
-        const statusClass = getStatusClass(order.estado);
-        let itemsListStr = "";
-        let itemsHtml = order.items.map(i => {
-          const iTotal = (parseFloat(i.precio || 0) * parseInt(i.cantidad || 1)).toFixed(2);
-          itemsListStr += `• ${i.isPromo ? '[PROMO] ' : ''}${i.nombre} (x${i.cantidad}) - $${iTotal}\n`;
-          return `<div>- ${i.isPromo ? '🔥 ' : ''}${i.nombre} (x${i.cantidad}) - $${iTotal}</div>`;
-        }).join('');
+      if (confirm(`¿Deseas canjear "${name}" por ${pointsCost} puntos?`)) {
+        try {
+          await updateDoc(doc(db, "clients", currentClientDocId), {
+            points: currentUser.points - pointsCost
+          });
 
-        const msg = `🛍️ *DETALLE DE PEDIDO - SUPER TOÑITA*\n\n` +
-          `🆔 *Pedido ID:* #${order.id.slice(-5).toUpperCase()}\n` +
-          `👤 *Cliente:* ${order.clienteNombre}\n` +
-          `📞 *Teléfono:* ${order.clienteTelefono}\n` +
-          `🏪 *Sucursal:* ${order.sucursal || 'N/A'}\n` +
-          `🚚 *Entrega:* ${order.tipoEntrega}\n` +
-          `${order.tipoEntrega !== 'Recoger en Tienda' ? `📍 *Dirección:* ${order.direccion}\n📌 *Ref:* ${order.referencia}\n` : ''}` +
-          `💳 *Método de Pago:* ${order.metodoPago}\n\n` +
-          `🛒 *Productos:*\n${itemsListStr}\n` +
-          `💵 *Subtotal:* $${parseFloat(order.subtotal || 0).toFixed(2)}\n` +
-          `🛵 *Envío:* $${parseFloat(order.envio || 0).toFixed(2)}\n` +
-          `💰 *TOTAL:* $${parseFloat(order.total).toFixed(2)}\n` +
-          `📌 *Estado:* ${order.estado}`;
+          await addDoc(collection(db, "redemptions"), {
+            clientName: currentUser.name,
+            clientPhone: currentUser.phone,
+            productName: `PREMIO: ${name}`,
+            pointsTransacted: pointsCost,
+            status: "pendiente",
+            date: new Date().toLocaleString('es-SV')
+          });
 
-        const waUrl = `https://wa.me/${order.clienteTelefono || WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
-
-        const card = document.createElement('div');
-        card.className = 'order-card';
-        card.innerHTML = `
-          <div class="order-header">
-            <div>
-              <strong>Pedido #${order.id.slice(-5).toUpperCase()}</strong>
-              <div style="font-size: 0.75rem; color: var(--text-muted);">${order.fecha}</div>
-            </div>
-            <select onchange="updateOrderStatus('${order.id}', this.value)" class="branch-select" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">
-              <option value="Pendiente" ${order.estado === 'Pendiente' ? 'selected' : ''}>🟡 Pendiente</option>
-              <option value="En camino" ${order.estado === 'En camino' ? 'selected' : ''}>🔵 En camino</option>
-              <option value="Entregado" ${order.estado === 'Entregado' ? 'selected' : ''}>🟢 Entregado</option>
-              <option value="Cancelado" ${order.estado === 'Cancelado' ? 'selected' : ''}>🔴 Cancelado</option>
-            </select>
-          </div>
-          <div style="font-size: 0.88rem; font-weight:700; margin-bottom: 0.2rem;">
-            👤 ${order.clienteNombre} (${order.clienteTelefono})
-          </div>
-          <div style="font-size: 0.82rem; color: var(--emerald-accent); font-weight:700; margin-bottom: 0.4rem;">
-            ${order.tipoEntrega} - ${order.sucursal}
-          </div>
-          ${order.tipoEntrega !== 'Recoger en Tienda' ? `
-            <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem;">
-              📍 ${order.direccion} (Ref:${order.referencia})
-            </div>
-          ` : ''}
-          <div style="font-size: 0.85rem; margin-bottom: 0.5rem; background: var(--bg-primary); padding: 0.5rem; border-radius: 8px;">
-            ${itemsHtml}
-          </div>
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem;">
-            <a href="${waUrl}" target="_blank" class="btn btn-sm btn-whatsapp-sm">
-              <i data-lucide="message-circle" style="width:14px; height:14px;"></i> Abrir WhatsApp
-            </a>
-            <div style="font-weight: 800; font-size: 1.05rem; color: var(--brand-dark);">
-              Total: $${parseFloat(order.total).toFixed(2)}
-            </div>
-          </div>
-        `;
-        adminOrdersList.appendChild(card);
-      });
-    }
-
-    window.updateOrderStatus = async (orderId, newStatus) => {
-      try {
-        await updateDoc(doc(db, "ordenes", orderId), { estado: newStatus });
-        const targetOrder = allOrders.find(o => o.id === orderId);
-        if (targetOrder) targetOrder.estado = newStatus;
-        renderAdminOrders();
-      } catch (err) {
-        alert("No se pudo actualizar el estado de la orden.");
+          alert("¡Canje solicitado! Preséntate en la sucursal para reclamarlo.");
+        } catch (err) {
+          alert("Error al procesar el canje.");
+        }
       }
     };
 
-    // PROMOCIONES Y MODAL DETALLADO
+    window.startCameraScanner = () => {
+      const reader = document.getElementById('qr-reader');
+      reader.classList.remove('hidden');
+      const html5QrCode = new Html5Qrcode("qr-reader");
+      html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, (decodedText) => {
+        document.getElementById('qr-input').value = decodedText;
+        claimPoints();
+        html5QrCode.stop();
+        reader.classList.add('hidden');
+      });
+    };
+
+    window.claimPoints = async () => {
+      const val = document.getElementById('qr-input').value.trim();
+      if (!val) return;
+
+      try {
+        const data = JSON.parse(val);
+        const usedRef = doc(db, "used_codes", data.id);
+        const snap = await getDoc(usedRef);
+
+        if (snap.exists()) {
+          alert("Este código QR ya fue utilizado.");
+          return;
+        }
+
+        await setDoc(usedRef, { used: true, by: currentUser.name, phone: currentUser.phone });
+        await updateDoc(doc(db, "clients", currentClientDocId), {
+          points: (currentUser.points || 0) + data.pts
+        });
+
+        alert(`¡Felicidades! Se sumaron ${data.pts} puntos a tu cuenta.`);
+        document.getElementById('qr-input').value = '';
+      } catch (e) {
+        alert("Código de ticket inválido.");
+      }
+    };
+
     async function loadPromos() {
       try {
         const querySnapshot = await getDocs(collection(db, "promociones"));
@@ -1939,21 +1573,9 @@
       
       let bannersHtml = `
         <div class="banner-card">
-          <div class="banner-text">
+          <div>
             <h4>🛵 Envío a Domicilio</h4>
-            <p>Hacemos tu super llegar directo hasta la puerta de tu casa en ${currentBranch}.</p>
-          </div>
-        </div>
-        <div class="banner-card" style="background: linear-gradient(135deg, #0284c7, #1e293b);">
-          <div class="banner-text">
-            <h4>🔥 Precios Especiales</h4>
-            <p>Encuentra tus abarrotes y productos Toñita con los mejores precios diarios.</p>
-          </div>
-        </div>
-        <div class="banner-card" style="background: linear-gradient(135deg, #d97706, #1e293b);">
-          <div class="banner-text">
-            <h4>🏬 Pedidos Rápidos</h4>
-            <p>Pide online y retira gratis en tienda sin hacer filas.</p>
+            <p>Hacemos tu super llegar directo hasta tu casa en ${currentBranch}.</p>
           </div>
         </div>
       `;
@@ -1963,154 +1585,381 @@
           const imgUrl = fixDriveUrl(p.imagenUrl);
           bannersHtml += `
             <div class="banner-card">
-              <div class="banner-text">
+              <div>
                 <h4>🔥 ${p.titulo}</h4>
                 <p>${p.descripcion}</p>
-                <small style="font-size:0.75rem; font-weight:800; color:#d1fae5;">Precio: $${parseFloat(p.precio || 0).toFixed(2)}</small>
+                <small style="font-weight:800;">Precio: $${parseFloat(p.precio || 0).toFixed(2)}</small>
               </div>
-              ${imgUrl ? `<img src="${imgUrl}" class="banner-img" alt="${p.titulo}">` : ''}
+              ${imgUrl ? `<img src="${imgUrl}" style="width:60px; height:60px; object-fit:contain; border-radius:10px;">` : ''}
             </div>
           `;
         });
       }
 
-      const bannersContainer = document.getElementById('clientBannersContainer');
-      bannersContainer.innerHTML = bannersHtml;
-
-      if (bannerInterval) clearInterval(bannerInterval);
-      bannerInterval = setInterval(() => {
-        if (bannersContainer) {
-          const maxScroll = bannersContainer.scrollWidth - bannersContainer.clientWidth;
-          if (bannersContainer.scrollLeft >= maxScroll - 10) {
-            bannersContainer.scrollTo({ left: 0, behavior: 'smooth' });
-          } else {
-            bannersContainer.scrollBy({ left: bannersContainer.clientWidth, behavior: 'smooth' });
-          }
-        }
-      }, 4500);
+      document.getElementById('clientBannersContainer').innerHTML = bannersHtml;
 
       const clientPromosList = document.getElementById('clientPromosList');
       if (activePromos.length === 0) {
-        clientPromosList.innerHTML = `
-          <div class="card" style="padding: 1.5rem; text-align: center;">
-            <i data-lucide="sparkles" style="width: 40px; height: 40px; color: var(--emerald-accent); margin: 0 auto 0.5rem auto;"></i>
-            <h3>¡Sin combos promocionales activos hoy!</h3>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Explora nuestro catálogo completo en ${currentBranch}.</p>
-          </div>
-        `;
+        clientPromosList.innerHTML = '<p style="text-align:center; padding:1.5rem;">No hay ofertas activas hoy en esta sucursal.</p>';
       } else {
         clientPromosList.innerHTML = activePromos.map(p => {
-          const imgUrl = fixDriveUrl(p.imagenUrl) || 'https://via.placeholder.com/300?text=Super+To%C3%B1ita+Promo';
           const pPrice = parseFloat(p.precio || 0);
-
           return `
-            <div class="card" style="margin-bottom: 1rem; padding: 1rem;">
-              <div onclick="openPromoDetail('${p.id}')" style="cursor: pointer;">
-                <img src="${imgUrl}" alt="${p.titulo}" class="promo-card-img">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin: 0.5rem 0 0.3rem 0;">
-                  <span class="category-label" style="color: var(--emerald-accent); font-weight:800;">${p.sucursal}</span>
-                  <i data-lucide="tag" style="color: var(--emerald-accent); width:18px;"></i>
-                </div>
-                <h3 style="font-size: 1.15rem; margin: 0.2rem 0;">${p.titulo}</h3>
-              </div>
-              <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.8rem;">${p.descripcion}</p>
-              
-              <div class="price-row">
+            <div class="card" style="margin-bottom:1rem; padding:1rem;">
+              <h3>${p.titulo}</h3>
+              <p style="color:var(--text-muted); font-size:0.85rem;">${p.descripcion}</p>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.5rem;">
                 <span class="price">$${pPrice.toFixed(2)}</span>
-                <button class="btn btn-sm btn-emerald" onclick="addToCart('${p.id}', '${p.titulo}', ${pPrice}, 1, true)">
-                  + Agregar Promo
-                </button>
+                <button class="btn btn-sm btn-emerald" onclick="addToCart('${p.id}', '${p.titulo}', ${pPrice}, 1, true)">+ Agregar Promo</button>
               </div>
             </div>
           `;
         }).join('');
       }
+    }
+
+    // SUBNAVEGACIÓN ADMINISTRADOR Y GESTIÓN DE PUNTOS POR CLIENTE
+    document.getElementById('adminTabOrdersBtn').addEventListener('click', () => switchAdminSubTab('orders'));
+    document.getElementById('adminTabProductsBtn').addEventListener('click', () => switchAdminSubTab('products'));
+    document.getElementById('adminTabRewardsBtn').addEventListener('click', () => switchAdminSubTab('rewards'));
+    document.getElementById('adminTabClientsBtn').addEventListener('click', () => switchAdminSubTab('clients'));
+    document.getElementById('adminTabPromosBtn').addEventListener('click', () => switchAdminSubTab('promos'));
+    document.getElementById('adminLogoutBtn').addEventListener('click', () => document.getElementById('logoutBtn').click());
+
+    function switchAdminSubTab(tab) {
+      ['adminOrdersTab', 'adminProductsTab', 'adminRewardsTab', 'adminClientsTab', 'adminPromosTab'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+      });
+
+      if (tab === 'orders') {
+        document.getElementById('adminOrdersTab').classList.remove('hidden');
+        loadAdminOrders();
+      } else if (tab === 'products') {
+        document.getElementById('adminProductsTab').classList.remove('hidden');
+        loadAdminProducts();
+      } else if (tab === 'rewards') {
+        document.getElementById('adminRewardsTab').classList.remove('hidden');
+        loadAdminRewards();
+      } else if (tab === 'clients') {
+        document.getElementById('adminClientsTab').classList.remove('hidden');
+        loadAdminClients();
+      } else if (tab === 'promos') {
+        document.getElementById('adminPromosTab').classList.remove('hidden');
+        loadAdminPromos();
+      }
       refreshIcons();
     }
 
-    // Modal para Ver la Promo Completa
-    window.openPromoDetail = (id) => {
-      const promo = allPromos.find(p => p.id === id);
-      if (!promo) return;
+    async function loadAdminClients() {
+      const container = document.getElementById('adminClientsList');
+      container.innerHTML = '<p>Cargando lista de clientes...</p>';
+      const querySnapshot = await getDocs(collection(db, "clients"));
+      allClientsList = [];
+      querySnapshot.forEach(docSnap => allClientsList.push({ id: docSnap.id, ...docSnap.data() }));
 
-      const imgUrl = fixDriveUrl(promo.imagenUrl) || 'https://via.placeholder.com/400?text=Super+To%C3%B1ita+Promo';
-      const pPrice = parseFloat(promo.precio || 0);
+      renderAdminClients(allClientsList);
+    }
 
-      detailContent.innerHTML = `
-        <div class="product-detail-img-wrapper">
-          <img id="mainDetailImg" src="${imgUrl}" alt="${promo.titulo}" style="max-height: 380px; object-fit: contain;">
-        </div>
+    function renderAdminClients(clients) {
+      const container = document.getElementById('adminClientsList');
+      container.innerHTML = '';
 
-        <div>
-          <span style="font-size: 0.75rem; font-weight:700; color: var(--emerald-accent); text-transform: uppercase;">Promoción • ${promo.sucursal}</span>
-          <h2 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 0.25rem;">${promo.titulo}</h2>
-          <p style="font-size: 1.4rem; font-weight: 800; color: var(--brand-dark); margin-bottom: 0.75rem;">
-            $${pPrice.toFixed(2)}
-          </p>
-          
-          <div style="margin-bottom: 1.25rem;">
-            <h4 style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem;">Detalles de la Oferta</h4>
-            <p style="font-size: 0.95rem; color: var(--text-main); line-height: 1.4;">${promo.descripcion}</p>
+      if (clients.length === 0) {
+        container.innerHTML = '<p style="color:var(--text-muted);">No se encontraron clientes.</p>';
+        return;
+      }
+
+      clients.forEach(c => {
+        const item = document.createElement('div');
+        item.style.cssText = 'background:var(--bg-primary); padding:0.85rem; border-radius:12px; display:flex; justify-content:space-between; align-items:center; border:1px solid var(--border);';
+        item.innerHTML = `
+          <div>
+            <strong>${c.name || 'Sin nombre'}</strong><br>
+            <small style="color:var(--text-muted);">📞 ${c.phone || 'N/A'}</small><br>
+            <span style="font-weight:800; color:var(--amber-accent);">⭐ ${c.points || 0} Pts</span>
           </div>
+          <button class="btn btn-sm btn-amber" onclick="adminAdjustPoints('${c.id}', '${c.name}', ${c.points || 0})">Modificar Puntos</button>
+        `;
+        container.appendChild(item);
+      });
+    }
 
-          <!-- Selector Numérico de Cantidad en Promos -->
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; background: var(--bg-primary); padding: 0.75rem 1rem; border-radius: var(--radius-md);">
-            <span style="font-weight: 700; font-size: 0.9rem; color: var(--text-main);">Cantidad de Combos:</span>
-            <div class="cart-qty-control">
-              <button class="cart-qty-btn" onclick="updateDetailQty(parseInt(document.getElementById('detailQtyInput').value || 1) - 1)">-</button>
-              <input type="number" min="1" id="detailQtyInput" class="cart-qty-input" value="1" onchange="updateDetailQty(this.value)">
-              <button class="cart-qty-btn" onclick="updateDetailQty(parseInt(document.getElementById('detailQtyInput').value || 1) + 1)">+</button>
+    document.getElementById('adminClientSearchInput').addEventListener('input', (e) => {
+      const queryStr = e.target.value.toLowerCase();
+      const filtered = allClientsList.filter(c => 
+        (c.name || '').toLowerCase().includes(queryStr) || 
+        (c.phone || '').includes(queryStr)
+      );
+      renderAdminClients(filtered);
+    });
+
+    window.adminAdjustPoints = async (id, name, currentPts) => {
+      const newAmount = prompt(`Ajustar puntos para ${name} (Saldo actual: ${currentPts} Pts):\nIngresa el nuevo total de puntos:`, currentPts);
+      if (newAmount !== null && !isNaN(parseInt(newAmount))) {
+        try {
+          await updateDoc(doc(db, "clients", id), { points: parseInt(newAmount) });
+          alert(`Puntos actualizados a ${newAmount} Pts para ${name}.`);
+          loadAdminClients();
+        } catch (e) {
+          alert("Error al actualizar puntos.");
+        }
+      }
+    };
+
+    window.filterAdminOrders = (status, btnElement) => {
+      currentAdminOrderFilter = status;
+      document.querySelectorAll('.order-filter-pill').forEach(pill => pill.classList.remove('active'));
+      btnElement.classList.add('active');
+      renderAdminOrders();
+    };
+
+    async function loadAdminOrders() {
+      const container = document.getElementById('adminOrdersList');
+      container.innerHTML = '<p>Cargando órdenes...</p>';
+      const querySnapshot = await getDocs(collection(db, "ordenes"));
+      allOrders = [];
+      querySnapshot.forEach(docSnap => allOrders.push({ id: docSnap.id, ...docSnap.data() }));
+      allOrders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      renderAdminOrders();
+    }
+
+    function renderAdminOrders() {
+      const container = document.getElementById('adminOrdersList');
+      container.innerHTML = '';
+
+      const filtered = allOrders.filter(o => {
+        if (currentAdminOrderFilter === 'Todos') return true;
+        return o.estado === currentAdminOrderFilter;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<p style="text-align:center; padding:1rem;">No hay órdenes en este estado.</p>';
+        return;
+      }
+
+      filtered.forEach(order => {
+        const card = document.createElement('div');
+        card.className = 'order-card';
+        card.innerHTML = `
+          <div class="order-header">
+            <div>
+              <strong>Pedido #${order.id.slice(-5).toUpperCase()}</strong>
+              <div style="font-size:0.75rem; color:var(--text-muted);">${order.fecha}</div>
             </div>
+            <select onchange="updateOrderStatus('${order.id}', this.value)" class="branch-select">
+              <option value="Pendiente" ${order.estado === 'Pendiente' ? 'selected' : ''}>🟡 Pendiente</option>
+              <option value="En camino" ${order.estado === 'En camino' ? 'selected' : ''}>🔵 En camino</option>
+              <option value="Entregado" ${order.estado === 'Entregado' ? 'selected' : ''}>🟢 Entregado (Acredita Puntos)</option>
+              <option value="Cancelado" ${order.estado === 'Cancelado' ? 'selected' : ''}>🔴 Cancelado</option>
+            </select>
           </div>
+          <div>👤 ${order.clienteNombre} (${order.clienteTelefono})</div>
+          <div>🏪 Sucursal: ${order.sucursal || 'N/A'}</div>
+          <div>⭐ Puntos acumulables: +${order.puntosAGanar || 0} Pts</div>
+          <div style="font-weight:800; text-align:right;">Total: $${parseFloat(order.total || 0).toFixed(2)}</div>
+        `;
+        container.appendChild(card);
+      });
+    }
 
-          <button class="btn btn-emerald" style="width: 100%; padding: 0.9rem;" onclick="addFromDetailModal('${promo.id}', '${promo.titulo}', ${pPrice}, true)">
-            <i data-lucide="shopping-cart"></i> Agregar Promo al Carrito
-          </button>
-        </div>
-      `;
+    window.updateOrderStatus = async (orderId, newStatus) => {
+      try {
+        const orderRef = doc(db, "ordenes", orderId);
+        const orderSnap = await getDoc(orderRef);
+        const orderData = orderSnap.data();
 
-      productDetailModal.classList.add('active');
-      refreshIcons();
+        await updateDoc(orderRef, { estado: newStatus });
+
+        if (newStatus === "Entregado" && !orderData.puntosAcreditados) {
+          const cleanOrderPhone = cleanPhone(orderData.clienteTelefono);
+          const q = query(collection(db, "clients"));
+          const clientSnap = await getDocs(q);
+
+          let targetClientDoc = null;
+          clientSnap.forEach(c => {
+            if (cleanPhone(c.data().phone) === cleanOrderPhone) {
+              targetClientDoc = { id: c.id, ...c.data() };
+            }
+          });
+
+          if (targetClientDoc) {
+            const currentPts = targetClientDoc.points || 0;
+            const ptsToAdd = orderData.puntosAGanar || 0;
+
+            await updateDoc(doc(db, "clients", targetClientDoc.id), {
+              points: currentPts + ptsToAdd
+            });
+
+            await updateDoc(orderRef, { puntosAcreditados: true });
+            alert(`Orden entregada. Se acreditaron +${ptsToAdd} puntos al cliente.`);
+          }
+        }
+        loadAdminOrders();
+      } catch (err) {
+        alert("Error al actualizar estado de la orden.");
+      }
+    };
+
+    async function loadAdminProducts() {
+      const grid = document.getElementById('adminProductGrid');
+      grid.innerHTML = '<p style="grid-column:1/-1; text-align:center;">Cargando productos...</p>';
+      const querySnapshot = await getDocs(collection(db, "productos"));
+      allProducts = [];
+      querySnapshot.forEach(docSnap => allProducts.push({ id: docSnap.id, ...docSnap.data() }));
+
+      grid.innerHTML = '';
+      allProducts.forEach(item => {
+        const mainImg = fixDriveUrl(item.imagenUrl1 || item.imagenUrl) || 'https://via.placeholder.com/200';
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <img src="${mainImg}">
+          <h3>${item.nombre}</h3>
+          <div style="font-size:0.75rem; color:var(--text-muted); margin:0.3rem 0;">
+            L.Fuentes: $${parseFloat(item.precioLosFuentes || 0).toFixed(2)} (${item.puntosLosFuentes || 0} Pts)<br>
+            Corinto: $${parseFloat(item.precioCorinto || 0).toFixed(2)} (${item.puntosCorinto || 0} Pts)<br>
+            Metapán: $${parseFloat(item.precioMetapan || 0).toFixed(2)} (${item.puntosMetapan || 0} Pts)
+          </div>
+          <div style="display:flex; gap:0.4rem; margin-top:0.5rem;">
+            <button class="btn btn-sm btn-secondary" style="flex:1;" onclick="editProduct('${item.id}')">Editar</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteProduct('${item.id}')">✕</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    document.getElementById('productForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('prodId').value;
+      const data = {
+        nombre: document.getElementById('prodName').value.trim(),
+        categoria: document.getElementById('prodCategory').value,
+        stockLosFuentes: document.getElementById('prodStockLosFuentes').value,
+        stockCorinto: document.getElementById('prodStockCorinto').value,
+        stockMetapan: document.getElementById('prodStockMetapan').value,
+        precioLosFuentes: parseFloat(document.getElementById('prodPriceLosFuentes').value || 0),
+        precioCorinto: parseFloat(document.getElementById('prodPriceCorinto').value || 0),
+        precioMetapan: parseFloat(document.getElementById('prodPriceMetapan').value || 0),
+        puntosLosFuentes: parseInt(document.getElementById('prodPointsLosFuentes').value || 0),
+        puntosCorinto: parseInt(document.getElementById('prodPointsCorinto').value || 0),
+        puntosMetapan: parseInt(document.getElementById('prodPointsMetapan').value || 0),
+        descripcion: document.getElementById('prodDesc').value.trim(),
+        imagenUrl1: document.getElementById('prodImg1').value.trim(),
+        imagenUrl2: document.getElementById('prodImg2').value.trim()
+      };
+
+      if (id) {
+        await updateDoc(doc(db, "productos", id), data);
+      } else {
+        await addDoc(collection(db, "productos"), data);
+      }
+
+      document.getElementById('prodId').value = '';
+      document.getElementById('productForm').reset();
+      loadAdminProducts();
+    });
+
+    window.editProduct = (id) => {
+      const item = allProducts.find(p => p.id === id);
+      if (!item) return;
+
+      document.getElementById('prodId').value = item.id;
+      document.getElementById('prodName').value = item.nombre;
+      document.getElementById('prodCategory').value = item.categoria || 'Productos Toñita';
+      document.getElementById('prodStockLosFuentes').value = item.stockLosFuentes || 'Disponible';
+      document.getElementById('prodStockCorinto').value = item.stockCorinto || 'Disponible';
+      document.getElementById('prodStockMetapan').value = item.stockMetapan || 'Disponible';
+      document.getElementById('prodPriceLosFuentes').value = item.precioLosFuentes || 0;
+      document.getElementById('prodPriceCorinto').value = item.precioCorinto || 0;
+      document.getElementById('prodPriceMetapan').value = item.precioMetapan || 0;
+      document.getElementById('prodPointsLosFuentes').value = item.puntosLosFuentes || item.bonusPoints || 0;
+      document.getElementById('prodPointsCorinto').value = item.puntosCorinto || item.bonusPoints || 0;
+      document.getElementById('prodPointsMetapan').value = item.puntosMetapan || item.bonusPoints || 0;
+      document.getElementById('prodDesc').value = item.descripcion || '';
+      document.getElementById('prodImg1').value = item.imagenUrl1 || item.imagenUrl || '';
+      document.getElementById('prodImg2').value = item.imagenUrl2 || '';
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.deleteProduct = async (id) => {
+      if (confirm("¿Deseas eliminar este producto del catálogo?")) {
+        await deleteDoc(doc(db, "productos", id));
+        loadAdminProducts();
+      }
+    };
+
+    async function loadAdminRewards() {
+      const list = document.getElementById('adminRewardsList');
+      list.innerHTML = '<p>Cargando premios...</p>';
+      const querySnapshot = await getDocs(collection(db, "products"));
+      list.innerHTML = '';
+      querySnapshot.forEach(docSnap => {
+        const r = docSnap.data();
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.style.marginBottom = '0.5rem';
+        card.style.flexDirection = 'row';
+        card.style.alignItems = 'center';
+        card.style.gap = '0.75rem';
+        card.innerHTML = `
+          <img src="${r.image || 'https://via.placeholder.com/60'}" style="width:50px; height:50px; margin-bottom:0;">
+          <div style="flex:1;">
+            <strong>${r.name}</strong><br>
+            <small style="color:var(--amber-accent); font-weight:800;">${r.points} Pts</small>
+          </div>
+          <button class="btn btn-sm btn-danger" onclick="deleteReward('${docSnap.id}')">✕</button>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    document.getElementById('rewardForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const newReward = {
+        name: document.getElementById('rewardName').value.trim(),
+        points: parseInt(document.getElementById('rewardPointsCost').value || 0),
+        image: document.getElementById('rewardImg').value.trim()
+      };
+      await addDoc(collection(db, "products"), newReward);
+      document.getElementById('rewardForm').reset();
+      loadAdminRewards();
+    });
+
+    window.deleteReward = async (id) => {
+      if (confirm("¿Eliminar este premio?")) {
+        await deleteDoc(doc(db, "products", id));
+        loadAdminRewards();
+      }
     };
 
     async function loadAdminPromos() {
-      adminPromosList.innerHTML = '<p style="text-align: center;">Cargando promociones...</p>';
-      try {
-        const querySnapshot = await getDocs(collection(db, "promociones"));
-        allPromos = [];
-        querySnapshot.forEach(docSnap => allPromos.push({ id: docSnap.id, ...docSnap.data() }));
-        
-        adminPromosList.innerHTML = '';
-        if (allPromos.length === 0) {
-          adminPromosList.innerHTML = '<p style="text-align: center; color: var(--text-muted);">No hay promociones activas.</p>';
-          return;
-        }
-
-        allPromos.forEach(p => {
-          const imgUrl = fixDriveUrl(p.imagenUrl) || 'https://via.placeholder.com/100?text=Promo';
-          const card = document.createElement('div');
-          card.className = 'card';
-          card.style.marginBottom = '0.75rem';
-          card.style.flexDirection = 'row';
-          card.style.gap = '0.8rem';
-          card.style.alignItems = 'center';
-          card.innerHTML = `
-            <img src="${imgUrl}" style="width: 70px; height: 70px; object-fit: contain; background:#f8fafc; border-radius:10px; margin-bottom:0;">
-            <div style="flex: 1;">
-              <span class="category-label" style="color: var(--emerald-accent); font-weight: 800;">${p.sucursal}</span>
-              <h3 style="font-size: 1rem; margin: 0.1rem 0;">${p.titulo}</h3>
-              <div style="font-weight:800; font-size:0.9rem; color:var(--brand-dark);">$${parseFloat(p.precio || 0).toFixed(2)}</div>
-            </div>
-            <button class="btn btn-sm btn-danger" onclick="deletePromo('${p.id}')">Eliminar</button>
-          `;
-          adminPromosList.appendChild(card);
-        });
-      } catch (err) {
-        adminPromosList.innerHTML = '<p style="text-align: center;">Error al cargar ofertas.</p>';
-      }
+      const list = document.getElementById('adminPromosList');
+      list.innerHTML = '<p>Cargando promociones...</p>';
+      const querySnapshot = await getDocs(collection(db, "promociones"));
+      list.innerHTML = '';
+      querySnapshot.forEach(docSnap => {
+        const p = docSnap.data();
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.style.marginBottom = '0.5rem';
+        card.style.flexDirection = 'row';
+        card.style.alignItems = 'center';
+        card.style.gap = '0.75rem';
+        card.innerHTML = `
+          <div style="flex:1;">
+            <span style="font-size:0.75rem; color:var(--emerald-accent); font-weight:800;">${p.sucursal}</span>
+            <h4 style="margin:0;">${p.titulo}</h4>
+            <div>$${parseFloat(p.precio || 0).toFixed(2)}</div>
+          </div>
+          <button class="btn btn-sm btn-danger" onclick="deletePromo('${docSnap.id}')">✕</button>
+        `;
+        list.appendChild(card);
+      });
     }
 
-    promoForm.addEventListener('submit', async (e) => {
+    document.getElementById('promoForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const newPromo = {
         sucursal: document.getElementById('promoBranch').value,
@@ -2120,33 +1969,31 @@
         descripcion: document.getElementById('promoDesc').value.trim(),
         createdAt: new Date().toISOString()
       };
-
-      try {
-        await addDoc(collection(db, "promociones"), newPromo);
-        promoForm.reset();
-        loadAdminPromos();
-        loadPromos();
-      } catch (err) {
-        alert("Error al guardar la promoción.");
-      }
+      await addDoc(collection(db, "promociones"), newPromo);
+      document.getElementById('promoForm').reset();
+      loadAdminPromos();
     });
 
     window.deletePromo = async (id) => {
-      if (confirm("¿Deseas eliminar esta promoción?")) {
+      if (confirm("¿Eliminar esta promoción?")) {
         await deleteDoc(doc(db, "promociones", id));
         loadAdminPromos();
-        loadPromos();
       }
     };
 
-    function getStatusClass(status) {
-      switch (status) {
-        case 'Pendiente': return 'status-pendiente';
-        case 'En camino': return 'status-encamino';
-        case 'Entregado': return 'status-entregado';
-        case 'Cancelado': return 'status-cancelado';
-        default: return 'status-pendiente';
-      }
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      currentUser = null;
+      currentClientDocId = null;
+      cart = [];
+      document.getElementById('loginScreen').classList.remove('hidden');
+      document.getElementById('clientView').classList.add('hidden');
+      document.getElementById('adminView').classList.add('hidden');
+      document.getElementById('bottomNav').classList.add('hidden');
+      document.getElementById('accessForm').reset();
+    });
+
+    function refreshIcons() {
+      if (window.lucide) window.lucide.createIcons();
     }
 
     refreshIcons();
