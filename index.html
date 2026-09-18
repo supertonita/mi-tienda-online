@@ -134,7 +134,7 @@
     .banners-container {
       display: flex;
       gap: 1rem;
-      overflow-x: hidden;
+      overflow-x: auto;
       scroll-snap-type: x mandatory;
       margin-bottom: 1.25rem;
       padding-bottom: 0.5rem;
@@ -157,7 +157,7 @@
       justify-content: space-between;
       gap: 0.75rem;
       box-shadow: var(--shadow-card);
-      min-height: 100px;
+      min-height: 110px;
     }
 
     .search-box {
@@ -491,7 +491,7 @@
 
   <main class="container">
     
-    <!-- 1. LOGIN CON RESTABLECIMIENTO EXCLUSIVO ADMIN POR WHATSAPP -->
+    <!-- 1. LOGIN CON RESTABLECIMIENTO EXCLUSIVO A ADMIN VIA WHATSAPP -->
     <section id="loginScreen" class="login-wrapper">
       <div class="login-card">
         <img src="LOGO.png" alt="Mini Super Toñita" style="width: 85px; height: 85px; object-fit: contain; margin-bottom: 1rem; border-radius: 16px;">
@@ -567,7 +567,7 @@
         <div id="productGrid" class="grid"></div>
       </div>
 
-      <!-- Tab Promociones -->
+      <!-- Tab Promociones Especiales -->
       <div id="clientPromosTab" class="hidden">
         <h2 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
           <i data-lucide="tag" style="color: var(--emerald-accent);"></i> Promociones Especiales
@@ -612,17 +612,9 @@
         <div id="rewardsCatalogGrid" class="grid"></div>
       </div>
 
-      <!-- Tab Mis Órdenes Cliente -->
-      <div id="clientOrdersTab" class="hidden">
-        <h2 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-          <i data-lucide="history" style="color: var(--emerald-accent);"></i> Historial de Compras y Canjes
-        </h2>
-        <div id="clientOrdersList"></div>
-      </div>
-
-      <!-- Tab Mi Perfil -->
+      <!-- Tab Mi Perfil (Integra Historial de Órdenes) -->
       <div id="clientProfileTab" class="hidden">
-        <div class="card" style="padding: 1.5rem;">
+        <div class="card" style="padding: 1.5rem; margin-bottom: 1.5rem;">
           <div style="background: var(--emerald-light); width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem auto;">
             <i data-lucide="user" style="color: var(--emerald-accent); width: 32px; height: 32px;"></i>
           </div>
@@ -655,6 +647,12 @@
             <i data-lucide="log-out"></i> Cerrar Sesión
           </button>
         </div>
+
+        <!-- Historial integrado de Órdenes dentro del Perfil -->
+        <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+          <i data-lucide="package" style="color: var(--emerald-accent);"></i> Mis Órdenes y Pedidos
+        </h3>
+        <div id="clientOrdersList"></div>
       </div>
     </section>
 
@@ -669,7 +667,7 @@
         <button class="btn btn-sm btn-danger" id="adminLogoutBtn">Salir</button>
       </div>
 
-      <!-- 3.1 Pestaña Órdenes Admin Organizadas -->
+      <!-- 3.1 Pestaña Órdenes Admin -->
       <div id="adminOrdersTab">
         <h2 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
           <i data-lucide="list-checks" style="color: var(--emerald-accent);"></i> Gestión de Pedidos
@@ -881,7 +879,7 @@
 
   </main>
 
-  <!-- NAVEGACIÓN FLOTANTE INFERIOR CLIENTE -->
+  <!-- NAVEGACIÓN FLOTANTE INFERIOR CLIENTE (Limpia: 5 Pestañas) -->
   <nav id="bottomNav" class="bottom-nav hidden">
     <button class="nav-item active" id="navCatalogBtn">
       <i data-lucide="grid"></i>
@@ -899,10 +897,6 @@
       <i data-lucide="shopping-cart"></i>
       <span>Carrito</span>
       <span class="cart-badge-floating" id="cartCount">0</span>
-    </button>
-    <button class="nav-item" id="navOrdersBtn">
-      <i data-lucide="package"></i>
-      <span>Mis Órdenes</span>
     </button>
     <button class="nav-item" id="navProfileBtn">
       <i data-lucide="user"></i>
@@ -1058,7 +1052,7 @@
       return (item.stockLosFuentes ?? item.stock ?? 'Disponible') === 'Disponible';
     }
 
-    // SOLICITUD DE RESTABLECIMIENTO EXCLUSIVA A ADMIN POR WHATSAPP
+    // RESTABLECIMIENTO EXCLUSIVO A ADMIN POR WHATSAPP
     window.requestAccountResetWhatsApp = () => {
       const inputName = document.getElementById('accessName').value.trim() || "Cliente";
       const inputPhone = document.getElementById('accessPass').value.trim() || "No especificado";
@@ -1074,7 +1068,7 @@
       window.location.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
     };
 
-    // LOGIN MIGRACIÓN DIRECTA CON BASE DE FIDELIZACIÓN
+    // LOGIN TOLERANTE Y MIGRACIÓN AUTOMÁTICA DE PUNTOS DE CLIENTES EXISTENTES
     document.getElementById('accessForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const name = document.getElementById('accessName').value.trim();
@@ -1092,7 +1086,11 @@
 
         querySnapshot.forEach(docSnap => {
           const data = docSnap.data();
-          if (cleanPhone(data.phone) === cleanInputPhone || (data.phone && data.phone.trim() === rawPass)) {
+          const storedPhone = data.phone || data.telefono || data.phone_number || '';
+          const cleanStored = cleanPhone(storedPhone);
+
+          // Coincidencia exacta o por los últimos 8 dígitos limpios
+          if (cleanStored === cleanInputPhone || (cleanStored.length >= 8 && cleanInputPhone.length >= 8 && cleanStored.endsWith(cleanInputPhone))) {
             matchedDoc = { id: docSnap.id, ...data };
           }
         });
@@ -1104,7 +1102,8 @@
           const newDoc = await addDoc(collection(db, "clients"), {
             name: name,
             phone: rawPass,
-            points: 100
+            points: 100,
+            createdAt: new Date().toISOString()
           });
           currentClientDocId = newDoc.id;
           currentUser = { id: newDoc.id, name, phone: rawPass, points: 100 };
@@ -1113,8 +1112,8 @@
 
         showClientView();
       } catch (err) {
-        console.error(err);
-        alert("Error de inicio de sesión. Toca 'Solicitar Restablecimiento al Admin' para verificar tus datos.");
+        console.error("Error al ingresar:", err);
+        alert("Error de conexión. Toca 'Solicitar Restablecimiento al Admin' para ayuda.");
       }
     });
 
@@ -1143,6 +1142,7 @@
       switchClientTab('catalog');
       listenToUserPoints();
       loadPromos();
+      loadClientOrders();
     }
 
     function listenToUserPoints() {
@@ -1181,14 +1181,13 @@
     document.getElementById('navPromosBtn').addEventListener('click', () => switchClientTab('promos'));
     document.getElementById('navRewardsBtn').addEventListener('click', () => switchClientTab('rewards'));
     document.getElementById('navCartBtn').addEventListener('click', () => document.getElementById('cartModal').classList.add('active'));
-    document.getElementById('navOrdersBtn').addEventListener('click', () => switchClientTab('orders'));
     document.getElementById('navProfileBtn').addEventListener('click', () => switchClientTab('profile'));
 
     function switchClientTab(tab) {
-      ['navCatalogBtn', 'navPromosBtn', 'navRewardsBtn', 'navOrdersBtn', 'navProfileBtn'].forEach(id => {
+      ['navCatalogBtn', 'navPromosBtn', 'navRewardsBtn', 'navProfileBtn'].forEach(id => {
         document.getElementById(id).classList.remove('active');
       });
-      ['clientCatalogTab', 'clientPromosTab', 'clientRewardsTab', 'clientOrdersTab', 'clientProfileTab'].forEach(id => {
+      ['clientCatalogTab', 'clientPromosTab', 'clientRewardsTab', 'clientProfileTab'].forEach(id => {
         document.getElementById(id).classList.add('hidden');
       });
 
@@ -1204,13 +1203,10 @@
         document.getElementById('navRewardsBtn').classList.add('active');
         document.getElementById('clientRewardsTab').classList.remove('hidden');
         loadRewards();
-      } else if (tab === 'orders') {
-        document.getElementById('navOrdersBtn').classList.add('active');
-        document.getElementById('clientOrdersTab').classList.remove('hidden');
-        loadClientOrders();
       } else if (tab === 'profile') {
         document.getElementById('navProfileBtn').classList.add('active');
         document.getElementById('clientProfileTab').classList.remove('hidden');
+        loadClientOrders();
       }
       refreshIcons();
     }
@@ -1438,7 +1434,7 @@
         container.innerHTML = '';
 
         if (querySnapshot.empty) {
-          container.innerHTML = '<p style="text-align:center; color:var(--text-muted);">No tienes órdenes registradas.</p>';
+          container.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding:1rem;">No tienes órdenes registradas.</p>';
           return;
         }
 
@@ -1559,6 +1555,7 @@
       }
     };
 
+    // PROMOCIONES Y BANNERS (CON FORMATEO Y DETECCIÓN DE IMÁGENES)
     async function loadPromos() {
       try {
         const querySnapshot = await getDocs(collection(db, "promociones"));
@@ -1590,7 +1587,7 @@
                 <p>${p.descripcion}</p>
                 <small style="font-weight:800;">Precio: $${parseFloat(p.precio || 0).toFixed(2)}</small>
               </div>
-              ${imgUrl ? `<img src="${imgUrl}" style="width:60px; height:60px; object-fit:contain; border-radius:10px;">` : ''}
+              ${imgUrl ? `<img src="${imgUrl}" style="width:70px; height:70px; object-fit:contain; border-radius:10px; background:rgba(255,255,255,0.2); padding:2px;">` : ''}
             </div>
           `;
         });
@@ -1604,12 +1601,14 @@
       } else {
         clientPromosList.innerHTML = activePromos.map(p => {
           const pPrice = parseFloat(p.precio || 0);
+          const imgUrl = fixDriveUrl(p.imagenUrl);
           return `
             <div class="card" style="margin-bottom:1rem; padding:1rem;">
+              ${imgUrl ? `<img src="${imgUrl}" style="width:100%; height:180px; object-fit:contain; margin-bottom:0.5rem;">` : ''}
               <h3>${p.titulo}</h3>
               <p style="color:var(--text-muted); font-size:0.85rem;">${p.descripcion}</p>
               <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.5rem;">
-                <span class="price">$${pPrice.toFixed(2)}</span>
+                <span class="price" style="font-weight:800; font-size:1.1rem; color:var(--emerald-accent);">$${pPrice.toFixed(2)}</span>
                 <button class="btn btn-sm btn-emerald" onclick="addToCart('${p.id}', '${p.titulo}', ${pPrice}, 1, true)">+ Agregar Promo</button>
               </div>
             </div>
