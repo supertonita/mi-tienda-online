@@ -985,7 +985,7 @@
         <div class="form-group">
           <label>Tipo de Entrega</label>
           <select id="deliveryType" class="form-control" required>
-            <option value="Envío Local">Envío Local (Gratis / Cercano)</option>
+            <option value="Envío Local">Envío Local (Gratis)</option>
             <option value="Envío Departamental">Envío Departamental (+$5.00)</option>
             <option value="Recoger en Tienda">Recoger en Tienda (Gratis)</option>
           </select>
@@ -1056,7 +1056,6 @@
     let currentSelectedCategory = 'Todas';
     let currentBranch = 'Super Toñita Los Fuentes';
     let bannerInterval = null;
-    let detailSelectedQty = 1;
 
     function fixDriveUrl(url) {
       if (!url) return '';
@@ -1414,12 +1413,25 @@
       refreshIcons();
     }
 
-    // Abrir Modal de Producto Ampliado con Control de Cantidad
+    // Funciones globales para control de cantidad en la vista detallada
+    window.updateDetailQty = (newVal) => {
+      const targetVal = Math.max(1, parseInt(newVal) || 1);
+      const inputEl = document.getElementById('detailQtyInput');
+      if (inputEl) inputEl.value = targetVal;
+    };
+
+    window.addFromDetailModal = (id, nombre, precio, isPromo = false) => {
+      const inputEl = document.getElementById('detailQtyInput');
+      const qty = inputEl ? Math.max(1, parseInt(inputEl.value) || 1) : 1;
+      addToCart(id, nombre, precio, qty, isPromo);
+      productDetailModal.classList.remove('active');
+    };
+
+    // Abrir Modal de Producto Ampliado con Control de Cantidad Funcional
     window.openProductDetail = (id) => {
       const item = allProducts.find(p => p.id === id);
       if (!item) return;
 
-      detailSelectedQty = 1;
       const img1 = fixDriveUrl(item.imagenUrl1 || item.imagenUrl) || 'https://via.placeholder.com/400?text=Super+To%C3%B1ita';
       const img2 = fixDriveUrl(item.imagenUrl2);
       const availableInBranch = isProductAvailableInBranch(item);
@@ -1453,13 +1465,13 @@
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; background: var(--bg-primary); padding: 0.75rem 1rem; border-radius: var(--radius-md);">
             <span style="font-weight: 700; font-size: 0.9rem; color: var(--text-main);">Cantidad a llevar:</span>
             <div class="cart-qty-control">
-              <button class="cart-qty-btn" onclick="updateDetailQty(detailSelectedQty - 1)">-</button>
-              <input type="number" min="1" id="detailQtyInput" class="cart-qty-input" value="1" onchange="updateDetailQty(parseInt(this.value) || 1)">
-              <button class="cart-qty-btn" onclick="updateDetailQty(detailSelectedQty + 1)">+</button>
+              <button class="cart-qty-btn" onclick="updateDetailQty(parseInt(document.getElementById('detailQtyInput').value || 1) - 1)">-</button>
+              <input type="number" min="1" id="detailQtyInput" class="cart-qty-input" value="1" onchange="updateDetailQty(this.value)">
+              <button class="cart-qty-btn" onclick="updateDetailQty(parseInt(document.getElementById('detailQtyInput').value || 1) + 1)">+</button>
             </div>
           </div>
 
-          <button class="btn btn-emerald" style="width: 100%; padding: 0.9rem;" ${!availableInBranch ? 'disabled' : ''} onclick="addToCart('${item.id}', '${item.nombre}', ${dynamicPrice}, detailSelectedQty); productDetailModal.classList.remove('active');">
+          <button class="btn btn-emerald" style="width: 100%; padding: 0.9rem;" ${!availableInBranch ? 'disabled' : ''} onclick="addFromDetailModal('${item.id}', '${item.nombre}', ${dynamicPrice}, false)">
             <i data-lucide="shopping-cart"></i> ${!availableInBranch ? 'Producto Agotado en Sucursal' : 'Agregar al Carrito'}
           </button>
         </div>
@@ -1467,12 +1479,6 @@
 
       productDetailModal.classList.add('active');
       refreshIcons();
-    };
-
-    window.updateDetailQty = (newVal) => {
-      detailSelectedQty = Math.max(1, newVal);
-      const inputEl = document.getElementById('detailQtyInput');
-      if (inputEl) inputEl.value = detailSelectedQty;
     };
 
     window.switchDetailImg = (src, element) => {
@@ -1484,7 +1490,7 @@
     searchInput.addEventListener('input', filterAndRenderProducts);
 
     window.addToCart = (id, nombre, precio, cantidad = 1, isPromo = false) => {
-      const qtyToAdd = parseInt(cantidad) || 1;
+      const qtyToAdd = Math.max(1, parseInt(cantidad) || 1);
       const existing = cart.find(p => p.id === id);
       if (existing) {
         existing.cantidad += qtyToAdd;
@@ -1533,13 +1539,14 @@
     }
 
     window.changeCartQty = (id, newQty) => {
-      if (newQty <= 0) {
+      const targetQty = parseInt(newQty);
+      if (isNaN(targetQty) || targetQty <= 0) {
         removeFromCart(id);
         return;
       }
       const item = cart.find(p => p.id === id);
       if (item) {
-        item.cantidad = newQty;
+        item.cantidad = targetQty;
         updateCart();
       }
     };
@@ -2026,7 +2033,6 @@
       const promo = allPromos.find(p => p.id === id);
       if (!promo) return;
 
-      detailSelectedQty = 1;
       const imgUrl = fixDriveUrl(promo.imagenUrl) || 'https://via.placeholder.com/400?text=Super+To%C3%B1ita+Promo';
       const pPrice = parseFloat(promo.precio || 0);
 
@@ -2051,13 +2057,13 @@
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; background: var(--bg-primary); padding: 0.75rem 1rem; border-radius: var(--radius-md);">
             <span style="font-weight: 700; font-size: 0.9rem; color: var(--text-main);">Cantidad de Combos:</span>
             <div class="cart-qty-control">
-              <button class="cart-qty-btn" onclick="updateDetailQty(detailSelectedQty - 1)">-</button>
-              <input type="number" min="1" id="detailQtyInput" class="cart-qty-input" value="1" onchange="updateDetailQty(parseInt(this.value) || 1)">
-              <button class="cart-qty-btn" onclick="updateDetailQty(detailSelectedQty + 1)">+</button>
+              <button class="cart-qty-btn" onclick="updateDetailQty(parseInt(document.getElementById('detailQtyInput').value || 1) - 1)">-</button>
+              <input type="number" min="1" id="detailQtyInput" class="cart-qty-input" value="1" onchange="updateDetailQty(this.value)">
+              <button class="cart-qty-btn" onclick="updateDetailQty(parseInt(document.getElementById('detailQtyInput').value || 1) + 1)">+</button>
             </div>
           </div>
 
-          <button class="btn btn-emerald" style="width: 100%; padding: 0.9rem;" onclick="addToCart('${promo.id}', '${promo.titulo}', ${pPrice}, detailSelectedQty, true); productDetailModal.classList.remove('active');">
+          <button class="btn btn-emerald" style="width: 100%; padding: 0.9rem;" onclick="addFromDetailModal('${promo.id}', '${promo.titulo}', ${pPrice}, true)">
             <i data-lucide="shopping-cart"></i> Agregar Promo al Carrito
           </button>
         </div>
