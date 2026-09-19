@@ -132,6 +132,7 @@
       cursor: pointer;
     }
 
+    /* CARRUSEL DE BANNERS RESTAURADO A 90% DE ANCHO */
     .banners-container {
       display: flex;
       gap: 1rem;
@@ -145,7 +146,8 @@
     .banners-container::-webkit-scrollbar { display: none; }
 
     .banner-card {
-      min-width: 100%;
+      min-width: 90%;
+      max-width: 90%;
       flex-shrink: 0;
       scroll-snap-align: center;
       background: linear-gradient(135deg, var(--emerald-accent), var(--brand-dark));
@@ -159,6 +161,7 @@
       gap: 0.75rem;
       box-shadow: var(--shadow-card);
       min-height: 110px;
+      margin: 0 auto;
     }
 
     .search-box {
@@ -429,7 +432,7 @@
       font-weight: 800;
     }
 
-    /* BARRA DE NAVEGACIÓN INFERIOR Y BOTÓN DEL CARRITO CENTRAL AL ESTILO CRISTAL */
+    /* BARRA DE NAVEGACIÓN INFERIOR Y CARRITO CRISTAL */
     .bottom-nav {
       position: fixed !important;
       bottom: 0 !important;
@@ -510,7 +513,6 @@
       overflow-x: auto;
     }
 
-    /* ESTILOS DE LA TARJETA NFC IMPRESA EN PANTALLA ADMIN */
     .nfc-card-preview {
       background: linear-gradient(135deg, #0f172a, #1e293b);
       color: white;
@@ -550,7 +552,7 @@
 
   <main class="container">
     
-    <!-- 1. LOGIN CLIENTE + OPCIONES ADMIN NFC/QR/BARCODE/MANUAL -->
+    <!-- 1. LOGIN CLIENTE / ADMIN -->
     <section id="loginScreen" class="login-wrapper">
       <div class="login-card">
         <img src="LOGO.png" alt="Mini Super Toñita" style="width: 85px; height: 85px; object-fit: contain; margin-bottom: 0.5rem; border-radius: 16px;">
@@ -571,12 +573,12 @@
 
         <form id="accessForm" style="text-align: left;">
           <div class="form-group">
-            <label>Nombre Completo / Usuario</label>
-            <input type="text" id="accessName" class="form-control" placeholder="Tu Nombre o FrankR" required>
+            <label>Nombre / Usuario</label>
+            <input type="text" id="accessName" class="form-control" placeholder="Tu Nombre o Frankr" required>
           </div>
           <div class="form-group">
-            <label>Teléfono o Código / Barcode</label>
-            <input type="text" id="accessPass" class="form-control" placeholder="Número o escanea código..." required>
+            <label>Teléfono / Código (Teclado numérico)</label>
+            <input type="tel" id="accessPass" class="form-control" placeholder="Ej: 70001122" inputmode="numeric" pattern="[0-9]*" required>
           </div>
           <button type="submit" id="loginSubmitBtn" class="btn btn-emerald" style="width: 100%; margin-top: 0.5rem; padding: 0.85rem;">
             Ingresar a la Tienda <i data-lucide="arrow-right" style="width:16px;"></i>
@@ -672,7 +674,7 @@
           </button>
           <div id="qr-reader" class="hidden" style="width: 100%; margin-bottom: 0.75rem; border-radius: 12px; overflow: hidden;"></div>
           <div style="display: flex; gap: 0.5rem;">
-            <input type="text" id="qr-input" class="form-control" placeholder="Código de ticket manual..." style="font-size: 0.85rem;">
+            <input type="text" id="qr-input" class="form-control" placeholder="Código de ticket manual..." style="font-size: 0.85rem;" inputmode="numeric">
             <button onclick="claimPoints()" class="btn btn-amber">Sumar</button>
           </div>
         </div>
@@ -738,7 +740,7 @@
         <button class="btn btn-sm btn-danger" id="adminLogoutBtn">Salir</button>
       </div>
 
-      <!-- 3.1 Pestaña Órdenes Admin -->
+      <!-- 3.1 Órdenes -->
       <div id="adminOrdersTab">
         <h2 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
           <i data-lucide="list-checks" style="color: var(--emerald-accent);"></i> Gestión de Pedidos
@@ -755,7 +757,7 @@
         <div id="adminOrdersList"></div>
       </div>
 
-      <!-- 3.2 Pestaña Productos -->
+      <!-- 3.2 Productos -->
       <div id="adminProductsTab" class="hidden">
         <div class="card" style="margin-bottom: 2rem; padding: 1.25rem;">
           <h4 id="formTitle" style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
@@ -814,15 +816,15 @@
               <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
                 <div>
                   <small style="color: var(--text-muted); font-size: 0.7rem; font-weight: 700;">LOS FUENTES</small>
-                  <input type="number" step="0.01" id="prodPriceLosFuentes" class="form-control" placeholder="0.00" required>
+                  <input type="number" step="0.01" id="prodPriceLosFuentes" class="form-control" placeholder="0.00" required inputmode="decimal">
                 </div>
                 <div>
                   <small style="color: var(--text-muted); font-size: 0.7rem; font-weight: 700;">CORINTO</small>
-                  <input type="number" step="0.01" id="prodPriceCorinto" class="form-control" placeholder="0.00" required>
+                  <input type="number" step="0.01" id="prodPriceCorinto" class="form-control" placeholder="0.00" required inputmode="decimal">
                 </div>
                 <div>
                   <small style="color: var(--text-muted); font-size: 0.7rem; font-weight: 700;">METAPÁN</small>
-                  <input type="number" step="0.01" id="prodPriceMetapan" class="form-control" placeholder="0.00" required>
+                  <input type="number" step="0.01" id="prodPriceMetapan" class="form-control" placeholder="0.00" required inputmode="decimal">
                 </div>
               </div>
             </div>
@@ -832,15 +834,15 @@
               <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
                 <div>
                   <small style="color: var(--text-muted); font-size: 0.7rem; font-weight: 700;">LOS FUENTES (Pts)</small>
-                  <input type="number" id="prodPointsLosFuentes" class="form-control" placeholder="0" value="0">
+                  <input type="number" id="prodPointsLosFuentes" class="form-control" placeholder="0" value="0" inputmode="numeric">
                 </div>
                 <div>
                   <small style="color: var(--text-muted); font-size: 0.7rem; font-weight: 700;">CORINTO (Pts)</small>
-                  <input type="number" id="prodPointsCorinto" class="form-control" placeholder="0" value="0">
+                  <input type="number" id="prodPointsCorinto" class="form-control" placeholder="0" value="0" inputmode="numeric">
                 </div>
                 <div>
                   <small style="color: var(--text-muted); font-size: 0.7rem; font-weight: 700;">METAPÁN (Pts)</small>
-                  <input type="number" id="prodPointsMetapan" class="form-control" placeholder="0" value="0">
+                  <input type="number" id="prodPointsMetapan" class="form-control" placeholder="0" value="0" inputmode="numeric">
                 </div>
               </div>
             </div>
@@ -881,7 +883,7 @@
             </div>
             <div class="form-group">
               <label>Puntos Requeridos para Canjear</label>
-              <input type="number" id="rewardPointsCost" class="form-control" placeholder="Ej: 50" required>
+              <input type="number" id="rewardPointsCost" class="form-control" placeholder="Ej: 50" required inputmode="numeric">
             </div>
             <div class="form-group">
               <label>Imagen del Premio (URL)</label>
@@ -929,7 +931,7 @@
             </div>
             <div class="form-group">
               <label>Precio Especial ($)</label>
-              <input type="number" step="0.01" id="promoPrice" class="form-control" placeholder="Ej: 4.50" required>
+              <input type="number" step="0.01" id="promoPrice" class="form-control" placeholder="Ej: 4.50" required inputmode="decimal">
             </div>
             <div class="form-group">
               <label>Imagen de la Promo (URL)</label>
@@ -947,11 +949,11 @@
         <div id="adminPromosList"></div>
       </div>
 
-      <!-- 3.6 PESTAÑA DISEÑO TARJETA ADMIN NFC / QR / BARCODE -->
+      <!-- 3.6 Tarjeta NFC / QR / Barcode -->
       <div id="adminCardTab" class="hidden">
         <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 1rem;">💳 Tu Tarjeta de Acceso Admin</h3>
         <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
-          Esta es la representación visual de tu tarjeta física. Podés imprimirla o mandar este diseño a sticker para pegarlo en tu tarjeta NFC.
+          Esta es la representación visual de tu tarjeta física. Puedes grabarla mediante NFC o usarla para escanear.
         </p>
 
         <div class="nfc-card-preview">
@@ -960,13 +962,11 @@
             <span class="nfc-chip-icon"></span>
           </div>
           
-          <div style="font-size: 1.1rem; font-weight: 800; margin: 0.5rem 0;">FrankR</div>
+          <div style="font-size: 1.1rem; font-weight: 800; margin: 0.5rem 0;">Frankr</div>
           <div style="font-size: 0.72rem; color: #94a3b8; margin-bottom: 1rem;">CREDENTIAL: ST-ADMIN-KEY-199818</div>
 
-          <!-- QR Generado -->
           <div id="adminCardQR" style="display: flex; justify-content: center; background: white; padding: 10px; border-radius: 12px; margin: 0 auto 0.75rem auto; width: 140px; height: 140px;"></div>
 
-          <!-- Barcode Generado -->
           <svg id="adminCardBarcode" style="width: 100%; height: 50px; background: white; border-radius: 8px; padding: 4px;"></svg>
         </div>
 
@@ -1115,7 +1115,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const ADMIN_USER = "FrankR";
+    const ADMIN_USER = "Frankr";
     const ADMIN_PASS = "199818";
     const ADMIN_KEY_TOKEN = "ST-ADMIN-KEY-199818";
     const WHATSAPP_NUMBER = "50370092996";
@@ -1177,7 +1177,7 @@
           await ndef.scan();
           alert("📡 Acerca tu tarjeta NFC a la parte trasera del teléfono...");
 
-          ndef.addEventListener("reading", ({ message, serialNumber }) => {
+          ndef.addEventListener("reading", ({ message }) => {
             for (const record of message.records) {
               const decoder = new TextDecoder();
               const text = decoder.decode(record.data);
@@ -1192,7 +1192,7 @@
           alert("Error al activar NFC: " + error.message);
         }
       } else {
-        alert("💡 Tu navegador o dispositivo no soporta Web NFC directa. Podés usar la app gratuita 'NFC Tools' en iPhone para guardar la URL o usar el código QR / Barcode.");
+        alert("💡 Tu navegador no soporta Web NFC directa. Usa la app 'NFC Tools' en tu iPhone para grabar el token o utiliza el escáner QR.");
       }
     };
 
@@ -1212,22 +1212,20 @@
       });
     };
 
-    // GRABAR EN TARJETA NFC DESDE LA APP
     window.writeToNFCTag = async () => {
       if ('NDEFReader' in window) {
         try {
           const ndef = new NDEFReader();
           await ndef.write(ADMIN_KEY_TOKEN);
-          alert("✅ ¡Acerca tu tarjeta NFC al teléfono para grabar la clave de acceso!");
+          alert("✅ ¡Acerca tu tarjeta NFC al teléfono para grabar la clave!");
         } catch (error) {
-          alert("Error al escribir en tarjeta: " + error.message);
+          alert("Error al escribir: " + error.message);
         }
       } else {
-        alert("Abrí la app 'NFC Tools' en tu teléfono y escribe el texto: " + ADMIN_KEY_TOKEN);
+        alert("Abre la app 'NFC Tools' en tu iPhone y graba este texto: " + ADMIN_KEY_TOKEN);
       }
     };
 
-    // VER DETALLE COMPLETO DE PROMOCIÓN
     window.openPromoDetailModal = (e, promoId) => {
       if (e) e.stopPropagation();
       const promo = allPromos.find(p => p.id === promoId);
@@ -1297,20 +1295,28 @@
       updateCart();
     });
 
-    // LOGIN DUAL: SOPORTA MANUAL (FrankR / 199818), CÓDIGO BARCODE Y CLIENTES
+    // LOGIN DUAL: SI ESCRIBES "Frankr" (O "FrankR"), ABRE ADMIN O PIDE NFC
     document.getElementById('accessForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const name = document.getElementById('accessName').value.trim();
       const rawPass = document.getElementById('accessPass').value.trim();
       const cleanInputPhone = cleanPhone(rawPass);
 
-      // ACCESO ADMIN POR CREDENCIALES MANUALES, BARCODE O TOKEN DE TARJETA
+      const isFrankrName = name.toLowerCase() === "frankr";
+
       if (
-        (name === ADMIN_USER && rawPass === ADMIN_PASS) || 
+        (isFrankrName && rawPass === ADMIN_PASS) || 
         rawPass === ADMIN_KEY_TOKEN || 
         name === ADMIN_KEY_TOKEN
       ) {
         showAdminView();
+        return;
+      }
+
+      // Si escribe "Frankr" pero la clave no es la contraseña numérica, le invitamos a acercar su NFC o escanear
+      if (isFrankrName) {
+        alert("👋 ¡Hola Frankr! Como ingresaste tu nombre de Admin, por favor presiona 'Leer NFC' o 'Escanear QR' para verificar tu tarjeta.");
+        startNFCScan();
         return;
       }
 
@@ -1376,7 +1382,7 @@
       document.getElementById('loginScreen').classList.add('hidden');
       document.getElementById('clientView').classList.add('hidden');
       document.getElementById('adminView').classList.remove('hidden');
-      document.getElementById('userHeaderArea').innerText = "FrankR (Admin)";
+      document.getElementById('userHeaderArea').innerText = "Frankr (Admin)";
       document.getElementById('bottomNav').classList.add('hidden');
       switchAdminSubTab('orders');
       generateAdminCardGraphic();
