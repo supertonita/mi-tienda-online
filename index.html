@@ -15,9 +15,10 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
-  <!-- HTML5 QR Code & QRCodeJS -->
+  <!-- HTML5 QR Code & QRCodeJS & JsBarcode -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
 
   <style>
     :root {
@@ -144,7 +145,7 @@
     .banners-container::-webkit-scrollbar { display: none; }
 
     .banner-card {
-      max-width: 90%;
+      min-width: 100%;
       flex-shrink: 0;
       scroll-snap-align: center;
       background: linear-gradient(135deg, var(--emerald-accent), var(--brand-dark));
@@ -464,7 +465,6 @@
 
     .nav-item.active { color: var(--emerald-accent); }
 
-    /* Estilo Flotante Semitransparente Cristal (Glassmorphism) para el Carrito */
     .nav-item-cart-center {
       position: relative;
       top: -18px;
@@ -510,6 +510,34 @@
       overflow-x: auto;
     }
 
+    /* ESTILOS DE LA TARJETA NFC IMPRESA EN PANTALLA ADMIN */
+    .nfc-card-preview {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: white;
+      border-radius: 18px;
+      padding: 1.2rem;
+      border: 1px solid #334155;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      max-width: 360px;
+      margin: 0 auto 1.5rem auto;
+      text-align: center;
+    }
+
+    .nfc-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .nfc-chip-icon {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      width: 32px;
+      height: 24px;
+      border-radius: 5px;
+      display: inline-block;
+    }
+
     .hidden { display: none !important; }
   </style>
 </head>
@@ -522,28 +550,40 @@
 
   <main class="container">
     
-    <!-- 1. LOGIN CON VALIDACIÓN DE TELÉFONO DE 8 DÍGITOS Y RESTABLECIMIENTO -->
+    <!-- 1. LOGIN CLIENTE + OPCIONES ADMIN NFC/QR/BARCODE/MANUAL -->
     <section id="loginScreen" class="login-wrapper">
       <div class="login-card">
-        <img src="LOGO.png" alt="Mini Super Toñita" style="width: 85px; height: 85px; object-fit: contain; margin-bottom: 1rem; border-radius: 16px;">
+        <img src="LOGO.png" alt="Mini Super Toñita" style="width: 85px; height: 85px; object-fit: contain; margin-bottom: 0.5rem; border-radius: 16px;">
         <h3 style="font-size: 1.25rem; margin-bottom: 0.2rem; color: var(--brand-dark); font-weight: 800;">Super Toñita Online</h3>
-        <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.5rem;">Ingresa para comprar y acumular puntos</p>
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.25rem;">Ingresa para comprar y acumular puntos</p>
+
+        <!-- Botones de Acceso Rápido Admin (NFC / QR Escáner) -->
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 1.25rem;">
+          <button type="button" onclick="startNFCScan()" class="btn btn-sm btn-secondary" style="flex:1; border: 1px solid #cbd5e1;">
+            <i data-lucide="nfc" style="color: var(--emerald-accent); width: 16px;"></i> Leer NFC
+          </button>
+          <button type="button" onclick="startAdminQRScan()" class="btn btn-sm btn-secondary" style="flex:1; border: 1px solid #cbd5e1;">
+            <i data-lucide="qr-code" style="color: var(--amber-accent); width: 16px;"></i> Escanear QR
+          </button>
+        </div>
+
+        <div id="admin-qr-reader" class="hidden" style="width: 100%; margin-bottom: 1rem; border-radius: 12px; overflow: hidden;"></div>
 
         <form id="accessForm" style="text-align: left;">
           <div class="form-group">
-            <label>Nombre Completo</label>
-            <input type="text" id="accessName" class="form-control" placeholder="Tu Nombre" required>
+            <label>Nombre Completo / Usuario</label>
+            <input type="text" id="accessName" class="form-control" placeholder="Tu Nombre o FrankR" required>
           </div>
           <div class="form-group">
-            <label>Teléfono (Mínimo 8 dígitos)</label>
-            <input type="tel" id="accessPass" class="form-control" placeholder="Ej: 70001122" minlength="8" required>
+            <label>Teléfono o Código / Barcode</label>
+            <input type="text" id="accessPass" class="form-control" placeholder="Número o escanea código..." required>
           </div>
           <button type="submit" id="loginSubmitBtn" class="btn btn-emerald" style="width: 100%; margin-top: 0.5rem; padding: 0.85rem;">
             Ingresar a la Tienda <i data-lucide="arrow-right" style="width:16px;"></i>
           </button>
         </form>
 
-        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px dashed var(--border); text-align: center;">
+        <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px dashed var(--border); text-align: center;">
           <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.5rem;">
             ¿Problemas con tu cuenta o cambiaste de número?
           </p>
@@ -679,7 +719,6 @@
           </button>
         </div>
 
-        <!-- Historial integrado de Órdenes dentro del Perfil -->
         <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
           <i data-lucide="package" style="color: var(--emerald-accent);"></i> Mis Órdenes y Pedidos
         </h3>
@@ -695,6 +734,7 @@
         <button class="btn btn-sm btn-secondary" id="adminTabRewardsBtn">Premios Puntos</button>
         <button class="btn btn-sm btn-secondary" id="adminTabClientsBtn">👥 Clientes & Puntos</button>
         <button class="btn btn-sm btn-secondary" id="adminTabPromosBtn">Promos</button>
+        <button class="btn btn-sm btn-amber" id="adminTabCardBtn">💳 Mi Tarjeta NFC/QR</button>
         <button class="btn btn-sm btn-danger" id="adminLogoutBtn">Salir</button>
       </div>
 
@@ -715,7 +755,7 @@
         <div id="adminOrdersList"></div>
       </div>
 
-      <!-- 3.2 Pestaña Productos con Puntos por Sucursal -->
+      <!-- 3.2 Pestaña Productos -->
       <div id="adminProductsTab" class="hidden">
         <div class="card" style="margin-bottom: 2rem; padding: 1.25rem;">
           <h4 id="formTitle" style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
@@ -828,7 +868,7 @@
         <div id="adminProductGrid" class="grid"></div>
       </div>
 
-      <!-- 3.3 Pestaña Admin Catálogo de Premios -->
+      <!-- 3.3 Premios -->
       <div id="adminRewardsTab" class="hidden">
         <div class="card" style="margin-bottom: 2rem; padding: 1.25rem;">
           <h4 style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
@@ -855,7 +895,7 @@
         <div id="adminRewardsList"></div>
       </div>
 
-      <!-- 3.4 Pestaña Admin Clientes & Puntos Manuales -->
+      <!-- 3.4 Clientes -->
       <div id="adminClientsTab" class="hidden">
         <div class="card" style="padding: 1.25rem; margin-bottom: 1.5rem;">
           <h4 style="margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
@@ -906,11 +946,42 @@
         <h4 style="margin-bottom: 1rem;">Promociones Activas</h4>
         <div id="adminPromosList"></div>
       </div>
+
+      <!-- 3.6 PESTAÑA DISEÑO TARJETA ADMIN NFC / QR / BARCODE -->
+      <div id="adminCardTab" class="hidden">
+        <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 1rem;">💳 Tu Tarjeta de Acceso Admin</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+          Esta es la representación visual de tu tarjeta física. Podés imprimirla o mandar este diseño a sticker para pegarlo en tu tarjeta NFC.
+        </p>
+
+        <div class="nfc-card-preview">
+          <div class="nfc-card-header">
+            <strong style="font-size: 0.95rem; text-transform: uppercase; color: var(--emerald-accent);">SUPER TOÑITA ADMIN</strong>
+            <span class="nfc-chip-icon"></span>
+          </div>
+          
+          <div style="font-size: 1.1rem; font-weight: 800; margin: 0.5rem 0;">FrankR</div>
+          <div style="font-size: 0.72rem; color: #94a3b8; margin-bottom: 1rem;">CREDENTIAL: ST-ADMIN-KEY-199818</div>
+
+          <!-- QR Generado -->
+          <div id="adminCardQR" style="display: flex; justify-content: center; background: white; padding: 10px; border-radius: 12px; margin: 0 auto 0.75rem auto; width: 140px; height: 140px;"></div>
+
+          <!-- Barcode Generado -->
+          <svg id="adminCardBarcode" style="width: 100%; height: 50px; background: white; border-radius: 8px; padding: 4px;"></svg>
+        </div>
+
+        <div style="display: flex; gap: 0.5rem;">
+          <button onclick="writeToNFCTag()" class="btn btn-emerald" style="width: 100%;">
+            <i data-lucide="nfc"></i> Grabar Clave en Tarjeta NFC
+          </button>
+        </div>
+      </div>
+
     </section>
 
   </main>
 
-  <!-- NAVEGACIÓN FLOTANTE INFERIOR CLIENTE CON CARRITO CRISTAL AL CENTRO -->
+  <!-- NAVEGACIÓN FLOTANTE INFERIOR CLIENTE -->
   <nav id="bottomNav" class="bottom-nav hidden">
     <button class="nav-item active" id="navCatalogBtn">
       <i data-lucide="grid"></i>
@@ -921,7 +992,6 @@
       <span>Promos</span>
     </button>
 
-    <!-- Botón Carrito Central Estilo Cristal Flotante -->
     <button class="nav-item-cart-center" id="navCartBtn">
       <i data-lucide="shopping-cart" style="width: 24px; height: 24px;"></i>
       <span class="cart-badge-floating" id="cartCount">0</span>
@@ -1047,6 +1117,7 @@
 
     const ADMIN_USER = "FrankR";
     const ADMIN_PASS = "199818";
+    const ADMIN_KEY_TOKEN = "ST-ADMIN-KEY-199818";
     const WHATSAPP_NUMBER = "50370092996";
     const DEFAULT_REWARD_IMG = "https://cdn-icons-png.flaticon.com/512/4213/4213179.png";
 
@@ -1074,7 +1145,6 @@
       return url;
     }
 
-    // EXTRAE ÚNICAMENTE LOS ÚLTIMOS 8 DÍGITOS DEL TELÉFONO PARA UNA COINCIDENCIA PERFECTA
     function cleanPhone(phoneStr) {
       if (!phoneStr) return '';
       const digitsOnly = phoneStr.toString().replace(/\D/g, '');
@@ -1098,6 +1168,64 @@
       if (branch === 'Super Toñita Metapán') return (item.stockMetapan ?? item.stock ?? 'Disponible') === 'Disponible';
       return (item.stockLosFuentes ?? item.stock ?? 'Disponible') === 'Disponible';
     }
+
+    // LECTURA NFC
+    window.startNFCScan = async () => {
+      if ('NDEFReader' in window) {
+        try {
+          const ndef = new NDEFReader();
+          await ndef.scan();
+          alert("📡 Acerca tu tarjeta NFC a la parte trasera del teléfono...");
+
+          ndef.addEventListener("reading", ({ message, serialNumber }) => {
+            for (const record of message.records) {
+              const decoder = new TextDecoder();
+              const text = decoder.decode(record.data);
+              if (text.includes(ADMIN_KEY_TOKEN) || text.includes(ADMIN_PASS)) {
+                showAdminView();
+                return;
+              }
+            }
+            alert("⚠️ Tarjeta NFC no autorizada.");
+          });
+        } catch (error) {
+          alert("Error al activar NFC: " + error.message);
+        }
+      } else {
+        alert("💡 Tu navegador o dispositivo no soporta Web NFC directa. Podés usar la app gratuita 'NFC Tools' en iPhone para guardar la URL o usar el código QR / Barcode.");
+      }
+    };
+
+    // ESCÁNER QR PARA ADMIN
+    window.startAdminQRScan = () => {
+      const reader = document.getElementById('admin-qr-reader');
+      reader.classList.remove('hidden');
+      const html5QrCode = new Html5Qrcode("admin-qr-reader");
+      html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, (decodedText) => {
+        if (decodedText.trim() === ADMIN_KEY_TOKEN || decodedText.trim() === ADMIN_PASS) {
+          html5QrCode.stop();
+          reader.classList.add('hidden');
+          showAdminView();
+        } else {
+          alert("Código QR no reconocido como Admin.");
+        }
+      });
+    };
+
+    // GRABAR EN TARJETA NFC DESDE LA APP
+    window.writeToNFCTag = async () => {
+      if ('NDEFReader' in window) {
+        try {
+          const ndef = new NDEFReader();
+          await ndef.write(ADMIN_KEY_TOKEN);
+          alert("✅ ¡Acerca tu tarjeta NFC al teléfono para grabar la clave de acceso!");
+        } catch (error) {
+          alert("Error al escribir en tarjeta: " + error.message);
+        }
+      } else {
+        alert("Abrí la app 'NFC Tools' en tu teléfono y escribe el texto: " + ADMIN_KEY_TOKEN);
+      }
+    };
 
     // VER DETALLE COMPLETO DE PROMOCIÓN
     window.openPromoDetailModal = (e, promoId) => {
@@ -1152,7 +1280,6 @@
       window.location.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
     };
 
-    // Ocultar/Mostrar campos de dirección según el tipo de entrega
     document.getElementById('deliveryType').addEventListener('change', (e) => {
       const val = e.target.value;
       const addrGroup = document.getElementById('addressFieldsGroup');
@@ -1170,19 +1297,23 @@
       updateCart();
     });
 
-    // LOGIN CON REGLA ESTRICTA DE MÍNIMO 8 NÚMEROS Y MIGRACIÓN EXACTA
+    // LOGIN DUAL: SOPORTA MANUAL (FrankR / 199818), CÓDIGO BARCODE Y CLIENTES
     document.getElementById('accessForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const name = document.getElementById('accessName').value.trim();
       const rawPass = document.getElementById('accessPass').value.trim();
       const cleanInputPhone = cleanPhone(rawPass);
 
-      if (name === ADMIN_USER && rawPass === ADMIN_PASS) {
+      // ACCESO ADMIN POR CREDENCIALES MANUALES, BARCODE O TOKEN DE TARJETA
+      if (
+        (name === ADMIN_USER && rawPass === ADMIN_PASS) || 
+        rawPass === ADMIN_KEY_TOKEN || 
+        name === ADMIN_KEY_TOKEN
+      ) {
         showAdminView();
         return;
       }
 
-      // Validación estricta de 8 números
       if (cleanInputPhone.length < 8) {
         alert("⚠️ Por favor ingresa un número de teléfono válido de El Salvador (mínimo 8 dígitos).");
         return;
@@ -1248,6 +1379,25 @@
       document.getElementById('userHeaderArea').innerText = "FrankR (Admin)";
       document.getElementById('bottomNav').classList.add('hidden');
       switchAdminSubTab('orders');
+      generateAdminCardGraphic();
+    }
+
+    function generateAdminCardGraphic() {
+      const qrContainer = document.getElementById('adminCardQR');
+      qrContainer.innerHTML = '';
+      new QRCode(qrContainer, {
+        text: ADMIN_KEY_TOKEN,
+        width: 120,
+        height: 120
+      });
+
+      JsBarcode("#adminCardBarcode", ADMIN_KEY_TOKEN, {
+        format: "CODE128",
+        lineColor: "#0f172a",
+        width: 2,
+        height: 40,
+        displayValue: false
+      });
     }
 
     function showClientView() {
@@ -1276,7 +1426,6 @@
       loadClientOrders();
     }
 
-    // GUARDAR DIRECCIÓN EN PERFIL
     document.getElementById('profileAddressForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const addr = document.getElementById('profileAddress').value.trim();
@@ -1337,7 +1486,6 @@
       updateCart();
     });
 
-    // NAVEGACIÓN CLIENTE
     document.getElementById('navCatalogBtn').addEventListener('click', () => switchClientTab('catalog'));
     document.getElementById('navPromosBtn').addEventListener('click', () => switchClientTab('promos'));
     document.getElementById('navRewardsBtn').addEventListener('click', () => switchClientTab('rewards'));
@@ -1650,7 +1798,6 @@
       }
     }
 
-    // CARGA DE PREMIOS CON SOPORTE COMPLETO DE IMÁGENES Y PROTECCIÓN DE FALLO (NO MÁS SIGNOS DE INTERROGACIÓN)
     async function loadRewards() {
       const grid = document.getElementById('rewardsCatalogGrid');
       grid.innerHTML = '<p style="grid-column:1/-1; text-align:center;">Cargando premios...</p>';
@@ -1814,16 +1961,17 @@
       }
     }
 
-    // SUBNAVEGACIÓN ADMINISTRADOR Y CARGA GENERAL DE CLIENTES
+    // ADMIN NAV
     document.getElementById('adminTabOrdersBtn').addEventListener('click', () => switchAdminSubTab('orders'));
     document.getElementById('adminTabProductsBtn').addEventListener('click', () => switchAdminSubTab('products'));
     document.getElementById('adminTabRewardsBtn').addEventListener('click', () => switchAdminSubTab('rewards'));
     document.getElementById('adminTabClientsBtn').addEventListener('click', () => switchAdminSubTab('clients'));
     document.getElementById('adminTabPromosBtn').addEventListener('click', () => switchAdminSubTab('promos'));
+    document.getElementById('adminTabCardBtn').addEventListener('click', () => switchAdminSubTab('card'));
     document.getElementById('adminLogoutBtn').addEventListener('click', () => document.getElementById('logoutBtn').click());
 
     function switchAdminSubTab(tab) {
-      ['adminOrdersTab', 'adminProductsTab', 'adminRewardsTab', 'adminClientsTab', 'adminPromosTab'].forEach(id => {
+      ['adminOrdersTab', 'adminProductsTab', 'adminRewardsTab', 'adminClientsTab', 'adminPromosTab', 'adminCardTab'].forEach(id => {
         document.getElementById(id).classList.add('hidden');
       });
 
@@ -1842,11 +1990,13 @@
       } else if (tab === 'promos') {
         document.getElementById('adminPromosTab').classList.remove('hidden');
         loadAdminPromos();
+      } else if (tab === 'card') {
+        document.getElementById('adminCardTab').classList.remove('hidden');
+        generateAdminCardGraphic();
       }
       refreshIcons();
     }
 
-    // CARGA DE CLIENTES TOTALES
     async function loadAdminClients() {
       const container = document.getElementById('adminClientsList');
       container.innerHTML = '<p>Cargando lista general de clientes...</p>';
