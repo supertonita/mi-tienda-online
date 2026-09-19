@@ -565,8 +565,8 @@
             <input type="text" id="accessName" class="form-control" placeholder="Tu Nombre o FrankR" required>
           </div>
           <div class="form-group">
-            <label>Teléfono (Mínimo 8 dígitos)</label>
-            <input type="tel" id="accessPass" class="form-control" placeholder="Ej: 70001122" inputmode="numeric" pattern="[0-9]*" id="accessPassInput">
+            <label>Teléfono (Opcional si eres Admin)</label>
+            <input type="tel" id="accessPass" class="form-control" placeholder="Ej: 70001122" inputmode="numeric">
           </div>
           <button type="submit" id="loginSubmitBtn" class="btn btn-emerald" style="width: 100%; margin-top: 0.5rem; padding: 0.85rem;">
             Ingresar a la Tienda <i data-lucide="arrow-right" style="width:16px;"></i>
@@ -735,7 +735,7 @@
             </div>
             <div class="form-group">
               <label>Punto de referencia</label>
-              <input type="text" id="profileRef" class="form-control" placeholder="Ej: Frente a la iglesia...">
+              <input type="text" id="profileRef" class="form-control" placeholder="Ej: Frente la iglesia...">
             </div>
             <button type="submit" class="btn btn-emerald btn-sm" style="width: 100%;">
               Guardar Dirección Predeterminada
@@ -1341,7 +1341,7 @@
       updateCart();
     });
 
-    // LOGIN PRINCIPAL: SI ESCRIBES "FrankR" SALTA DIRECTO A LA VALIDACIÓN ADMIN SIN PEDIR TELÉFONO
+    // LOGIN PRINCIPAL: SI ESCRIBES "FrankR" SALTA DIRECTO A LA VALIDACIÓN ADMIN SIN IMPORTAR EL TELÉFONO
     document.getElementById('accessForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const name = document.getElementById('accessName').value.trim();
@@ -2420,4 +2420,3 @@
   </script>
 </body>
 </html>
-
