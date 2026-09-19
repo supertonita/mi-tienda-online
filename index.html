@@ -552,7 +552,7 @@
 
   <main class="container">
     
-    <!-- 1. PANTALLA DE LOGIN LIMPIA PARA CLIENTES (Y DISCRETA PARA ADMIN) -->
+    <!-- 1. PANTALLA DE LOGIN LIMPIA PARA CLIENTES -->
     <section id="loginScreen" class="login-wrapper">
       <div class="login-card">
         <img src="LOGO.png" alt="Mini Super Toñita" style="width: 85px; height: 85px; object-fit: contain; margin-bottom: 0.5rem; border-radius: 16px;">
@@ -562,11 +562,11 @@
         <form id="accessForm" style="text-align: left;">
           <div class="form-group">
             <label>Nombre Completo</label>
-            <input type="text" id="accessName" class="form-control" placeholder="Tu Nombre" required>
+            <input type="text" id="accessName" class="form-control" placeholder="Tu Nombre o FrankR" required>
           </div>
           <div class="form-group">
             <label>Teléfono (Mínimo 8 dígitos)</label>
-            <input type="tel" id="accessPass" class="form-control" placeholder="Ej: 70001122" inputmode="numeric" pattern="[0-9]*" minlength="8" required>
+            <input type="tel" id="accessPass" class="form-control" placeholder="Ej: 70001122" inputmode="numeric" pattern="[0-9]*" id="accessPassInput">
           </div>
           <button type="submit" id="loginSubmitBtn" class="btn btn-emerald" style="width: 100%; margin-top: 0.5rem; padding: 0.85rem;">
             Ingresar a la Tienda <i data-lucide="arrow-right" style="width:16px;"></i>
@@ -585,19 +585,21 @@
       </div>
     </section>
 
-    <!-- 1.1 PANTALLA EXCLUSIVA DE VALIDACIÓN ADMIN (NFC / QR / BARCODE) -->
+    <!-- 1.1 PANTALLA EXCLUSIVA DE VALIDACIÓN ADMIN (NFC / QR / CLAVE) -->
     <section id="adminAuthScreen" class="login-wrapper hidden">
       <div class="login-card">
         <div style="background: var(--brand-dark); width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto;">
           <i data-lucide="shield-check" style="color: var(--emerald-accent); width: 32px; height: 32px;"></i>
         </div>
         <h3 style="font-size: 1.25rem; margin-bottom: 0.3rem; color: var(--brand-dark); font-weight: 800;">Validación de Administrador</h3>
-        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">Hola FrankR. Por favor valida tu identidad para acceder al panel.</p>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Hola FrankR. Acerca tu tarjeta NFC, escanea el QR o ingresa tu clave.</p>
+
+        <!-- Botón de activación directa de Web NFC con gesto táctil -->
+        <button type="button" onclick="startNFCScan()" class="btn btn-emerald" style="width: 100%; padding: 0.85rem; margin-bottom: 0.75rem; font-size: 0.95rem;">
+          <i data-lucide="nfc" style="width: 20px;"></i> 📡 Toca aquí para activar lector NFC
+        </button>
 
         <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-          <button type="button" onclick="startNFCScan()" class="btn btn-emerald" style="flex:1; padding: 0.75rem;">
-            <i data-lucide="nfc"></i> Leer NFC
-          </button>
           <button type="button" onclick="startAdminQRScan()" class="btn btn-amber" style="flex:1; padding: 0.75rem;">
             <i data-lucide="qr-code"></i> Escanear QR
           </button>
@@ -605,10 +607,10 @@
 
         <div id="admin-qr-reader" class="hidden" style="width: 100%; margin-bottom: 1rem; border-radius: 12px; overflow: hidden;"></div>
 
-        <form id="adminKeyForm" style="text-align: left; margin-top: 1rem;">
+        <form id="adminKeyForm" style="text-align: left; margin-top: 0.5rem;">
           <div class="form-group">
-            <label>O ingresa tu contraseña / clave digital</label>
-            <input type="password" id="adminKeyInput" class="form-control" placeholder="Contraseña o código de tarjeta..." required inputmode="numeric">
+            <label>O ingresa tu clave digital</label>
+            <input type="password" id="adminKeyInput" class="form-control" placeholder="Contraseña o código..." required inputmode="numeric">
           </div>
           <button type="submit" class="btn btn-emerald" style="width: 100%; margin-top: 0.5rem; padding: 0.85rem;">
             Confirmar Acceso Admin
@@ -1193,30 +1195,32 @@
       return (item.stockLosFuentes ?? item.stock ?? 'Disponible') === 'Disponible';
     }
 
-    // LECTURA NFC
+    // LECTURA NFC OPTIMIZADA CON GESTO TÁCTIL
     window.startNFCScan = async () => {
       if ('NDEFReader' in window) {
         try {
           const ndef = new NDEFReader();
           await ndef.scan();
-          alert("📡 Acerca tu tarjeta NFC a la parte trasera del teléfono...");
+          alert("📡 ¡Lector NFC activo! Acerca tu tarjeta a la parte trasera del teléfono...");
 
           ndef.addEventListener("reading", ({ message }) => {
             for (const record of message.records) {
               const decoder = new TextDecoder();
               const text = decoder.decode(record.data);
-              if (text.includes(ADMIN_KEY_TOKEN) || text.includes(ADMIN_PASS)) {
+              
+              if (text.includes(ADMIN_KEY_TOKEN) || text.includes(ADMIN_PASS) || text.includes("199818")) {
+                alert("¡Tarjeta NFC reconocida con éxito!");
                 showAdminView();
                 return;
               }
             }
-            alert("⚠️ Tarjeta NFC no autorizada.");
+            alert("⚠️ Tarjeta NFC leída, pero el contenido no coincide con la llave de Admin.");
           });
         } catch (error) {
-          alert("Error al activar NFC: " + error.message);
+          alert("Error al activar NFC: " + error.message + "\n(Asegúrate de conceder permisos si el navegador los solicita).");
         }
       } else {
-        alert("💡 Tu navegador no soporta Web NFC directa. Usa la app 'NFC Tools' en tu iPhone o ingresa tu clave manualmente.");
+        alert("💡 Tu navegador actual (o iOS) requiere ejecutar Web NFC mediante conexión segura HTTPS. Usa tu clave numérica temporalmente mientras tanto.");
       }
     };
 
@@ -1337,12 +1341,11 @@
       updateCart();
     });
 
-    // LOGIN PRINCIPAL: SI ESCRIBES "FrankR" MUESTRA LA PANTALLA SECUNDARIA DE VALIDACIÓN ADMIN
+    // LOGIN PRINCIPAL: SI ESCRIBES "FrankR" SALTA DIRECTO A LA VALIDACIÓN ADMIN SIN PEDIR TELÉFONO
     document.getElementById('accessForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const name = document.getElementById('accessName').value.trim();
       const rawPass = document.getElementById('accessPass').value.trim();
-      const cleanInputPhone = cleanPhone(rawPass);
 
       const isFrankrName = name.toLowerCase() === "frankr";
 
@@ -1353,6 +1356,7 @@
         return;
       }
 
+      const cleanInputPhone = cleanPhone(rawPass);
       if (cleanInputPhone.length < 8) {
         alert("⚠️ Por favor ingresa un número de teléfono válido de El Salvador (mínimo 8 dígitos).");
         return;
@@ -2416,3 +2420,4 @@
   </script>
 </body>
 </html>
+
