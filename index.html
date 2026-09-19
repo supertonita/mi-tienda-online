@@ -562,11 +562,11 @@
         <form id="accessForm" style="text-align: left;">
           <div class="form-group">
             <label>Nombre Completo</label>
-            <input type="text" id="accessName" class="form-control" placeholder="Tu Nombre o FrankR" required>
+            <input type="text" id="accessName" class="form-control" placeholder="Tu Nombre" required>
           </div>
           <div class="form-group">
             <label>Teléfono (Opcional si eres Admin)</label>
-            <input type="tel" id="accessPass" class="form-control" placeholder="Ej: 70001122" inputmode="numeric">
+            <input type="tel" id="accessPass" class="form-control" placeholder="Tu Numero" inputmode="numeric">
           </div>
           <button type="submit" id="loginSubmitBtn" class="btn btn-emerald" style="width: 100%; margin-top: 0.5rem; padding: 0.85rem;">
             Ingresar a la Tienda <i data-lucide="arrow-right" style="width:16px;"></i>
@@ -596,7 +596,7 @@
 
         <!-- Botón de activación directa de Web NFC con gesto táctil -->
         <button type="button" onclick="startNFCScan()" class="btn btn-emerald" style="width: 100%; padding: 0.85rem; margin-bottom: 0.75rem; font-size: 0.95rem;">
-          <i data-lucide="nfc" style="width: 20px;"></i> 📡 Toca aquí para activar lector NFC
+          <i data-lucide="nfc" style="width: 20px;"></i>Toca aquí para activar lector NFC
         </button>
 
         <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
@@ -760,9 +760,9 @@
         <button class="btn btn-sm btn-emerald" id="adminTabOrdersBtn">Órdenes</button>
         <button class="btn btn-sm btn-secondary" id="adminTabProductsBtn">Productos</button>
         <button class="btn btn-sm btn-secondary" id="adminTabRewardsBtn">Premios Puntos</button>
-        <button class="btn btn-sm btn-secondary" id="adminTabClientsBtn">👥 Clientes & Puntos</button>
+        <button class="btn btn-sm btn-secondary" id="adminTabClientsBtn">Clientes & Puntos</button>
         <button class="btn btn-sm btn-secondary" id="adminTabPromosBtn">Promos</button>
-        <button class="btn btn-sm btn-amber" id="adminTabCardBtn">💳 Mi Tarjeta NFC/QR</button>
+        <button class="btn btn-sm btn-amber" id="adminTabCardBtn">Mi Tarjeta NFC/QR</button>
         <button class="btn btn-sm btn-danger" id="adminLogoutBtn">Salir</button>
       </div>
 
@@ -940,7 +940,7 @@
       <!-- 3.5 Promociones -->
       <div id="adminPromosTab" class="hidden">
         <div class="card" style="margin-bottom: 2rem; padding: 1.25rem;">
-          <h4 style="margin-bottom: 1rem;">Crear Promoción Comprable por Sucursal</h4>
+          <h4 style="margin-bottom: 1rem;">Crear Promoción por Sucursal</h4>
           <form id="promoForm">
             <div class="form-group">
               <label>Sucursal Destino</label>
@@ -953,11 +953,11 @@
             </div>
             <div class="form-group">
               <label>Título de la Promo</label>
-              <input type="text" id="promoTitle" class="form-control" placeholder="Ej: Combo Familiar Snacks" required>
+              <input type="text" id="promoTitle" class="form-control" placeholder="" required>
             </div>
             <div class="form-group">
               <label>Precio Especial ($)</label>
-              <input type="number" step="0.01" id="promoPrice" class="form-control" placeholder="Ej: 4.50" required inputmode="decimal">
+              <input type="number" step="0.01" id="promoPrice" class="form-control" placeholder="" required inputmode="decimal">
             </div>
             <div class="form-group">
               <label>Imagen de la Promo (URL)</label>
@@ -965,7 +965,7 @@
             </div>
             <div class="form-group">
               <label>Descripción</label>
-              <textarea id="promoDesc" class="form-control" rows="2" placeholder="Detalles..." required></textarea>
+              <textarea id="promoDesc" class="form-control" rows="2" placeholder="" required></textarea>
             </div>
             <button type="submit" class="btn btn-emerald" style="width: 100%;">Publicar Promoción</button>
           </form>
@@ -1096,7 +1096,7 @@
         <div class="form-group">
           <label>Tipo de Entrega</label>
           <select id="deliveryType" class="form-control" required>
-            <option value="Envío Local">Envío Local (Gratis / Cercano)</option>
+            <option value="Envío Local">Envío Local (Gratis)</option>
             <option value="Envío Departamental">Envío Departamental (+$5.00)</option>
             <option value="Recoger en Tienda">Recoger en Tienda (Gratis)</option>
           </select>
