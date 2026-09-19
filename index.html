@@ -132,7 +132,7 @@
       cursor: pointer;
     }
 
-    /* CARRUSEL DE BANNERS RESTAURADO A 90% DE ANCHO */
+    /* CARRUSEL DE BANNERS AL 90% */
     .banners-container {
       display: flex;
       gap: 1rem;
@@ -552,33 +552,21 @@
 
   <main class="container">
     
-    <!-- 1. LOGIN CLIENTE / ADMIN -->
+    <!-- 1. PANTALLA DE LOGIN LIMPIA PARA CLIENTES (Y DISCRETA PARA ADMIN) -->
     <section id="loginScreen" class="login-wrapper">
       <div class="login-card">
         <img src="LOGO.png" alt="Mini Super Toñita" style="width: 85px; height: 85px; object-fit: contain; margin-bottom: 0.5rem; border-radius: 16px;">
         <h3 style="font-size: 1.25rem; margin-bottom: 0.2rem; color: var(--brand-dark); font-weight: 800;">Super Toñita Online</h3>
-        <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.25rem;">Ingresa para comprar y acumular puntos</p>
-
-        <!-- Botones de Acceso Rápido Admin (NFC / QR Escáner) -->
-        <div style="display: flex; gap: 0.5rem; margin-bottom: 1.25rem;">
-          <button type="button" onclick="startNFCScan()" class="btn btn-sm btn-secondary" style="flex:1; border: 1px solid #cbd5e1;">
-            <i data-lucide="nfc" style="color: var(--emerald-accent); width: 16px;"></i> Leer NFC
-          </button>
-          <button type="button" onclick="startAdminQRScan()" class="btn btn-sm btn-secondary" style="flex:1; border: 1px solid #cbd5e1;">
-            <i data-lucide="qr-code" style="color: var(--amber-accent); width: 16px;"></i> Escanear QR
-          </button>
-        </div>
-
-        <div id="admin-qr-reader" class="hidden" style="width: 100%; margin-bottom: 1rem; border-radius: 12px; overflow: hidden;"></div>
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.5rem;">Ingresa para comprar y acumular puntos</p>
 
         <form id="accessForm" style="text-align: left;">
           <div class="form-group">
-            <label>Nombre / Usuario</label>
-            <input type="text" id="accessName" class="form-control" placeholder="Tu Nombre o Frankr" required>
+            <label>Nombre Completo</label>
+            <input type="text" id="accessName" class="form-control" placeholder="Tu Nombre" required>
           </div>
           <div class="form-group">
-            <label>Teléfono / Código (Teclado numérico)</label>
-            <input type="tel" id="accessPass" class="form-control" placeholder="Ej: 70001122" inputmode="numeric" pattern="[0-9]*" required>
+            <label>Teléfono (Mínimo 8 dígitos)</label>
+            <input type="tel" id="accessPass" class="form-control" placeholder="Ej: 70001122" inputmode="numeric" pattern="[0-9]*" minlength="8" required>
           </div>
           <button type="submit" id="loginSubmitBtn" class="btn btn-emerald" style="width: 100%; margin-top: 0.5rem; padding: 0.85rem;">
             Ingresar a la Tienda <i data-lucide="arrow-right" style="width:16px;"></i>
@@ -594,6 +582,42 @@
             Solicitar Restablecimiento al Admin
           </button>
         </div>
+      </div>
+    </section>
+
+    <!-- 1.1 PANTALLA EXCLUSIVA DE VALIDACIÓN ADMIN (NFC / QR / BARCODE) -->
+    <section id="adminAuthScreen" class="login-wrapper hidden">
+      <div class="login-card">
+        <div style="background: var(--brand-dark); width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto;">
+          <i data-lucide="shield-check" style="color: var(--emerald-accent); width: 32px; height: 32px;"></i>
+        </div>
+        <h3 style="font-size: 1.25rem; margin-bottom: 0.3rem; color: var(--brand-dark); font-weight: 800;">Validación de Administrador</h3>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">Hola FrankR. Por favor valida tu identidad para acceder al panel.</p>
+
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+          <button type="button" onclick="startNFCScan()" class="btn btn-emerald" style="flex:1; padding: 0.75rem;">
+            <i data-lucide="nfc"></i> Leer NFC
+          </button>
+          <button type="button" onclick="startAdminQRScan()" class="btn btn-amber" style="flex:1; padding: 0.75rem;">
+            <i data-lucide="qr-code"></i> Escanear QR
+          </button>
+        </div>
+
+        <div id="admin-qr-reader" class="hidden" style="width: 100%; margin-bottom: 1rem; border-radius: 12px; overflow: hidden;"></div>
+
+        <form id="adminKeyForm" style="text-align: left; margin-top: 1rem;">
+          <div class="form-group">
+            <label>O ingresa tu contraseña / clave digital</label>
+            <input type="password" id="adminKeyInput" class="form-control" placeholder="Contraseña o código de tarjeta..." required inputmode="numeric">
+          </div>
+          <button type="submit" class="btn btn-emerald" style="width: 100%; margin-top: 0.5rem; padding: 0.85rem;">
+            Confirmar Acceso Admin
+          </button>
+        </form>
+
+        <button type="button" onclick="cancelAdminAuth()" class="btn btn-sm btn-secondary" style="width: 100%; margin-top: 1rem;">
+          ← Volver a la Tienda
+        </button>
       </div>
     </section>
 
@@ -962,7 +986,7 @@
             <span class="nfc-chip-icon"></span>
           </div>
           
-          <div style="font-size: 1.1rem; font-weight: 800; margin: 0.5rem 0;">Frankr</div>
+          <div style="font-size: 1.1rem; font-weight: 800; margin: 0.5rem 0;">FrankR</div>
           <div style="font-size: 0.72rem; color: #94a3b8; margin-bottom: 1rem;">CREDENTIAL: ST-ADMIN-KEY-199818</div>
 
           <div id="adminCardQR" style="display: flex; justify-content: center; background: white; padding: 10px; border-radius: 12px; margin: 0 auto 0.75rem auto; width: 140px; height: 140px;"></div>
@@ -1115,7 +1139,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const ADMIN_USER = "Frankr";
+    const ADMIN_USER = "FrankR";
     const ADMIN_PASS = "199818";
     const ADMIN_KEY_TOKEN = "ST-ADMIN-KEY-199818";
     const WHATSAPP_NUMBER = "50370092996";
@@ -1192,11 +1216,11 @@
           alert("Error al activar NFC: " + error.message);
         }
       } else {
-        alert("💡 Tu navegador no soporta Web NFC directa. Usa la app 'NFC Tools' en tu iPhone para grabar el token o utiliza el escáner QR.");
+        alert("💡 Tu navegador no soporta Web NFC directa. Usa la app 'NFC Tools' en tu iPhone o ingresa tu clave manualmente.");
       }
     };
 
-    // ESCÁNER QR PARA ADMIN
+    // ESCÁNER QR ADMIN
     window.startAdminQRScan = () => {
       const reader = document.getElementById('admin-qr-reader');
       reader.classList.remove('hidden');
@@ -1225,6 +1249,24 @@
         alert("Abre la app 'NFC Tools' en tu iPhone y graba este texto: " + ADMIN_KEY_TOKEN);
       }
     };
+
+    window.cancelAdminAuth = () => {
+      document.getElementById('adminAuthScreen').classList.add('hidden');
+      document.getElementById('loginScreen').classList.remove('hidden');
+      document.getElementById('accessForm').reset();
+    };
+
+    // VALIDACIÓN CLAVE ADMIN DESDE PANTALLA SECUNDARIA
+    document.getElementById('adminKeyForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const val = document.getElementById('adminKeyInput').value.trim();
+      if (val === ADMIN_PASS || val === ADMIN_KEY_TOKEN) {
+        document.getElementById('adminAuthScreen').classList.add('hidden');
+        showAdminView();
+      } else {
+        alert("⚠️ Contraseña o código incorrecto.");
+      }
+    });
 
     window.openPromoDetailModal = (e, promoId) => {
       if (e) e.stopPropagation();
@@ -1295,7 +1337,7 @@
       updateCart();
     });
 
-    // LOGIN DUAL: SI ESCRIBES "Frankr" (O "FrankR"), ABRE ADMIN O PIDE NFC
+    // LOGIN PRINCIPAL: SI ESCRIBES "FrankR" MUESTRA LA PANTALLA SECUNDARIA DE VALIDACIÓN ADMIN
     document.getElementById('accessForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const name = document.getElementById('accessName').value.trim();
@@ -1304,19 +1346,10 @@
 
       const isFrankrName = name.toLowerCase() === "frankr";
 
-      if (
-        (isFrankrName && rawPass === ADMIN_PASS) || 
-        rawPass === ADMIN_KEY_TOKEN || 
-        name === ADMIN_KEY_TOKEN
-      ) {
-        showAdminView();
-        return;
-      }
-
-      // Si escribe "Frankr" pero la clave no es la contraseña numérica, le invitamos a acercar su NFC o escanear
       if (isFrankrName) {
-        alert("👋 ¡Hola Frankr! Como ingresaste tu nombre de Admin, por favor presiona 'Leer NFC' o 'Escanear QR' para verificar tu tarjeta.");
-        startNFCScan();
+        document.getElementById('loginScreen').classList.add('hidden');
+        document.getElementById('adminAuthScreen').classList.remove('hidden');
+        document.getElementById('adminKeyInput').focus();
         return;
       }
 
@@ -1380,9 +1413,10 @@
 
     function showAdminView() {
       document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('adminAuthScreen').classList.add('hidden');
       document.getElementById('clientView').classList.add('hidden');
       document.getElementById('adminView').classList.remove('hidden');
-      document.getElementById('userHeaderArea').innerText = "Frankr (Admin)";
+      document.getElementById('userHeaderArea').innerText = "FrankR (Admin)";
       document.getElementById('bottomNav').classList.add('hidden');
       switchAdminSubTab('orders');
       generateAdminCardGraphic();
@@ -1408,6 +1442,7 @@
 
     function showClientView() {
       document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('adminAuthScreen').classList.add('hidden');
       document.getElementById('adminView').classList.add('hidden');
       document.getElementById('clientView').classList.remove('hidden');
       document.getElementById('bottomNav').classList.remove('hidden');
@@ -2366,6 +2401,7 @@
       currentClientDocId = null;
       cart = [];
       document.getElementById('loginScreen').classList.remove('hidden');
+      document.getElementById('adminAuthScreen').classList.add('hidden');
       document.getElementById('clientView').classList.add('hidden');
       document.getElementById('adminView').classList.add('hidden');
       document.getElementById('bottomNav').classList.add('hidden');
