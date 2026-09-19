@@ -144,7 +144,7 @@
     .banners-container::-webkit-scrollbar { display: none; }
 
     .banner-card {
-      max-width: 90%;
+      min-width: 100%;
       flex-shrink: 0;
       scroll-snap-align: center;
       background: linear-gradient(135deg, var(--emerald-accent), var(--brand-dark));
@@ -522,7 +522,7 @@
 
   <main class="container">
     
-    <!-- 1. LOGIN CON RESTABLECIMIENTO EXCLUSIVO A ADMIN VIA WHATSAPP -->
+    <!-- 1. LOGIN CON VALIDACIÓN DE TELÉFONO DE 8 DÍGITOS Y RESTABLECIMIENTO -->
     <section id="loginScreen" class="login-wrapper">
       <div class="login-card">
         <img src="LOGO.png" alt="Mini Super Toñita" style="width: 85px; height: 85px; object-fit: contain; margin-bottom: 1rem; border-radius: 16px;">
@@ -535,8 +535,8 @@
             <input type="text" id="accessName" class="form-control" placeholder="Tu Nombre" required>
           </div>
           <div class="form-group">
-            <label>Teléfono</label>
-            <input type="tel" id="accessPass" class="form-control" placeholder="Tu Número" required>
+            <label>Teléfono (Mínimo 8 dígitos)</label>
+            <input type="tel" id="accessPass" class="form-control" placeholder="Ej: 70001122" minlength="8" required>
           </div>
           <button type="submit" id="loginSubmitBtn" class="btn btn-emerald" style="width: 100%; margin-top: 0.5rem; padding: 0.85rem;">
             Ingresar a la Tienda <i data-lucide="arrow-right" style="width:16px;"></i>
@@ -1048,6 +1048,7 @@
     const ADMIN_USER = "FrankR";
     const ADMIN_PASS = "199818";
     const WHATSAPP_NUMBER = "50370092996";
+    const DEFAULT_REWARD_IMG = "https://cdn-icons-png.flaticon.com/512/4213/4213179.png";
 
     let currentShippingFee = 0.00;
     let cart = [];
@@ -1169,23 +1170,27 @@
       updateCart();
     });
 
-    // LOGIN REFORZADO - MIGRACIÓN DE PUNTOS EXACTA
+    // LOGIN CON REGLA ESTRICTA DE MÍNIMO 8 NÚMEROS Y MIGRACIÓN EXACTA
     document.getElementById('accessForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const btn = document.getElementById('loginSubmitBtn');
-      btn.innerText = "Verificando...";
-      btn.disabled = true;
-
       const name = document.getElementById('accessName').value.trim();
       const rawPass = document.getElementById('accessPass').value.trim();
       const cleanInputPhone = cleanPhone(rawPass);
 
       if (name === ADMIN_USER && rawPass === ADMIN_PASS) {
-        btn.innerText = "Ingresar a la Tienda";
-        btn.disabled = false;
         showAdminView();
         return;
       }
+
+      // Validación estricta de 8 números
+      if (cleanInputPhone.length < 8) {
+        alert("⚠️ Por favor ingresa un número de teléfono válido de El Salvador (mínimo 8 dígitos).");
+        return;
+      }
+
+      const btn = document.getElementById('loginSubmitBtn');
+      btn.innerText = "Verificando...";
+      btn.disabled = true;
 
       try {
         const querySnapshot = await getDocs(collection(db, "clients"));
@@ -1193,7 +1198,6 @@
 
         querySnapshot.forEach(docSnap => {
           const data = docSnap.data();
-          // Evalúa múltiples campos que hayan usado en la colección antigua
           const storedPhone = data.phone || data.telefono || data.phone_number || '';
           const cleanStored = cleanPhone(storedPhone);
 
@@ -1210,11 +1214,9 @@
         });
 
         if (matchedDoc) {
-          // CLIENTE EXISTENTE: MANTIENE SUS PUNTOS ACUMULADOS ANTERIORES
           currentClientDocId = matchedDoc.id;
           currentUser = matchedDoc;
         } else {
-          // CLIENTE COMPLETAMENTE NUEVO: CREAR Y ENTREGAR REGALO DE BIENVENIDA
           const newDoc = await addDoc(collection(db, "clients"), {
             name: name,
             phone: rawPass,
@@ -1261,7 +1263,6 @@
       document.getElementById('profilePointsDisplay').innerText = `${currentUser.points || 0} Pts`;
       document.getElementById('rewardsPointsDisplay').innerText = `${currentUser.points || 0} Pts`;
 
-      // Cargar dirección prediseñada
       const savedAddress = currentUser.address || localStorage.getItem(`addr_${currentUser.phone}`) || "";
       const savedRef = currentUser.reference || localStorage.getItem(`ref_${currentUser.phone}`) || "";
       document.getElementById('profileAddress').value = savedAddress;
@@ -1649,6 +1650,7 @@
       }
     }
 
+    // CARGA DE PREMIOS CON SOPORTE COMPLETO DE IMÁGENES Y PROTECCIÓN DE FALLO (NO MÁS SIGNOS DE INTERROGACIÓN)
     async function loadRewards() {
       const grid = document.getElementById('rewardsCatalogGrid');
       grid.innerHTML = '<p style="grid-column:1/-1; text-align:center;">Cargando premios...</p>';
@@ -1658,18 +1660,29 @@
         querySnapshot.forEach(docSnap => allRewards.push({ id: docSnap.id, ...docSnap.data() }));
 
         grid.innerHTML = '';
+        if (allRewards.length === 0) {
+          grid.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:var(--text-muted);">No hay premios registrados por el momento.</p>';
+          return;
+        }
+
         allRewards.forEach(r => {
+          const rewardName = r.name || r.nombre || 'Premio Especial';
+          const rewardPts = parseInt(r.points ?? r.puntos ?? 0);
+          const rawImg = r.image || r.imagenUrl || r.imagen || r.img || '';
+          const fixedImg = fixDriveUrl(rawImg) || DEFAULT_REWARD_IMG;
+
           const card = document.createElement('div');
           card.className = 'card';
           card.innerHTML = `
-            <img src="${r.image || 'https://via.placeholder.com/150'}" alt="${r.name}">
-            <h3>${r.name}</h3>
-            <div style="font-weight:800; color:var(--amber-accent); margin:0.4rem 0;">${r.points} Puntos</div>
-            <button class="btn btn-sm btn-amber" onclick="redeemReward('${r.id}', '${r.name}', ${r.points})">Canjear Premio</button>
+            <img src="${fixedImg}" alt="${rewardName}" onerror="this.onerror=null; this.src='${DEFAULT_REWARD_IMG}';">
+            <h3>${rewardName}</h3>
+            <div style="font-weight:800; color:var(--amber-accent); margin:0.4rem 0;">${rewardPts} Puntos</div>
+            <button class="btn btn-sm btn-amber" onclick="redeemReward('${r.id}', '${rewardName}', ${rewardPts})">Canjear Premio</button>
           `;
           grid.appendChild(card);
         });
       } catch (err) {
+        console.error("Error al cargar premios:", err);
         grid.innerHTML = '<p style="grid-column:1/-1; text-align:center;">Error al cargar premios.</p>';
       }
     }
@@ -2103,6 +2116,11 @@
       list.innerHTML = '';
       querySnapshot.forEach(docSnap => {
         const r = docSnap.data();
+        const rewardName = r.name || r.nombre || 'Premio';
+        const rewardPts = parseInt(r.points ?? r.puntos ?? 0);
+        const rawImg = r.image || r.imagenUrl || r.imagen || r.img || '';
+        const fixedImg = fixDriveUrl(rawImg) || DEFAULT_REWARD_IMG;
+
         const card = document.createElement('div');
         card.className = 'card';
         card.style.marginBottom = '0.5rem';
@@ -2110,10 +2128,10 @@
         card.style.alignItems = 'center';
         card.style.gap = '0.75rem';
         card.innerHTML = `
-          <img src="${r.image || 'https://via.placeholder.com/60'}" style="width:50px; height:50px; margin-bottom:0;">
+          <img src="${fixedImg}" style="width:50px; height:50px; margin-bottom:0; object-fit:contain;" onerror="this.onerror=null; this.src='${DEFAULT_REWARD_IMG}';">
           <div style="flex:1;">
-            <strong>${r.name}</strong><br>
-            <small style="color:var(--amber-accent); font-weight:800;">${r.points} Pts</small>
+            <strong>${rewardName}</strong><br>
+            <small style="color:var(--amber-accent); font-weight:800;">${rewardPts} Pts</small>
           </div>
           <button class="btn btn-sm btn-danger" onclick="deleteReward('${docSnap.id}')">✕</button>
         `;
