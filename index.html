@@ -132,7 +132,7 @@
       cursor: pointer;
     }
 
-    /* CARRUSEL DE BANNERS AL 90% */
+    /* CARRUSEL DE BANNERS CON ANIMACIÓN FLUIDA */
     .banners-container {
       display: flex;
       gap: 1rem;
@@ -162,6 +162,11 @@
       box-shadow: var(--shadow-card);
       min-height: 110px;
       margin: 0 auto;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .banner-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px -6px rgba(5, 150, 105, 0.3);
     }
 
     .search-box {
@@ -506,38 +511,38 @@
       border: 2px solid white;
     }
 
+    /* SUBMENÚ ADMIN CON TONO VERDE ACTIVO */
     .admin-subnav {
       display: flex;
       gap: 0.5rem;
       margin-bottom: 1.25rem;
       overflow-x: auto;
+      padding-bottom: 0.3rem;
+    }
+    .admin-subnav .btn {
+      background: #e2e8f0;
+      color: var(--text-main);
+      white-space: nowrap;
+    }
+    .admin-subnav .btn.active-admin-tab {
+      background: var(--emerald-accent) !important;
+      color: white !important;
     }
 
-    .nfc-card-preview {
-      background: linear-gradient(135deg, #0f172a, #1e293b);
-      color: white;
-      border-radius: 18px;
-      padding: 1.2rem;
-      border: 1px solid #334155;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-      max-width: 360px;
-      margin: 0 auto 1.5rem auto;
-      text-align: center;
-    }
-
-    .nfc-card-header {
+    /* PERFIL CLIENTE SUB-TABS */
+    .profile-subnav {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.75rem;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
     }
-
-    .nfc-chip-icon {
-      background: linear-gradient(135deg, #f59e0b, #d97706);
-      width: 32px;
-      height: 24px;
-      border-radius: 5px;
-      display: inline-block;
+    .profile-subnav .btn {
+      flex: 1;
+      background: #e2e8f0;
+      color: var(--text-main);
+    }
+    .profile-subnav .btn.active-profile-tab {
+      background: var(--brand-dark) !important;
+      color: white !important;
     }
 
     .hidden { display: none !important; }
@@ -557,7 +562,7 @@
       <div class="login-card">
         <img src="LOGO.png" alt="Mini Super Toñita" style="width: 85px; height: 85px; object-fit: contain; margin-bottom: 0.5rem; border-radius: 16px;">
         <h3 style="font-size: 1.25rem; margin-bottom: 0.2rem; color: var(--brand-dark); font-weight: 800;">Super Toñita Online</h3>
-        <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.5rem;">Compra Y acumula puntos.</p>
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.5rem;">Compra y acumula puntos.</p>
 
         <form id="accessForm" style="text-align: left;">
           <div class="form-group">
@@ -566,7 +571,7 @@
           </div>
           <div class="form-group">
             <label>Teléfono</label>
-            <input type="tel" id="accessPass" class="form-control" placeholder="Tu Numero" inputmode="numeric">
+            <input type="tel" id="accessPass" class="form-control" placeholder="Tu Número" inputmode="numeric">
           </div>
           <button type="submit" id="loginSubmitBtn" class="btn btn-emerald" style="width: 100%; margin-top: 0.5rem; padding: 0.85rem;">
             Ingresar a la Tienda <i data-lucide="arrow-right" style="width:16px;"></i>
@@ -585,23 +590,18 @@
       </div>
     </section>
 
-    <!-- 1.1 PANTALLA EXCLUSIVA DE VALIDACIÓN ADMIN (NFC / QR / CLAVE) -->
+    <!-- 1.1 PANTALLA EXCLUSIVA DE VALIDACIÓN ADMIN (QR / CLAVE) -->
     <section id="adminAuthScreen" class="login-wrapper hidden">
       <div class="login-card">
         <div style="background: var(--brand-dark); width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto;">
           <i data-lucide="shield-check" style="color: var(--emerald-accent); width: 32px; height: 32px;"></i>
         </div>
         <h3 style="font-size: 1.25rem; margin-bottom: 0.3rem; color: var(--brand-dark); font-weight: 800;">Validación de Administrador</h3>
-        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Hola FrankR. Acerca tu tarjeta NFC, escanea el QR o ingresa tu clave.</p>
-
-        <!-- Botón de activación directa de Web NFC con gesto táctil -->
-        <button type="button" onclick="startNFCScan()" class="btn btn-emerald" style="width: 100%; padding: 0.85rem; margin-bottom: 0.75rem; font-size: 0.95rem;">
-          <i data-lucide="nfc" style="width: 20px;"></i>Toca aquí para activar lector NFC
-        </button>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Hola FrankR. Escanea tu código QR o ingresa tu clave.</p>
 
         <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-          <button type="button" onclick="startAdminQRScan()" class="btn btn-amber" style="flex:1; padding: 0.75rem;">
-            <i data-lucide="qr-code"></i> Escanear QR
+          <button type="button" onclick="startAdminQRScan()" class="btn btn-amber" style="width: 100%; padding: 0.75rem;">
+            <i data-lucide="qr-code"></i> Escanear Código QR de Admin
           </button>
         </div>
 
@@ -711,7 +711,7 @@
         <div id="rewardsCatalogGrid" class="grid"></div>
       </div>
 
-      <!-- Tab Mi Perfil -->
+      <!-- Tab Mi Perfil (Con sub-botones Mis Órdenes y Mis Canjes) -->
       <div id="clientProfileTab" class="hidden">
         <div class="card" style="padding: 1.5rem; margin-bottom: 1.5rem;">
           <div style="background: var(--emerald-light); width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem auto;">
@@ -747,22 +747,37 @@
           </button>
         </div>
 
-        <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-          <i data-lucide="package" style="color: var(--emerald-accent);"></i> Mis Órdenes y Pedidos
-        </h3>
-        <div id="clientOrdersList"></div>
+        <!-- Botones de navegación interna en Perfil -->
+        <div class="profile-subnav">
+          <button class="btn btn-sm active-profile-tab" id="profileTabOrdersBtn" onclick="switchProfileSubTab('orders')">📦 Mis Órdenes</button>
+          <button class="btn btn-sm" id="profileTabRedemptionsBtn" onclick="switchProfileSubTab('redemptions')">🎁 Mis Canjes</button>
+        </div>
+
+        <div id="profileOrdersSection">
+          <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+            <i data-lucide="package" style="color: var(--emerald-accent);"></i> Historial de Pedidos
+          </h3>
+          <div id="clientOrdersList"></div>
+        </div>
+
+        <div id="profileRedemptionsSection" class="hidden">
+          <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+            <i data-lucide="gift" style="color: var(--amber-accent);"></i> Mis Canjes Solicitados
+          </h3>
+          <div id="clientRedemptionsList"></div>
+        </div>
       </div>
     </section>
 
     <!-- 3. VISTA ADMINISTRADOR -->
     <section id="adminView" class="hidden">
       <div class="admin-subnav">
-        <button class="btn btn-sm btn-emerald" id="adminTabOrdersBtn">Órdenes</button>
-        <button class="btn btn-sm btn-secondary" id="adminTabProductsBtn">Productos</button>
-        <button class="btn btn-sm btn-secondary" id="adminTabRewardsBtn">Premios Puntos</button>
-        <button class="btn btn-sm btn-secondary" id="adminTabClientsBtn">Clientes & Puntos</button>
-        <button class="btn btn-sm btn-secondary" id="adminTabPromosBtn">Promos</button>
-        <button class="btn btn-sm btn-amber" id="adminTabCardBtn">Mi Tarjeta NFC/QR</button>
+        <button class="btn btn-sm active-admin-tab" id="adminTabOrdersBtn" onclick="switchAdminSubTab('orders')">📦 Órdenes</button>
+        <button class="btn btn-sm" id="adminTabProductsBtn" onclick="switchAdminSubTab('products')">🏷️ Productos</button>
+        <button class="btn btn-sm" id="adminTabRewardsBtn" onclick="switchAdminSubTab('rewards')">🎁 Premios Puntos</button>
+        <button class="btn btn-sm" id="adminTabClientsBtn" onclick="switchAdminSubTab('clients')">👥 Clientes & Puntos</button>
+        <button class="btn btn-sm" id="adminTabRedemptionsBtn" onclick="switchAdminSubTab('redemptions')">🎟️ Canjes Pendientes</button>
+        <button class="btn btn-sm" id="adminTabPromosBtn" onclick="switchAdminSubTab('promos')">🔥 Promos</button>
         <button class="btn btn-sm btn-danger" id="adminLogoutBtn">Salir</button>
       </div>
 
@@ -923,12 +938,15 @@
         <div id="adminRewardsList"></div>
       </div>
 
-      <!-- 3.4 Clientes -->
+      <!-- 3.4 Clientes (Con edición completa de Nombre, Teléfono y Puntos) -->
       <div id="adminClientsTab" class="hidden">
         <div class="card" style="padding: 1.25rem; margin-bottom: 1.5rem;">
           <h4 style="margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
             <i data-lucide="users" style="color: var(--emerald-accent);"></i> Control de Clientes Registrados
           </h4>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">
+            💡 Edita nombres o teléfonos en caso de errores de tipeo o cambios de número.
+          </p>
           <div class="search-box" style="margin-bottom: 1rem;">
             <i data-lucide="search" style="color: var(--text-muted); width: 18px;"></i>
             <input type="text" id="adminClientSearchInput" placeholder="Buscar cliente por nombre o teléfono...">
@@ -937,10 +955,21 @@
         </div>
       </div>
 
-      <!-- 3.5 Promociones -->
+      <!-- 3.5 Historial de Canjes (Para evaluar frecuencia del cliente) -->
+      <div id="adminRedemptionsTab" class="hidden">
+        <h2 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+          <i data-lucide="gift" style="color: var(--amber-accent);"></i> Historial y Control de Canjes de Premios
+        </h2>
+        <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1rem;">
+          Evalúa aquí qué tan frecuentes son tus clientes revisando los premios que solicitan y marca cuando ya se les haya entregado.
+        </p>
+        <div id="adminRedemptionsList"></div>
+      </div>
+
+      <!-- 3.6 Promociones -->
       <div id="adminPromosTab" class="hidden">
         <div class="card" style="margin-bottom: 2rem; padding: 1.25rem;">
-          <h4 style="margin-bottom: 1rem;">Crear Promoción por Sucursal</h4>
+          <h4 style="margin-bottom: 1rem;">Crear Promoción Comprable por Sucursal</h4>
           <form id="promoForm">
             <div class="form-group">
               <label>Sucursal Destino</label>
@@ -953,11 +982,11 @@
             </div>
             <div class="form-group">
               <label>Título de la Promo</label>
-              <input type="text" id="promoTitle" class="form-control" placeholder="" required>
+              <input type="text" id="promoTitle" class="form-control" placeholder="Ej: Combo Familiar Snacks" required>
             </div>
             <div class="form-group">
               <label>Precio Especial ($)</label>
-              <input type="number" step="0.01" id="promoPrice" class="form-control" placeholder="" required inputmode="decimal">
+              <input type="number" step="0.01" id="promoPrice" class="form-control" placeholder="Ej: 4.50" required inputmode="decimal">
             </div>
             <div class="form-group">
               <label>Imagen de la Promo (URL)</label>
@@ -965,7 +994,7 @@
             </div>
             <div class="form-group">
               <label>Descripción</label>
-              <textarea id="promoDesc" class="form-control" rows="2" placeholder="" required></textarea>
+              <textarea id="promoDesc" class="form-control" rows="2" placeholder="Detalles..." required></textarea>
             </div>
             <button type="submit" class="btn btn-emerald" style="width: 100%;">Publicar Promoción</button>
           </form>
@@ -973,34 +1002,6 @@
 
         <h4 style="margin-bottom: 1rem;">Promociones Activas</h4>
         <div id="adminPromosList"></div>
-      </div>
-
-      <!-- 3.6 Tarjeta NFC / QR / Barcode -->
-      <div id="adminCardTab" class="hidden">
-        <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 1rem;">💳 Tu Tarjeta de Acceso Admin</h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
-          Esta es la representación visual de tu tarjeta física. Puedes grabarla mediante NFC o usarla para escanear.
-        </p>
-
-        <div class="nfc-card-preview">
-          <div class="nfc-card-header">
-            <strong style="font-size: 0.95rem; text-transform: uppercase; color: var(--emerald-accent);">SUPER TOÑITA ADMIN</strong>
-            <span class="nfc-chip-icon"></span>
-          </div>
-          
-          <div style="font-size: 1.1rem; font-weight: 800; margin: 0.5rem 0;">FrankR</div>
-          <div style="font-size: 0.72rem; color: #94a3b8; margin-bottom: 1rem;">CREDENTIAL: ST-ADMIN-KEY-199818</div>
-
-          <div id="adminCardQR" style="display: flex; justify-content: center; background: white; padding: 10px; border-radius: 12px; margin: 0 auto 0.75rem auto; width: 140px; height: 140px;"></div>
-
-          <svg id="adminCardBarcode" style="width: 100%; height: 50px; background: white; border-radius: 8px; padding: 4px;"></svg>
-        </div>
-
-        <div style="display: flex; gap: 0.5rem;">
-          <button onclick="writeToNFCTag()" class="btn btn-emerald" style="width: 100%;">
-            <i data-lucide="nfc"></i> Grabar Clave en Tarjeta NFC
-          </button>
-        </div>
       </div>
 
     </section>
@@ -1096,7 +1097,7 @@
         <div class="form-group">
           <label>Tipo de Entrega</label>
           <select id="deliveryType" class="form-control" required>
-            <option value="Envío Local">Envío Local (Gratis)</option>
+            <option value="Envío Local">Envío Local (Gratis / Cercano)</option>
             <option value="Envío Departamental">Envío Departamental (+$5.00)</option>
             <option value="Recoger en Tienda">Recoger en Tienda (Gratis)</option>
           </select>
@@ -1156,6 +1157,7 @@
     let allRewards = [];
     let allOrders = [];
     let allClientsList = [];
+    let allRedemptions = [];
     let currentBranch = 'Super Toñita Los Fuentes';
     let currentSelectedCategory = 'Todas';
     let currentAdminOrderFilter = 'Todos';
@@ -1195,35 +1197,6 @@
       return (item.stockLosFuentes ?? item.stock ?? 'Disponible') === 'Disponible';
     }
 
-    // LECTURA NFC OPTIMIZADA CON GESTO TÁCTIL
-    window.startNFCScan = async () => {
-      if ('NDEFReader' in window) {
-        try {
-          const ndef = new NDEFReader();
-          await ndef.scan();
-          alert("📡 ¡Lector NFC activo! Acerca tu tarjeta a la parte trasera del teléfono...");
-
-          ndef.addEventListener("reading", ({ message }) => {
-            for (const record of message.records) {
-              const decoder = new TextDecoder();
-              const text = decoder.decode(record.data);
-              
-              if (text.includes(ADMIN_KEY_TOKEN) || text.includes(ADMIN_PASS) || text.includes("199818")) {
-                alert("¡Tarjeta NFC reconocida con éxito!");
-                showAdminView();
-                return;
-              }
-            }
-            alert("⚠️ Tarjeta NFC leída, pero el contenido no coincide con la llave de Admin.");
-          });
-        } catch (error) {
-          alert("Error al activar NFC: " + error.message + "\n(Asegúrate de conceder permisos si el navegador los solicita).");
-        }
-      } else {
-        alert("💡 Tu navegador actual (o iOS) requiere ejecutar Web NFC mediante conexión segura HTTPS. Usa tu clave numérica temporalmente mientras tanto.");
-      }
-    };
-
     // ESCÁNER QR ADMIN
     window.startAdminQRScan = () => {
       const reader = document.getElementById('admin-qr-reader');
@@ -1240,27 +1213,12 @@
       });
     };
 
-    window.writeToNFCTag = async () => {
-      if ('NDEFReader' in window) {
-        try {
-          const ndef = new NDEFReader();
-          await ndef.write(ADMIN_KEY_TOKEN);
-          alert("✅ ¡Acerca tu tarjeta NFC al teléfono para grabar la clave!");
-        } catch (error) {
-          alert("Error al escribir: " + error.message);
-        }
-      } else {
-        alert("Abre la app 'NFC Tools' en tu iPhone y graba este texto: " + ADMIN_KEY_TOKEN);
-      }
-    };
-
     window.cancelAdminAuth = () => {
       document.getElementById('adminAuthScreen').classList.add('hidden');
       document.getElementById('loginScreen').classList.remove('hidden');
       document.getElementById('accessForm').reset();
     };
 
-    // VALIDACIÓN CLAVE ADMIN DESDE PANTALLA SECUNDARIA
     document.getElementById('adminKeyForm').addEventListener('submit', (e) => {
       e.preventDefault();
       const val = document.getElementById('adminKeyInput').value.trim();
@@ -1341,7 +1299,7 @@
       updateCart();
     });
 
-    // LOGIN PRINCIPAL: SI ESCRIBES "FrankR" SALTA DIRECTO A LA VALIDACIÓN ADMIN SIN IMPORTAR EL TELÉFONO
+    // LOGIN PRINCIPAL
     document.getElementById('accessForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const name = document.getElementById('accessName').value.trim();
@@ -1423,25 +1381,6 @@
       document.getElementById('userHeaderArea').innerText = "FrankR (Admin)";
       document.getElementById('bottomNav').classList.add('hidden');
       switchAdminSubTab('orders');
-      generateAdminCardGraphic();
-    }
-
-    function generateAdminCardGraphic() {
-      const qrContainer = document.getElementById('adminCardQR');
-      qrContainer.innerHTML = '';
-      new QRCode(qrContainer, {
-        text: ADMIN_KEY_TOKEN,
-        width: 120,
-        height: 120
-      });
-
-      JsBarcode("#adminCardBarcode", ADMIN_KEY_TOKEN, {
-        format: "CODE128",
-        lineColor: "#0f172a",
-        width: 2,
-        height: 40,
-        displayValue: false
-      });
     }
 
     function showClientView() {
@@ -1469,6 +1408,7 @@
       listenToUserPoints();
       loadPromos();
       loadClientOrders();
+      loadClientRedemptions();
     }
 
     document.getElementById('profileAddressForm').addEventListener('submit', async (e) => {
@@ -1571,9 +1511,18 @@
         document.getElementById('navProfileBtn').classList.add('active');
         document.getElementById('clientProfileTab').classList.remove('hidden');
         loadClientOrders();
+        loadClientRedemptions();
       }
       refreshIcons();
     }
+
+    // NAVEGACIÓN INTERNA EN PERFIL CLIENTE
+    window.switchProfileSubTab = (subtab) => {
+      document.getElementById('profileTabOrdersBtn').classList.toggle('active-profile-tab', subtab === 'orders');
+      document.getElementById('profileTabRedemptionsBtn').classList.toggle('active-profile-tab', subtab === 'redemptions');
+      document.getElementById('profileOrdersSection').classList.toggle('hidden', subtab !== 'orders');
+      document.getElementById('profileRedemptionsSection').classList.toggle('hidden', subtab !== 'redemptions');
+    };
 
     document.getElementById('closeCartBtn').addEventListener('click', () => document.getElementById('cartModal').classList.remove('active'));
     document.getElementById('closeDetailBtn').addEventListener('click', () => document.getElementById('productDetailModal').classList.remove('active'));
@@ -1843,6 +1792,44 @@
       }
     }
 
+    async function loadClientRedemptions() {
+      const container = document.getElementById('clientRedemptionsList');
+      container.innerHTML = '<p style="text-align:center;">Cargando tus canjes...</p>';
+
+      try {
+        const q = query(collection(db, "redemptions"), where("clientPhone", "==", currentUser.phone));
+        const querySnapshot = await getDocs(q);
+        container.innerHTML = '';
+
+        if (querySnapshot.empty) {
+          container.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding:1rem;">No has solicitado canjes de premios todavía.</p>';
+          return;
+        }
+
+        let redemptions = [];
+        querySnapshot.forEach(docSnap => redemptions.push({ id: docSnap.id, ...docSnap.data() }));
+
+        redemptions.forEach(r => {
+          const isDelivered = (r.status || '').toLowerCase() === 'entregado';
+          const card = document.createElement('div');
+          card.className = 'order-card';
+          card.innerHTML = `
+            <div class="order-header">
+              <div>
+                <strong>${r.productName}</strong>
+                <div style="font-size:0.75rem; color:var(--text-muted);">${r.date}</div>
+              </div>
+              <span class="status-badge ${isDelivered ? 'status-entregado' : 'status-pendiente'}">${r.status || 'Pendiente'}</span>
+            </div>
+            <div style="color:var(--amber-accent); font-weight:700;">Costo: ${r.pointsTransacted} Pts</div>
+          `;
+          container.appendChild(card);
+        });
+      } catch (e) {
+        container.innerHTML = '<p style="text-align:center;">Error al cargar tus canjes.</p>';
+      }
+    }
+
     async function loadRewards() {
       const grid = document.getElementById('rewardsCatalogGrid');
       grid.innerHTML = '<p style="grid-column:1/-1; text-align:center;">Cargando premios...</p>';
@@ -1896,11 +1883,12 @@
             clientPhone: currentUser.phone,
             productName: `PREMIO: ${name}`,
             pointsTransacted: pointsCost,
-            status: "pendiente",
+            status: "Pendiente",
             date: new Date().toLocaleString('es-SV')
           });
 
           alert("¡Canje solicitado! Preséntate en la sucursal para reclamarlo.");
+          loadClientRedemptions();
         } catch (err) {
           alert("Error al procesar el canje.");
         }
@@ -2006,42 +1994,53 @@
       }
     }
 
-    // ADMIN NAV
-    document.getElementById('adminTabOrdersBtn').addEventListener('click', () => switchAdminSubTab('orders'));
-    document.getElementById('adminTabProductsBtn').addEventListener('click', () => switchAdminSubTab('products'));
-    document.getElementById('adminTabRewardsBtn').addEventListener('click', () => switchAdminSubTab('rewards'));
-    document.getElementById('adminTabClientsBtn').addEventListener('click', () => switchAdminSubTab('clients'));
-    document.getElementById('adminTabPromosBtn').addEventListener('click', () => switchAdminSubTab('promos'));
-    document.getElementById('adminTabCardBtn').addEventListener('click', () => switchAdminSubTab('card'));
-    document.getElementById('adminLogoutBtn').addEventListener('click', () => document.getElementById('logoutBtn').click());
-
-    function switchAdminSubTab(tab) {
-      ['adminOrdersTab', 'adminProductsTab', 'adminRewardsTab', 'adminClientsTab', 'adminPromosTab', 'adminCardTab'].forEach(id => {
+    // GESTIÓN DE PESTAÑAS ADMIN CON TONO VERDE ACTIVO
+    window.switchAdminSubTab = (tab) => {
+      ['adminOrdersTab', 'adminProductsTab', 'adminRewardsTab', 'adminClientsTab', 'adminRedemptionsTab', 'adminPromosTab'].forEach(id => {
         document.getElementById(id).classList.add('hidden');
+      });
+
+      ['adminTabOrdersBtn', 'adminTabProductsBtn', 'adminTabRewardsBtn', 'adminTabClientsBtn', 'adminTabRedemptionsBtn', 'adminTabPromosBtn'].forEach(id => {
+        document.getElementById(id).classList.remove('active-admin-tab');
       });
 
       if (tab === 'orders') {
         document.getElementById('adminOrdersTab').classList.remove('hidden');
+        document.getElementById('adminTabOrdersBtn').classList.add('active-admin-tab');
         loadAdminOrders();
       } else if (tab === 'products') {
         document.getElementById('adminProductsTab').classList.remove('hidden');
+        document.getElementById('adminTabProductsBtn').classList.add('active-admin-tab');
         loadAdminProducts();
       } else if (tab === 'rewards') {
         document.getElementById('adminRewardsTab').classList.remove('hidden');
+        document.getElementById('adminTabRewardsBtn').classList.add('active-admin-tab');
         loadAdminRewards();
       } else if (tab === 'clients') {
         document.getElementById('adminClientsTab').classList.remove('hidden');
+        document.getElementById('adminTabClientsBtn').classList.add('active-admin-tab');
         loadAdminClients();
+      } else if (tab === 'redemptions') {
+        document.getElementById('adminRedemptionsTab').classList.remove('hidden');
+        document.getElementById('adminTabRedemptionsBtn').classList.add('active-admin-tab');
+        loadAdminRedemptions();
       } else if (tab === 'promos') {
         document.getElementById('adminPromosTab').classList.remove('hidden');
+        document.getElementById('adminTabPromosBtn').classList.add('active-admin-tab');
         loadAdminPromos();
-      } else if (tab === 'card') {
-        document.getElementById('adminCardTab').classList.remove('hidden');
-        generateAdminCardGraphic();
       }
       refreshIcons();
-    }
+    };
 
+    document.getElementById('adminTabOrdersBtn').addEventListener('click', () => switchAdminSubTab('orders'));
+    document.getElementById('adminTabProductsBtn').addEventListener('click', () => switchAdminSubTab('products'));
+    document.getElementById('adminTabRewardsBtn').addEventListener('click', () => switchAdminSubTab('rewards'));
+    document.getElementById('adminTabClientsBtn').addEventListener('click', () => switchAdminSubTab('clients'));
+    document.getElementById('adminTabRedemptionsBtn').addEventListener('click', () => switchAdminSubTab('redemptions'));
+    document.getElementById('adminTabPromosBtn').addEventListener('click', () => switchAdminSubTab('promos'));
+    document.getElementById('adminLogoutBtn').addEventListener('click', () => document.getElementById('logoutBtn').click());
+
+    // CARGAR Y GESTIONAR CLIENTES DESDE ADMIN (NOMBRE, TELÉFONO, PUNTOS)
     async function loadAdminClients() {
       const container = document.getElementById('adminClientsList');
       container.innerHTML = '<p>Cargando lista general de clientes...</p>';
@@ -2085,7 +2084,10 @@
             <small style="color:var(--text-muted);">📞 ${c.phone}</small><br>
             <span style="font-weight:800; color:var(--amber-accent);">⭐ ${c.points} Pts</span>
           </div>
-          <button class="btn btn-sm btn-amber" onclick="adminAdjustPoints('${c.id}', '${c.name}', ${c.points})">Modificar Puntos</button>
+          <div style="display:flex; gap:0.4rem;">
+            <button class="btn btn-sm btn-secondary" onclick="adminEditClient('${c.id}', '${c.name}', '${c.phone}', ${c.points})">Editar Datos</button>
+            <button class="btn btn-sm btn-amber" onclick="adminAdjustPoints('${c.id}', '${c.name}', ${c.points})">Puntos</button>
+          </div>
         `;
         container.appendChild(item);
       });
@@ -2100,6 +2102,24 @@
       renderAdminClients(filtered);
     });
 
+    window.adminEditClient = async (id, currentName, currentPhone, currentPts) => {
+      const newName = prompt(`Editar Nombre de Cliente:`, currentName);
+      if (newName === null) return;
+      const newPhone = prompt(`Editar Teléfono de Cliente:`, currentPhone);
+      if (newPhone === null) return;
+
+      try {
+        await updateDoc(doc(db, "clients", id), {
+          name: newName.trim(),
+          phone: newPhone.trim()
+        });
+        alert("¡Datos de cliente actualizados correctamente!");
+        loadAdminClients();
+      } catch (e) {
+        alert("Error al actualizar datos del cliente.");
+      }
+    };
+
     window.adminAdjustPoints = async (id, name, currentPts) => {
       const newAmount = prompt(`Ajustar puntos para ${name} (Saldo actual: ${currentPts} Pts):\nIngresa el nuevo total de puntos:`, currentPts);
       if (newAmount !== null && !isNaN(parseInt(newAmount))) {
@@ -2110,6 +2130,58 @@
         } catch (e) {
           alert("Error al actualizar puntos.");
         }
+      }
+    };
+
+    // CONTROL DE CANJES EN ADMIN
+    async function loadAdminRedemptions() {
+      const container = document.getElementById('adminRedemptionsList');
+      container.innerHTML = '<p>Cargando canjes...</p>';
+      try {
+        const querySnapshot = await getDocs(collection(db, "redemptions"));
+        allRedemptions = [];
+        querySnapshot.forEach(docSnap => allRedemptions.push({ id: docSnap.id, ...docSnap.data() }));
+
+        container.innerHTML = '';
+        if (allRedemptions.length === 0) {
+          container.innerHTML = '<p style="text-align:center; padding:1.5rem; color:var(--text-muted);">No hay canjes solicitados.</p>';
+          return;
+        }
+
+        allRedemptions.forEach(r => {
+          const isDelivered = (r.status || '').toLowerCase() === 'entregado';
+          const card = document.createElement('div');
+          card.className = 'order-card';
+          card.innerHTML = `
+            <div class="order-header">
+              <div>
+                <strong>${r.productName}</strong>
+                <div style="font-size:0.75rem; color:var(--text-muted);">${r.date || 'Fecha N/A'}</div>
+              </div>
+              <span class="status-badge ${isDelivered ? 'status-entregado' : 'status-pendiente'}">${r.status || 'Pendiente'}</span>
+            </div>
+            <div>👤 <strong>${r.clientName || 'Cliente'}</strong> (📞 ${r.clientPhone || 'Sin tel'})</div>
+            <div style="color:var(--amber-accent); font-weight:700; margin:0.3rem 0;">Costo: ${r.pointsTransacted} Pts</div>
+            <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:0.75rem;">
+              <button class="btn btn-sm ${isDelivered ? 'btn-secondary' : 'btn-emerald'}" onclick="updateRedemptionStatus('${r.id}', '${isDelivered ? 'Pendiente' : 'Entregado'}')">
+                ${isDelivered ? 'Marcar Pendiente' : '✅ Marcar como Entregado'}
+              </button>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      } catch (e) {
+        container.innerHTML = '<p style="text-align:center; color:var(--danger);">Error al cargar canjes.</p>';
+      }
+    }
+
+    window.updateRedemptionStatus = async (redemptionId, newStatus) => {
+      try {
+        await updateDoc(doc(db, "redemptions", redemptionId), { status: newStatus });
+        alert(`Canje marcado como "${newStatus}".`);
+        loadAdminRedemptions();
+      } catch (e) {
+        alert("Error al actualizar estado del canje.");
       }
     };
 
