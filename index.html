@@ -538,7 +538,7 @@
             <label>Teléfono</label>
             <input type="tel" id="accessPass" class="form-control" placeholder="Tu Número" required>
           </div>
-          <button type="submit" class="btn btn-emerald" style="width: 100%; margin-top: 0.5rem; padding: 0.85rem;">
+          <button type="submit" id="loginSubmitBtn" class="btn btn-emerald" style="width: 100%; margin-top: 0.5rem; padding: 0.85rem;">
             Ingresar a la Tienda <i data-lucide="arrow-right" style="width:16px;"></i>
           </button>
         </form>
@@ -947,7 +947,7 @@
     </div>
   </div>
 
-  <!-- Modal Detalle / Compra de Promoción (Con controles de cantidad y botón al carrito) -->
+  <!-- Modal Detalle / Compra de Promoción -->
   <div class="modal-overlay" id="promoDetailModal">
     <div class="modal-card">
       <div style="display: flex; justify-content: flex-end; margin-bottom: 0.5rem;">
@@ -1073,8 +1073,11 @@
       return url;
     }
 
+    // EXTRAE ÚNICAMENTE LOS ÚLTIMOS 8 DÍGITOS DEL TELÉFONO PARA UNA COINCIDENCIA PERFECTA
     function cleanPhone(phoneStr) {
-      return (phoneStr || '').toString().replace(/\D/g, '');
+      if (!phoneStr) return '';
+      const digitsOnly = phoneStr.toString().replace(/\D/g, '');
+      return digitsOnly.length >= 8 ? digitsOnly.slice(-8) : digitsOnly;
     }
 
     function getProductPrice(item, branch = currentBranch) {
@@ -1095,7 +1098,7 @@
       return (item.stockLosFuentes ?? item.stock ?? 'Disponible') === 'Disponible';
     }
 
-    // VER DETALLE COMPLETO DE PROMOCIÓN CON IMAGEN GRANDE Y CONTROLES DE CANTIDAD/AGREGAR
+    // VER DETALLE COMPLETO DE PROMOCIÓN
     window.openPromoDetailModal = (e, promoId) => {
       if (e) e.stopPropagation();
       const promo = allPromos.find(p => p.id === promoId);
@@ -1166,14 +1169,20 @@
       updateCart();
     });
 
-    // LOGIN CON MIGRACIÓN AUTOMÁTICA
+    // LOGIN REFORZADO - MIGRACIÓN DE PUNTOS EXACTA
     document.getElementById('accessForm').addEventListener('submit', async (e) => {
       e.preventDefault();
+      const btn = document.getElementById('loginSubmitBtn');
+      btn.innerText = "Verificando...";
+      btn.disabled = true;
+
       const name = document.getElementById('accessName').value.trim();
       const rawPass = document.getElementById('accessPass').value.trim();
       const cleanInputPhone = cleanPhone(rawPass);
 
       if (name === ADMIN_USER && rawPass === ADMIN_PASS) {
+        btn.innerText = "Ingresar a la Tienda";
+        btn.disabled = false;
         showAdminView();
         return;
       }
@@ -1184,18 +1193,28 @@
 
         querySnapshot.forEach(docSnap => {
           const data = docSnap.data();
+          // Evalúa múltiples campos que hayan usado en la colección antigua
           const storedPhone = data.phone || data.telefono || data.phone_number || '';
           const cleanStored = cleanPhone(storedPhone);
 
-          if (cleanStored === cleanInputPhone || (cleanStored.length >= 8 && cleanInputPhone.length >= 8 && cleanStored.endsWith(cleanInputPhone))) {
-            matchedDoc = { id: docSnap.id, ...data };
+          if (cleanStored && cleanInputPhone && cleanStored === cleanInputPhone) {
+            matchedDoc = { 
+              id: docSnap.id, 
+              name: data.name || data.nombre || name,
+              phone: rawPass,
+              points: parseInt(data.points ?? data.puntos ?? 0),
+              address: data.address || data.direccion || "",
+              reference: data.reference || data.referencia || ""
+            };
           }
         });
 
         if (matchedDoc) {
+          // CLIENTE EXISTENTE: MANTIENE SUS PUNTOS ACUMULADOS ANTERIORES
           currentClientDocId = matchedDoc.id;
           currentUser = matchedDoc;
         } else {
+          // CLIENTE COMPLETAMENTE NUEVO: CREAR Y ENTREGAR REGALO DE BIENVENIDA
           const newDoc = await addDoc(collection(db, "clients"), {
             name: name,
             phone: rawPass,
@@ -1209,10 +1228,14 @@
           alert("¡Bienvenido a Super Toñita! Te regalamos 100 puntos de bienvenida.");
         }
 
+        btn.innerText = "Ingresar a la Tienda";
+        btn.disabled = false;
         showClientView();
       } catch (err) {
         console.error("Error al ingresar:", err);
-        alert("Error de conexión. Toca 'Solicitar Restablecimiento al Admin' para ayuda.");
+        btn.innerText = "Ingresar a la Tienda";
+        btn.disabled = false;
+        alert("Error de conexión al verificar cliente.");
       }
     });
 
@@ -1286,7 +1309,7 @@
       onSnapshot(doc(db, "clients", currentClientDocId), (docSnap) => {
         if (docSnap.exists()) {
           const updated = docSnap.data();
-          currentUser.points = updated.points || 0;
+          currentUser.points = parseInt(updated.points ?? updated.puntos ?? 0);
           document.getElementById('profilePointsDisplay').innerText = `${currentUser.points} Pts`;
           document.getElementById('rewardsPointsDisplay').innerText = `${currentUser.points} Pts`;
         }
@@ -1810,7 +1833,7 @@
       refreshIcons();
     }
 
-    // CARGA DE CLIENTES TOTALES SINO OMITIR NINGÚN DOCUMENTO
+    // CARGA DE CLIENTES TOTALES
     async function loadAdminClients() {
       const container = document.getElementById('adminClientsList');
       container.innerHTML = '<p>Cargando lista general de clientes...</p>';
@@ -1824,7 +1847,7 @@
             id: docSnap.id,
             name: data.name || data.nombre || 'Cliente sin nombre',
             phone: data.phone || data.telefono || data.phone_number || 'Sin teléfono',
-            points: data.points ?? data.puntos ?? 0,
+            points: parseInt(data.points ?? data.puntos ?? 0),
             address: data.address || data.direccion || ''
           });
         });
@@ -1955,13 +1978,13 @@
           clientSnap.forEach(c => {
             const storedPhone = c.data().phone || c.data().telefono || c.data().phone_number || '';
             const cleanStored = cleanPhone(storedPhone);
-            if (cleanStored === cleanOrderPhone || (cleanStored.length >= 8 && cleanOrderPhone.length >= 8 && cleanStored.endsWith(cleanOrderPhone))) {
+            if (cleanStored && cleanOrderPhone && cleanStored === cleanOrderPhone) {
               targetClientDoc = { id: c.id, ...c.data() };
             }
           });
 
           if (targetClientDoc) {
-            const currentPts = targetClientDoc.points || 0;
+            const currentPts = parseInt(targetClientDoc.points ?? targetClientDoc.puntos ?? 0);
             const ptsToAdd = orderData.puntosAGanar || 0;
 
             await updateDoc(doc(db, "clients", targetClientDoc.id), {
