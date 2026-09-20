@@ -158,9 +158,22 @@
       align-items: center;
       justify-content: space-between;
       gap: 0.75rem;
-      min-height: 110px;
+      min-height: 115px;
       margin: 0 auto;
       box-shadow: var(--shadow-card);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .banner-flash-pulse {
+      background: linear-gradient(135deg, #dc2626, #991b1b) !important;
+      animation: flashPulse 1.8s infinite;
+    }
+    @keyframes flashPulse {
+      0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); }
+      70% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
     }
 
     .search-box {
@@ -579,6 +592,13 @@
             Ingresar a la Tienda <i data-lucide="arrow-right" style="width:16px;"></i>
           </button>
         </form>
+
+        <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px dashed var(--border); text-align: center;">
+          <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.4rem;">¿Problemas para ingresar a la app?</p>
+          <a href="https://wa.me/50363163274?text=Hola,%20tengo%20problemas%20para%20ingresar%20a%20Super%20To%C3%B1ita%20Online.%20%C2%BFC%C3%B3mo%20me%20pueden%20ayudar?" target="_blank" style="font-size: 0.82rem; font-weight: 800; color: var(--emerald-accent); text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem;">
+            <i class="fa-brands fa-whatsapp"></i> Contáctanos por Soporte
+          </a>
+        </div>
       </div>
     </section>
 
@@ -629,9 +649,6 @@
         </select>
       </div>
 
-      <!-- Alerta Flash Notificación Push por Sucursal -->
-      <div id="flashAlertContainer"></div>
-
       <!-- Tab Catálogo -->
       <div id="clientCatalogTab">
         <div id="fuentesGamesBanner" class="hidden"></div>
@@ -668,7 +685,7 @@
         <h2 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
           <i data-lucide="tag" style="color: var(--emerald-accent);"></i> Promociones Especiales
         </h2>
-        <div id="clientPromosList"></div>
+        <div id="clientPromosList" style="display: flex; flex-direction: column; gap: 1rem;"></div>
       </div>
 
       <!-- Tab Canjes / Puntos & Juegos -->
@@ -839,7 +856,10 @@
             </div>
             <div class="form-group"><label>Descripción</label><textarea id="prodDesc" class="form-control" rows="2" required></textarea></div>
             <div class="form-group"><label>Imagen URL 1</label><input type="url" id="prodImg1" class="form-control"></div>
-            <button type="submit" class="btn btn-emerald" style="width: 100%;">Guardar Producto</button>
+            <div style="display:flex; gap:0.5rem;">
+              <button type="submit" class="btn btn-emerald" style="flex:1;" id="prodSubmitBtn">Guardar Producto</button>
+              <button type="button" class="btn btn-secondary hidden" id="cancelProdEditBtn" onclick="resetProductForm()">Cancelar</button>
+            </div>
           </form>
         </div>
         <h4>Productos en Tienda</h4>
@@ -849,12 +869,16 @@
       <!-- 3.3 Premios -->
       <div id="adminRewardsTab" class="hidden">
         <div class="card" style="margin-bottom: 2rem; padding: 1.25rem;">
-          <h4 style="margin-bottom: 1rem;">Agregar Premio por Puntos</h4>
+          <h4 id="rewardFormTitle" style="margin-bottom: 1rem;">Agregar Premio por Puntos</h4>
           <form id="rewardForm">
+            <input type="hidden" id="rewardEditId">
             <div class="form-group"><label>Nombre del Premio</label><input type="text" id="rewardName" class="form-control" required></div>
             <div class="form-group"><label>Puntos Requeridos</label><input type="number" id="rewardPointsCost" class="form-control" required></div>
             <div class="form-group"><label>Imagen URL</label><input type="url" id="rewardImg" class="form-control"></div>
-            <button type="submit" class="btn btn-amber" style="width: 100%;">Guardar Premio</button>
+            <div style="display:flex; gap:0.5rem;">
+              <button type="submit" class="btn btn-amber" style="flex:1;">Guardar Premio</button>
+              <button type="button" class="btn btn-secondary hidden" id="cancelRewardEditBtn" onclick="resetRewardForm()">Cancelar</button>
+            </div>
           </form>
         </div>
         <h4>Premios Configurados</h4>
@@ -865,12 +889,15 @@
       <div id="adminClientsTab" class="hidden">
         <div class="card" style="padding: 1.25rem; margin-bottom: 1.5rem;">
           <h4 style="margin-bottom: 0.75rem;">Control de Clientes Registrados</h4>
-          <div class="search-box" style="margin-bottom: 1rem;"><input type="text" id="adminClientSearchInput" placeholder="Buscar por nombre o teléfono..."></div>
+          <div class="search-box" style="margin-bottom: 1rem;">
+            <i data-lucide="search" style="color: var(--text-muted); width: 18px;"></i>
+            <input type="text" id="adminClientSearchInput" placeholder="Buscar por nombre o teléfono..." oninput="filterAdminClientsList()">
+          </div>
           <div id="adminClientsList" style="display: flex; flex-direction: column; gap: 0.75rem;"></div>
         </div>
       </div>
 
-      <!-- 3.5 Canjes (CON BOTÓN DE ENTREGA) -->
+      <!-- 3.5 Canjes -->
       <div id="adminRedemptionsTab" class="hidden">
         <h2 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 0.75rem;">Gestión y Entrega de Canjes</h2>
         <div id="adminRedemptionsList"></div>
@@ -879,8 +906,9 @@
       <!-- 3.6 Promos -->
       <div id="adminPromosTab" class="hidden">
         <div class="card" style="margin-bottom: 2rem; padding: 1.25rem;">
-          <h4 style="margin-bottom: 1rem;">Crear Promoción por Sucursal</h4>
+          <h4 id="promoFormTitle" style="margin-bottom: 1rem;">Crear / Editar Promoción</h4>
           <form id="promoForm">
+            <input type="hidden" id="promoEditId">
             <div class="form-group">
               <label>Sucursal Destino</label>
               <select id="promoBranch" class="form-control" required>
@@ -894,21 +922,25 @@
             <div class="form-group"><label>Precio ($)</label><input type="number" step="0.01" id="promoPrice" class="form-control" required></div>
             <div class="form-group"><label>Imagen URL</label><input type="url" id="promoImg" class="form-control" required></div>
             <div class="form-group"><label>Descripción</label><textarea id="promoDesc" class="form-control" rows="2" required></textarea></div>
-            <button type="submit" class="btn btn-emerald" style="width: 100%;">Publicar Promoción</button>
+            <div style="display:flex; gap:0.5rem;">
+              <button type="submit" class="btn btn-emerald" style="flex:1;">Guardar Promoción</button>
+              <button type="button" class="btn btn-secondary hidden" id="cancelPromoEditBtn" onclick="resetPromoForm()">Cancelar</button>
+            </div>
           </form>
         </div>
         <h4>Promociones Activas</h4>
-        <div id="adminPromosList"></div>
+        <div id="adminPromosList" style="display: flex; flex-direction: column; gap: 1rem;"></div>
       </div>
 
-      <!-- 3.7 GESTIÓN DE JUEGOS Y ALERTAS FLASH (CON EDICIÓN Y ELIMINACIÓN) -->
+      <!-- 3.7 GESTIÓN DE JUEGOS Y ALERTAS FLASH -->
       <div id="adminGamificationTab" class="hidden">
         <div class="card" style="margin-bottom: 2rem; padding: 1.25rem;">
           <h4 style="margin-bottom: 1rem; color: var(--emerald-accent);"><i data-lucide="bell"></i> Gestionar Notificación Push / Alerta Flash</h4>
           
           <div class="form-group">
-            <label>Seleccionar Sucursal a Administrar</label>
+            <label>Seleccionar Destino de la Alerta</label>
             <select id="adminFlashBranch" class="form-control" onchange="loadAdminFlashForBranch()">
+              <option value="Todas">🌐 Todas las Sucursales</option>
               <option value="Super Toñita Los Fuentes">Super Toñita Los Fuentes</option>
               <option value="Super Toñita Corinto">Super Toñita Corinto</option>
               <option value="Super Toñita Metapán">Super Toñita Metapán</option>
@@ -929,8 +961,8 @@
               <input type="number" step="0.01" id="flashDiscount" class="form-control" placeholder="Ej: 2.00" required>
             </div>
             <div class="form-group">
-              <label>Duración en Minutos (Cronómetro)</label>
-              <input type="number" id="flashMinutes" class="form-control" value="30" required inputmode="numeric">
+              <label>Disponible hasta la Hora (Formato 24h, ej: 22:30)</label>
+              <input type="time" id="flashEndTime" class="form-control" required>
             </div>
             <div style="display:flex; gap:0.5rem;">
               <button type="submit" class="btn btn-emerald" style="flex:1;">Guardar / Actualizar Alerta</button>
@@ -982,7 +1014,7 @@
   <div class="modal-overlay" id="rouletteModal">
     <div class="modal-card" style="text-align: center;">
       <h3 style="margin-bottom: 0.5rem; color: var(--amber-accent);">🎰 Ruleta de la Suerte</h3>
-      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">¡Gira y gana un descuento directo!</p>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">¡Gira y gana un descuento directo! (Compra mínima $25.00)</p>
       <div id="rouletteWheelBox" style="background: var(--bg-primary); padding: 2rem; border-radius: 20px; font-size: 1.3rem; font-weight: 900; margin-bottom: 1.5rem; border: 2px dashed var(--amber-accent);">
         🎁 ¡Listo para Girar!
       </div>
@@ -994,7 +1026,7 @@
   <div class="modal-overlay" id="scratchModal">
     <div class="modal-card" style="text-align: center;">
       <h3 style="margin-bottom: 0.5rem; color: var(--emerald-accent);">🎫 Raspa y Gana Toñita</h3>
-      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">Haz clic para raspar tu tarjeta diaria.</p>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">Haz clic para raspar tu tarjeta diaria. (Compra mínima $25.00)</p>
       <div id="scratchCardBox" style="background: linear-gradient(135deg, #cbd5e1, #94a3b8); color: #0f172a; padding: 2.5rem 1rem; border-radius: 16px; font-size: 1.1rem; font-weight: 900; margin-bottom: 1.5rem; cursor: pointer;" onclick="revealScratchCard()">
         ✨ [ RASPA AQUÍ ] ✨
       </div>
@@ -1021,7 +1053,8 @@
 
       <div class="cart-summary" style="background: var(--bg-primary); padding: 1rem; border-radius: var(--radius-md); margin: 1rem 0;">
         <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;"><span>Subtotal:</span><span>$<span id="subtotalPrice">0.00</span></span></div>
-        <div id="discountRow" style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: var(--danger); font-weight: 700; display: none;"><span>Descuento Push / Antojos:</span><span>-$<span id="discountPrice">0.00</span></span></div>
+        <div id="discountRow" style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: var(--danger); font-weight: 700; display: none;"><span>Cupón Ganado (Juego):</span><span>-$<span id="discountPrice">0.00</span></span></div>
+        <div id="couponNoticeBox" style="font-size: 0.78rem; color: var(--amber-accent); font-weight: 700; margin-bottom: 0.5rem; display: none;"></div>
         <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: var(--amber-accent); font-weight: 700;"><span>Puntos a ganar:</span><span>+<span id="earnedPointsPreview">0</span> Pts</span></div>
         <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;"><span>Costo de Envío:</span><span>$<span id="shippingPrice">0.00</span></span></div>
         <div class="total" style="font-weight: 800; font-size: 1.15rem; color: var(--emerald-accent); border-top: 1px dashed var(--border); padding-top: 0.5rem; display: flex; justify-content: space-between;">
@@ -1034,7 +1067,7 @@
         <div class="form-group"><label>Teléfono</label><input type="tel" id="custPhone" class="form-control" required readonly></div>
         <div class="form-group">
           <label>Tipo de Entrega</label>
-          <select id="deliveryType" class="form-control" required>
+          <select id="deliveryType" class="form-control" required onchange="handleDeliveryTypeChange()">
             <option value="Envío Local">Envío Local (Gratis)</option>
             <option value="Envío Departamental">Envío Departamental (+$5.00)</option>
             <option value="Recoger en Tienda">Recoger en Tienda (Gratis)</option>
@@ -1077,6 +1110,7 @@
     const ADMIN_USER = "FrankR";
     const ADMIN_PASS = "199818";
     const ADMIN_KEY_TOKEN = "ST-ADMIN-KEY-199818";
+    const MIN_PURCHASE_FOR_COUPON = 25.00;
     
     const BRANCH_WHATSAPP = {
       "Super Toñita Metapán": "50370363867",
@@ -1096,8 +1130,10 @@
     let allClientsList = [];
     let allRedemptions = [];
     let currentFlashAlert = null;
+    let flashTimerInterval = null;
+    let bannerSliderInterval = null;
     let gamesConfigState = { status: "inactivo" };
-    let appliedAntojosDiscount = 0; 
+    let wonGameDiscount = 0; 
     let currentBranch = 'Super Toñita Los Fuentes';
     let currentSelectedCategory = 'Todas';
     let currentAdminOrderFilter = 'Todos';
@@ -1186,7 +1222,7 @@
       }
 
       const btn = document.getElementById('loginSubmitBtn');
-      btn.innerText = "Verificando...";
+      btn.innerText = "Ingresando...";
       btn.disabled = true;
 
       try {
@@ -1225,7 +1261,6 @@
           });
           currentClientDocId = newDoc.id;
           currentUser = { id: newDoc.id, name, phone: rawPass, points: 100, address: "", reference: "", lastPlayedDate: "", activeDiscount: 0 };
-          alert("¡Bienvenido! Te regalamos 100 puntos de bienvenida.");
         }
 
         btn.innerText = "Ingresar a la Tienda";
@@ -1262,7 +1297,7 @@
       document.getElementById('profilePointsDisplay').innerText = `${currentUser.points || 0} Pts`;
       document.getElementById('rewardsPointsDisplay').innerText = `${currentUser.points || 0} Pts`;
 
-      appliedAntojosDiscount = currentUser.activeDiscount || 0;
+      wonGameDiscount = currentUser.activeDiscount || 0;
 
       const savedAddress = currentUser.address || "";
       const savedRef = currentUser.reference || "";
@@ -1282,17 +1317,20 @@
     function checkBranchFeatures() {
       const banner = document.getElementById('fuentesGamesBanner');
       const gamesContainer = document.getElementById('gamesSectionContainer');
+      const today = new Date().toISOString().split('T')[0];
+      const hasPlayedToday = currentUser && currentUser.lastPlayedDate === today;
 
       if (gamesConfigState.status === 'activo') {
         banner.classList.remove('hidden');
         banner.innerHTML = `
-          <div class="fuentes-antojos-banner" style="background: linear-gradient(135deg, #d97706, #b45309); color: white; border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 1.25rem; box-shadow: var(--shadow-card);">
+          <div class="fuentes-antojos-banner" onclick="handleGameBannerClick(${hasPlayedToday})" style="background: linear-gradient(135deg, #d97706, #b45309); color: white; border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 1.25rem; box-shadow: var(--shadow-card); cursor: pointer;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
               <h4 style="font-size:1rem; font-weight:900;"><i data-lucide="sparkles"></i> Centro de Juegos - ${currentBranch}</h4>
               <span style="background:rgba(255,255,255,0.2); padding:0.2rem 0.5rem; border-radius:6px; font-size:0.7rem;">Activo</span>
             </div>
-            <p style="font-size:0.82rem; opacity:0.9; margin:0.4rem 0;">¡Gira la ruleta o raspa y gana descuentos directos!</p>
-            <button class="btn btn-sm btn-emerald" onclick="switchClientTab('rewards')">🎰 Jugar Ahora</button>
+            <p style="font-size:0.82rem; opacity:0.9; margin:0.4rem 0;">
+              ${hasPlayedToday ? '✅ ¡Ya jugaste hoy! Toca para ir al catálogo y aprovechar tus beneficios.' : '🎁 ¡Toca aquí para girar la ruleta o raspar y ganar descuentos!'}
+            </p>
           </div>
         `;
 
@@ -1301,7 +1339,7 @@
             <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; color: #34d399;">
               <i data-lucide="sparkles"></i> Juegos Diarios (${currentBranch})
             </h3>
-            <p style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 1rem;">Participa una vez al día para obtener rebajas instantáneas.</p>
+            <p style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 1rem;">Participa una vez al día para obtener rebajas instantáneas (Compra mín. $25.00).</p>
             <div style="display: flex; gap: 0.5rem;">
               <button class="btn btn-emerald" style="flex: 1;" onclick="openRouletteModal()">🎰 Girar Ruleta</button>
               <button class="btn btn-amber" style="flex: 1;" onclick="openScratchModal()">🎫 Raspa y Gana</button>
@@ -1315,6 +1353,24 @@
       }
       refreshIcons();
     }
+
+    window.handleGameBannerClick = (hasPlayedToday) => {
+      if (hasPlayedToday) {
+        switchClientTab('catalog');
+      } else {
+        switchClientTab('rewards');
+      }
+    };
+
+    window.handleDeliveryTypeChange = () => {
+      const type = document.getElementById('deliveryType').value;
+      const addressGroup = document.getElementById('addressFieldsGroup');
+      if (type === 'Recoger en Tienda') {
+        addressGroup.classList.add('hidden');
+      } else {
+        addressGroup.classList.remove('hidden');
+      }
+    };
 
     document.getElementById('globalBranchSelect').addEventListener('change', (e) => {
       currentBranch = e.target.value;
@@ -1332,7 +1388,7 @@
     });
     document.getElementById('navProfileBtn').addEventListener('click', () => switchClientTab('profile'));
 
-    function switchClientTab(tab) {
+    window.switchClientTab = (tab) => {
       ['navCatalogBtn', 'navPromosBtn', 'navRewardsBtn', 'navProfileBtn'].forEach(id => {
         document.getElementById(id).classList.remove('active');
       });
@@ -1359,8 +1415,9 @@
         loadClientOrders();
         loadClientRedemptions();
       }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       refreshIcons();
-    }
+    };
 
     window.switchProfileSubTab = (subtab) => {
       document.getElementById('profileTabOrdersBtn').classList.toggle('active-profile-tab', subtab === 'orders');
@@ -1381,6 +1438,7 @@
         if (notice) notice.innerText = "";
         if (btnSpin) btnSpin.disabled = false;
       }
+      checkBranchFeatures();
     }
 
     window.openRouletteModal = () => {
@@ -1400,8 +1458,8 @@
       
       setTimeout(async () => {
         const prizes = [
-          { name: "$1.00 de Descuento", discount: 1.00 },
-          { name: "$2.00 de Descuento", discount: 2.00 },
+          { name: "$1.00 de Cupón", discount: 1.00 },
+          { name: "$2.00 de Cupón", discount: 2.00 },
           { name: "50 Puntos de Regalo", pts: 50 }
         ];
         const won = prizes[Math.floor(Math.random() * prizes.length)];
@@ -1411,10 +1469,10 @@
         let updateData = { lastPlayedDate: today };
 
         if (won.discount > 0) {
-          appliedAntojosDiscount = won.discount;
+          wonGameDiscount = won.discount;
           updateData.activeDiscount = won.discount;
           currentUser.activeDiscount = won.discount;
-          alert(`¡Descuento de $${won.discount.toFixed(2)} aplicado en tus compras!`);
+          alert(`¡Cupón de $${won.discount.toFixed(2)} ganado! Se aplicará en tu carrito al alcanzar la compra mínima de $25.00.`);
         } else if (won.pts) {
           currentUser.points = (currentUser.points || 0) + won.pts;
           updateData.points = currentUser.points;
@@ -1447,12 +1505,12 @@
       box.style.background = "#d1fae5";
       box.style.color = "#047857";
       
-      const wonDiscount = 1.50;
-      appliedAntojosDiscount = wonDiscount;
+      const wonDiscount = 2.00;
+      wonGameDiscount = wonDiscount;
       currentUser.activeDiscount = wonDiscount;
       currentUser.lastPlayedDate = today;
 
-      box.innerText = `🎉 ¡Ganaste:\n$${wonDiscount.toFixed(2)} OFF!`;
+      box.innerText = `🎉 ¡Ganaste:\n$${wonDiscount.toFixed(2)} Cupón OFF!`;
 
       try {
         await updateDoc(doc(db, "clients", currentClientDocId), {
@@ -1465,13 +1523,8 @@
       updateCart();
     };
 
-    let flashTimerInterval = null;
-
     function listenToBranchData() {
       onSnapshot(doc(db, "branch_config", currentBranch), (docSnap) => {
-        const container = document.getElementById('flashAlertContainer');
-        const bannersContainer = document.getElementById('clientBannersContainer');
-        
         if (docSnap.exists()) {
           const data = docSnap.data();
           gamesConfigState = data.games || { status: "inactivo" };
@@ -1479,56 +1532,66 @@
 
           if (data.flashAlert && data.flashAlert.active) {
             currentFlashAlert = data.flashAlert;
-            startLiveTimer(data.flashAlert.minutes || 30, data.flashAlert);
-            if (bannersContainer) bannersContainer.style.display = 'none';
+            startFlashTimeRemaining(data.flashAlert.endTime);
           } else {
-            container.innerHTML = '';
             currentFlashAlert = null;
             if (flashTimerInterval) clearInterval(flashTimerInterval);
-            if (bannersContainer) bannersContainer.style.display = 'flex';
           }
         } else {
-          container.innerHTML = '';
           currentFlashAlert = null;
           gamesConfigState = { status: "inactivo" };
           checkBranchFeatures();
-          if (bannersContainer) bannersContainer.style.display = 'flex';
         }
+        renderBranchPromos();
         filterAndRenderProducts();
+      });
+
+      onSnapshot(doc(db, "branch_config", "Todas"), (docSnap) => {
+        if (docSnap.exists() && docSnap.data().flashAlert && docSnap.data().flashAlert.active && (!currentFlashAlert || !currentFlashAlert.active)) {
+          const data = docSnap.data();
+          currentFlashAlert = data.flashAlert;
+          startFlashTimeRemaining(data.flashAlert.endTime);
+          renderBranchPromos();
+          filterAndRenderProducts();
+        }
       });
     }
 
-    function startLiveTimer(minutes, alertData) {
+    function startFlashTimeRemaining(endTimeStr) {
       if (flashTimerInterval) clearInterval(flashTimerInterval);
-      
-      let totalSeconds = minutes * 60;
-      const container = document.getElementById('flashAlertContainer');
 
-      flashTimerInterval = setInterval(() => {
-        if (totalSeconds <= 0) {
-          container.innerHTML = '';
+      function updateClock() {
+        if (!currentFlashAlert || !currentFlashAlert.active) return;
+        const now = new Date();
+        const [targetHours, targetMinutes] = endTimeStr.split(':').map(Number);
+        
+        const targetDate = new Date();
+        targetDate.setHours(targetHours, targetMinutes, 0, 0);
+
+        const diffMs = targetDate - now;
+        if (diffMs <= 0) {
+          const timerSpan = document.getElementById('flashTimerDisplay');
+          if (timerSpan) timerSpan.innerText = "¡Finalizada!";
           clearInterval(flashTimerInterval);
           return;
         }
 
-        totalSeconds--;
-        const mins = Math.floor(totalSeconds / 60);
-        const secs = totalSeconds % 60;
-        const timeFormatted = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        const totalSecs = Math.floor(diffMs / 1000);
+        const hrs = Math.floor(totalSecs / 3600);
+        const mins = Math.floor((totalSecs % 3600) / 60);
+        const secs = totalSecs % 60;
 
-        container.innerHTML = `
-          <div onclick="findAndOpenFlashProduct('${alertData.product}')" style="background: linear-gradient(135deg, #ef4444, #991b1b); color: white; padding: 0.85rem 1rem; border-radius: var(--radius-md); margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-card); cursor: pointer;">
-            <div>
-              <strong>🔥 OFERTA FLASH EN VIVO (${currentBranch})</strong><br>
-              <span>${alertData.product} - <strong>$${parseFloat(alertData.discount || 0).toFixed(2)} OFF por unidad</strong></span><br>
-              <small style="text-decoration: underline;">👉 Toca para ver y ordenar rápido</small>
-            </div>
-            <div style="background: rgba(0,0,0,0.3); padding: 0.4rem 0.7rem; border-radius: 10px; font-size: 0.9rem; font-weight: 900;">
-              ⏱️ ${timeFormatted}
-            </div>
-          </div>
-        `;
-      }, 1000);
+        let timeStr = `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        if (hrs > 0) {
+          timeStr = `${hrs}:${timeStr}`;
+        }
+
+        const timerSpan = document.getElementById('flashTimerDisplay');
+        if (timerSpan) timerSpan.innerText = timeStr;
+      }
+
+      updateClock();
+      flashTimerInterval = setInterval(updateClock, 1000);
     }
 
     window.findAndOpenFlashProduct = (productExactName) => {
@@ -1542,13 +1605,12 @@
       }
     };
 
-    // GESTIÓN DE ALERTAS FLASH EN EL ADMIN (CARGAR, GUARDAR, ELIMINAR)
     window.loadAdminFlashForBranch = async () => {
       const branch = document.getElementById('adminFlashBranch').value;
       const statusBox = document.getElementById('adminFlashStatusBox');
       const prodInput = document.getElementById('flashProduct');
       const discInput = document.getElementById('flashDiscount');
-      const minInput = document.getElementById('flashMinutes');
+      const timeInput = document.getElementById('flashEndTime');
 
       statusBox.innerHTML = '<p style="font-size:0.85rem; color:var(--text-muted);">Cargando alerta de esta sucursal...</p>';
 
@@ -1558,17 +1620,17 @@
           const alertData = snap.data().flashAlert;
           statusBox.innerHTML = `
             <div style="color:var(--emerald-dark); font-weight:700; font-size:0.85rem;">
-              ✅ Alerta Activa: <strong>${alertData.product}</strong> (-$${alertData.discount} OFF)
+              ✅ Alerta Activa en [${branch}]: <strong>${alertData.product}</strong> (-$${alertData.discount} OFF) hasta las ${alertData.endTime}
             </div>
           `;
           prodInput.value = alertData.product || '';
           discInput.value = alertData.discount || '';
-          minInput.value = alertData.minutes || 30;
+          timeInput.value = alertData.endTime || '22:00';
         } else {
-          statusBox.innerHTML = `<div style="color:var(--text-muted); font-size:0.85rem;">⚠️ No hay alerta activa en ${branch}. Puedes crear una abajo.</div>`;
+          statusBox.innerHTML = `<div style="color:var(--text-muted); font-size:0.85rem;">⚠️ No hay alerta activa en [${branch}]. Puedes crear una abajo.</div>`;
           prodInput.value = '';
           discInput.value = '';
-          minInput.value = '30';
+          timeInput.value = '22:00';
         }
       } catch (e) {
         statusBox.innerHTML = `<div style="color:var(--danger); font-size:0.85rem;">Error al cargar datos.</div>`;
@@ -1580,7 +1642,7 @@
       const branch = document.getElementById('adminFlashBranch').value;
       const product = document.getElementById('flashProduct').value.trim();
       const discount = parseFloat(document.getElementById('flashDiscount').value || 0);
-      const minutes = parseInt(document.getElementById('flashMinutes').value || 30);
+      const endTime = document.getElementById('flashEndTime').value;
 
       try {
         const ref = doc(db, "branch_config", branch);
@@ -1591,11 +1653,11 @@
           active: true,
           product,
           discount,
-          minutes
+          endTime
         };
 
         await setDoc(ref, existingData, { merge: true });
-        alert(`¡Alerta Flash guardada y actualizada para ${branch}!`);
+        alert(`¡Alerta Flash programada hasta las ${endTime} para [${branch}]!`);
         loadAdminFlashForBranch();
       } catch (err) {
         alert("Error al guardar alerta.");
@@ -1604,7 +1666,7 @@
 
     window.deleteFlashAlertForBranch = async () => {
       const branch = document.getElementById('adminFlashBranch').value;
-      if (confirm(`¿Estás seguro de eliminar la Alerta Flash de ${branch}?`)) {
+      if (confirm(`¿Estás seguro de eliminar la Alerta Flash de [${branch}]?`)) {
         try {
           const ref = doc(db, "branch_config", branch);
           const snap = await getDoc(ref);
@@ -1810,20 +1872,30 @@
       });
 
       let finalDiscount = 0;
+      const discountRow = document.getElementById('discountRow');
+      const couponNoticeBox = document.getElementById('couponNoticeBox');
+
       if (hasFlashProductInCart) {
         finalDiscount = totalPushDiscount;
-      } else {
-        let hasAntojos = cart.some(i => i.categoria === 'Antojos / Comidas');
-        if (hasAntojos && appliedAntojosDiscount > 0) {
-          finalDiscount = appliedAntojosDiscount;
-        }
-      }
-
-      if (finalDiscount > 0) {
-        document.getElementById('discountRow').style.display = 'flex';
+        discountRow.style.display = 'flex';
         document.getElementById('discountPrice').innerText = finalDiscount.toFixed(2);
+        couponNoticeBox.style.display = 'none';
+      } else if (wonGameDiscount > 0) {
+        if (subtotal >= MIN_PURCHASE_FOR_COUPON) {
+          finalDiscount = wonGameDiscount;
+          discountRow.style.display = 'flex';
+          document.getElementById('discountPrice').innerText = finalDiscount.toFixed(2);
+          couponNoticeBox.style.display = 'none';
+        } else {
+          finalDiscount = 0;
+          discountRow.style.display = 'none';
+          const missing = MIN_PURCHASE_FOR_COUPON - subtotal;
+          couponNoticeBox.style.display = 'block';
+          couponNoticeBox.innerText = `💡 Tienes un cupón de $${wonGameDiscount.toFixed(2)}. ¡Agrega $${missing.toFixed(2)} más para aplicarlo (Mín. $25.00)!`;
+        }
       } else {
-        document.getElementById('discountRow').style.display = 'none';
+        discountRow.style.display = 'none';
+        couponNoticeBox.style.display = 'none';
       }
 
       const finalSubtotal = Math.max(0, subtotal - finalDiscount);
@@ -1862,7 +1934,13 @@
         detailList += `• ${item.nombre} (x${item.cantidad}) - $${t.toFixed(2)}\n`;
       });
 
-      let finalDiscount = hasFlashProductInCart ? totalPushDiscount : (cart.some(i => i.categoria === 'Antojos / Comidas') ? appliedAntojosDiscount : 0);
+      let finalDiscount = 0;
+      if (hasFlashProductInCart) {
+        finalDiscount = totalPushDiscount;
+      } else if (wonGameDiscount > 0 && subtotal >= MIN_PURCHASE_FOR_COUPON) {
+        finalDiscount = wonGameDiscount;
+      }
+
       const finalSubtotal = Math.max(0, subtotal - finalDiscount);
       const deliveryTypeVal = document.getElementById('deliveryType').value;
       const pointsToEarn = Math.floor(finalSubtotal) + totalBonus;
@@ -1872,7 +1950,7 @@
       if (!hasFlashProductInCart && finalDiscount > 0 && currentClientDocId) {
         try {
           await updateDoc(doc(db, "clients", currentClientDocId), { activeDiscount: 0 });
-          appliedAntojosDiscount = 0;
+          wonGameDiscount = 0;
           currentUser.activeDiscount = 0;
         } catch (e) {}
       }
@@ -1904,7 +1982,7 @@
           `📞 *Teléfono:* ${currentUser.phone}\n` +
           `🏪 *Sucursal:* ${currentBranch}\n` +
           `🚚 *Entrega:* ${deliveryTypeVal}\n` +
-          `📍 *Dirección:* ${finalAddress}\n` +
+          `${deliveryTypeVal !== 'Recoger en Tienda' ? `📍 *Dirección:* ${finalAddress}\n` : ''}` +
           `${finalDiscount > 0 ? `🎫 *Descuento Aplicado:* -$${finalDiscount.toFixed(2)}\n` : ''}` +
           `⭐ *Puntos a sumar:* +${pointsToEarn} Pts\n\n` +
           `🛒 *Detalle:*\n${detailList}\n` +
@@ -1961,12 +2039,15 @@
       grid.innerHTML = '';
       snapshot.forEach(docSnap => {
         const r = docSnap.data();
+        const rName = r.name || r.nombre || 'Premio';
+        const rPoints = r.points || r.puntos || 0;
+        const rImage = fixDriveUrl(r.image || r.imagenUrl) || DEFAULT_REWARD_IMG;
         grid.innerHTML += `
           <div class="card">
-            <img src="${fixDriveUrl(r.image || r.imagenUrl) || DEFAULT_REWARD_IMG}">
-            <h3>${r.name || r.nombre}</h3>
-            <div style="font-weight:800; color:var(--amber-accent); margin:0.4rem 0;">${r.points || r.puntos} Pts</div>
-            <button class="btn btn-sm btn-amber" onclick="redeemReward('${docSnap.id}', '${r.name || r.nombre}', ${r.points || r.puntos})">Canjear</button>
+            <img src="${rImage}">
+            <h3>${rName}</h3>
+            <div style="font-weight:800; color:var(--amber-accent); margin:0.4rem 0;">${rPoints} Pts</div>
+            <button class="btn btn-sm btn-amber" onclick="redeemReward('${docSnap.id}', '${rName}', ${rPoints})">Canjear</button>
           </div>
         `;
       });
@@ -2014,13 +2095,30 @@
         allPromos = [];
         snapshot.forEach(docSnap => allPromos.push({ id: docSnap.id, ...docSnap.data() }));
         renderBranchPromos();
+        renderClientPromosTab();
       } catch (e) {}
     }
 
     function renderBranchPromos() {
       const activePromos = allPromos.filter(p => p.sucursal === 'Todas' || p.sucursal === currentBranch);
-      let bannersHtml = `
-        <div class="banner-card">
+      let bannersHtml = '';
+
+      if (currentFlashAlert && currentFlashAlert.active) {
+        bannersHtml += `
+          <div class="banner-card banner-flash-pulse" onclick="findAndOpenFlashProduct('${currentFlashAlert.product}')">
+            <div style="flex:1; z-index:2;">
+              <span style="background:white; color:#dc2626; font-size:0.65rem; padding:0.2rem 0.5rem; border-radius:4px; font-weight:900; text-transform:uppercase;">🔥 OFERTA FLASH EN VIVO</span>
+              <h4 style="font-size:1.05rem; font-weight:900; margin-top:0.3rem;">${currentFlashAlert.product}</h4>
+              <p style="font-size:0.85rem; opacity:0.9; margin:0.2rem 0;">-$${parseFloat(currentFlashAlert.discount || 0).toFixed(2)} OFF por unidad</p>
+              <div style="font-size:0.8rem; font-weight:900; background:rgba(0,0,0,0.3); display:inline-block; padding:0.15rem 0.5rem; border-radius:6px; margin-top:0.2rem;">⏱️ Restante: <span id="flashTimerDisplay">Calculando...</span></div>
+            </div>
+            <i class="fa-solid fa-bolt" style="font-size: 2.5rem; opacity: 0.85;"></i>
+          </div>
+        `;
+      }
+
+      bannersHtml += `
+        <div class="banner-card" onclick="switchClientTab('catalog')">
           <div>
             <h4>🛵 Envío a Domicilio</h4>
             <p>Rápido y seguro en ${currentBranch}.</p>
@@ -2030,18 +2128,71 @@
       `;
 
       activePromos.forEach(p => {
+        const promoImg = fixDriveUrl(p.imagenUrl);
         bannersHtml += `
-          <div class="banner-card">
-            <div style="flex:1;">
-              <h4 style="font-size:0.95rem; font-weight:900;">🔥 ${p.titulo}</h4>
+          <div class="banner-card" onclick="switchClientTab('promos')" style="${promoImg ? `background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${promoImg}'); background-size: cover; background-position: center;` : ''}">
+            <div style="flex:1; z-index:2;">
+              <span style="background:var(--emerald-accent); font-size:0.65rem; padding:0.15rem 0.4rem; border-radius:4px; font-weight:800; text-transform:uppercase;">${p.sucursal}</span>
+              <h4 style="font-size:0.95rem; font-weight:900; margin-top:0.2rem;">🔥 ${p.titulo}</h4>
               <p style="font-size:0.8rem; opacity:0.9; margin:0.2rem 0;">${p.descripcion}</p>
-              <span style="font-weight:800; font-size:0.85rem;">$${parseFloat(p.precio || 0).toFixed(2)}</span>
+              <span style="font-weight:800; font-size:0.9rem; color:#34d399;">$${parseFloat(p.precio || 0).toFixed(2)} — ¡Toca para pedir!</span>
             </div>
           </div>
         `;
       });
 
       document.getElementById('clientBannersContainer').innerHTML = bannersHtml;
+      refreshIcons();
+      startAutoBannerSlider();
+    }
+
+    function startAutoBannerSlider() {
+      if (bannerSliderInterval) clearInterval(bannerSliderInterval);
+      const container = document.getElementById('clientBannersContainer');
+      if (!container) return;
+
+      bannerSliderInterval = setInterval(() => {
+        const cards = container.getElementsByClassName('banner-card');
+        if (cards.length <= 1) return;
+        
+        const cardWidth = cards[0].offsetWidth + 16;
+        const totalScrollWidth = container.scrollWidth;
+        const currentScroll = container.scrollLeft;
+        const visibleWidth = container.clientWidth;
+
+        if (currentScroll + visibleWidth >= totalScrollWidth - 10) {
+          container.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          container.scrollBy({ left: cardWidth, behavior: 'smooth' });
+        }
+      }, 3000);
+    }
+
+    function renderClientPromosTab() {
+      const container = document.getElementById('clientPromosList');
+      const activePromos = allPromos.filter(p => p.sucursal === 'Todas' || p.sucursal === currentBranch);
+      container.innerHTML = '';
+
+      if (activePromos.length === 0) {
+        container.innerHTML = '<p style="text-align:center; color:var(--text-muted);">No hay promociones especiales disponibles para esta sucursal.</p>';
+        return;
+      }
+
+      activePromos.forEach(p => {
+        const promoImg = fixDriveUrl(p.imagenUrl) || 'https://via.placeholder.com/300';
+        container.innerHTML += `
+          <div class="card" style="flex-direction:row; gap:1rem; align-items:center;">
+            <img src="${promoImg}" style="width:100px; height:100px; object-fit:cover; border-radius:12px; margin-bottom:0;">
+            <div style="flex:1;">
+              <span style="font-size:0.7rem; color:var(--emerald-accent); font-weight:800; text-transform:uppercase;">${p.sucursal}</span>
+              <h3 style="font-size:1.05rem; font-weight:900; margin:0.2rem 0;">${p.titulo}</h3>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.4rem;">${p.descripcion}</p>
+              <span style="font-weight:900; font-size:1.1rem; color:var(--brand-dark);">$${parseFloat(p.precio || 0).toFixed(2)}</span>
+            </div>
+            <button class="btn btn-sm btn-emerald" onclick="addToCart('${p.id}', '${p.titulo}', ${parseFloat(p.precio || 0)}, 1, true)">+ Pedir</button>
+          </div>
+        `;
+      });
       refreshIcons();
     }
 
@@ -2088,15 +2239,40 @@
     function renderAdminClients(clients) {
       const container = document.getElementById('adminClientsList');
       container.innerHTML = '';
+      if (clients.length === 0) {
+        container.innerHTML = '<p style="text-align:center; color:var(--text-muted);">No hay clientes registrados.</p>';
+        return;
+      }
       clients.forEach(c => {
+        const clientName = c.name || c.nombre || 'Sin Nombre';
+        const clientPhone = c.phone || c.telefono || 'Sin Teléfono';
         container.innerHTML += `
-          <div style="background:var(--bg-primary); padding:0.85rem; border-radius:12px; display:flex; justify-content:space-between; align-items:center;">
-            <div><strong>${c.name || c.nombre}</strong><br><small>📞 ${c.phone || c.telefono}</small><br><span style="color:var(--amber-accent); font-weight:800;">⭐ ${c.points || 0} Pts</span></div>
-            <button class="btn btn-sm btn-amber" onclick="adminAdjustPoints('${c.id}', '${c.name || c.nombre}', ${c.points || 0})">Puntos</button>
+          <div style="background:var(--bg-primary); padding:0.85rem; border-radius:12px; display:flex; justify-content:space-between; align-items:center; gap:0.5rem;">
+            <div style="flex:1;">
+              <strong>${clientName}</strong><br>
+              <small>📞 ${clientPhone}</small><br>
+              <span style="color:var(--amber-accent); font-weight:800;">⭐ ${c.points || 0} Pts</span>
+            </div>
+            <div style="display:flex; gap:0.3rem; flex-wrap:wrap; justify-content:flex-end;">
+              <button class="btn btn-sm btn-amber" onclick="adminAdjustPoints('${c.id}', '${clientName}', ${c.points || 0})">Puntos</button>
+              <button class="btn btn-sm btn-secondary" onclick="adminEditClient('${c.id}', '${clientName}', '${clientPhone}')">Editar</button>
+              <button class="btn btn-sm btn-danger" onclick="adminDeleteClient('${c.id}', '${clientName}')">Eliminar</button>
+            </div>
           </div>
         `;
       });
+      refreshIcons();
     }
+
+    window.filterAdminClientsList = () => {
+      const searchVal = document.getElementById('adminClientSearchInput').value.toLowerCase();
+      const filtered = allClientsList.filter(c => {
+        const name = (c.name || c.nombre || '').toLowerCase();
+        const phone = (c.phone || c.telefono || '').toLowerCase();
+        return name.includes(searchVal) || phone.includes(searchVal);
+      });
+      renderAdminClients(filtered);
+    };
 
     window.adminAdjustPoints = async (id, name, currentPts) => {
       const newAmount = prompt(`Ajustar puntos para ${name} (Actual: ${currentPts}):`, currentPts);
@@ -2106,7 +2282,41 @@
       }
     };
 
-    // GESTIÓN DE CANJES EN ADMIN (CON BOTÓN DE ENTREGADO)
+    window.adminEditClient = async (id, currentName, currentPhone) => {
+      const newName = prompt("Editar Nombre del Cliente:", currentName);
+      if (newName === null) return;
+      const newPhone = prompt("Editar Teléfono del Cliente:", currentPhone);
+      if (newPhone === null) return;
+
+      if (!newName.trim() || !newPhone.trim()) {
+        alert("⚠️ El nombre y el teléfono no pueden estar vacíos.");
+        return;
+      }
+
+      try {
+        await updateDoc(doc(db, "clients", id), {
+          name: newName.trim(),
+          phone: newPhone.trim()
+        });
+        alert("¡Datos del cliente actualizados con éxito!");
+        loadAdminClients();
+      } catch (err) {
+        alert("Error al actualizar los datos del cliente.");
+      }
+    };
+
+    window.adminDeleteClient = async (id, name) => {
+      if (confirm(`⚠️ ¿Estás seguro de eliminar al cliente "${name}"? Esta acción no se puede deshacer.`)) {
+        try {
+          await deleteDoc(doc(db, "clients", id));
+          alert("¡Cliente eliminado con éxito!");
+          loadAdminClients();
+        } catch (err) {
+          alert("Error al eliminar el cliente.");
+        }
+      }
+    };
+
     async function loadAdminRedemptions() {
       const container = document.getElementById('adminRedemptionsList');
       container.innerHTML = '<p style="text-align:center;">Cargando canjes...</p>';
@@ -2182,17 +2392,92 @@
 
     async function loadAdminProducts() {
       const grid = document.getElementById('adminProductGrid');
-      const snapshot = await getDocs(collection(db, "productos"));
-      grid.innerHTML = '';
-      snapshot.forEach(d => {
-        const p = d.data();
-        grid.innerHTML += `<div class="card"><img src="${fixDriveUrl(p.imagenUrl1)}"><h3>${p.nombre}</h3></div>`;
-      });
+      try {
+        const snapshot = await getDocs(collection(db, "productos"));
+        allProducts = [];
+        snapshot.forEach(d => allProducts.push({ id: d.id, ...d.data() }));
+
+        grid.innerHTML = '';
+        if (allProducts.length === 0) {
+          grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color:var(--text-muted);">No hay productos registrados.</p>';
+          return;
+        }
+
+        allProducts.forEach(p => {
+          const pImg = fixDriveUrl(p.imagenUrl1 || p.imagenUrl) || 'https://via.placeholder.com/200';
+          const pName = p.nombre || 'Sin Nombre';
+          const pCat = p.categoria || 'Otros';
+          const pPrice = p.precioLosFuentes ?? p.precio ?? 0;
+
+          grid.innerHTML += `
+            <div class="card">
+              <img src="${pImg}">
+              <div style="font-size:0.7rem; color:var(--text-muted);">${pCat}</div>
+              <h3>${pName}</h3>
+              <div style="font-weight:800; color:var(--brand-dark); margin:0.4rem 0;">$${parseFloat(pPrice).toFixed(2)}</div>
+              <div style="display:flex; gap:0.4rem; margin-top:auto;">
+                <button class="btn btn-sm btn-amber" style="flex:1;" onclick="editProduct('${p.id}')">Editar</button>
+                <button class="btn btn-sm btn-danger" style="flex:1;" onclick="deleteProduct('${p.id}', '${pName}')">Eliminar</button>
+              </div>
+            </div>
+          `;
+        });
+        refreshIcons();
+      } catch (e) {
+        grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color:var(--danger);">Error al cargar productos.</p>';
+      }
     }
+
+    window.editProduct = (id) => {
+      const p = allProducts.find(item => item.id === id);
+      if (!p) return;
+
+      document.getElementById('prodId').value = p.id;
+      document.getElementById('prodName').value = p.nombre || '';
+      document.getElementById('prodCategory').value = p.categoria || 'Otros';
+      document.getElementById('prodStockLosFuentes').value = p.stockLosFuentes || 'Disponible';
+      document.getElementById('prodStockCorinto').value = p.stockCorinto || 'Disponible';
+      document.getElementById('prodStockMetapan').value = p.stockMetapan || 'Disponible';
+      document.getElementById('prodPriceLosFuentes').value = p.precioLosFuentes ?? p.precio ?? 0;
+      document.getElementById('prodPriceCorinto').value = p.precioCorinto ?? p.precio ?? 0;
+      document.getElementById('prodPriceMetapan').value = p.precioMetapan ?? p.precio ?? 0;
+      document.getElementById('prodPointsLosFuentes').value = p.puntosLosFuentes ?? p.bonusPoints ?? 0;
+      document.getElementById('prodPointsCorinto').value = p.puntosCorinto ?? 0;
+      document.getElementById('prodPointsMetapan').value = p.puntosMetapan ?? 0;
+      document.getElementById('prodDesc').value = p.descripcion || '';
+      document.getElementById('prodImg1').value = p.imagenUrl1 || p.imagenUrl || '';
+
+      document.getElementById('formTitle').innerText = "✏️ Editar Producto";
+      document.getElementById('prodSubmitBtn').innerText = "Actualizar Producto";
+      document.getElementById('cancelProdEditBtn').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.resetProductForm = () => {
+      document.getElementById('productForm').reset();
+      document.getElementById('prodId').value = "";
+      document.getElementById('formTitle').innerText = "Agregar / Editar Producto";
+      document.getElementById('prodSubmitBtn').innerText = "Guardar Producto";
+      document.getElementById('cancelProdEditBtn').classList.add('hidden');
+    };
+
+    window.deleteProduct = async (id, name) => {
+      if (confirm(`⚠️ ¿Estás seguro de eliminar el producto "${name}"?`)) {
+        try {
+          await deleteDoc(doc(db, "productos", id));
+          alert("¡Producto eliminado con éxito!");
+          loadProducts();
+          loadAdminProducts();
+        } catch (e) {
+          alert("Error al eliminar producto.");
+        }
+      }
+    };
 
     document.getElementById('productForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      await addDoc(collection(db, "productos"), {
+      const editId = document.getElementById('prodId').value;
+      const productData = {
         nombre: document.getElementById('prodName').value.trim(),
         categoria: document.getElementById('prodCategory').value,
         stockLosFuentes: document.getElementById('prodStockLosFuentes').value,
@@ -2201,56 +2486,205 @@
         precioLosFuentes: parseFloat(document.getElementById('prodPriceLosFuentes').value || 0),
         precioCorinto: parseFloat(document.getElementById('prodPriceCorinto').value || 0),
         precioMetapan: parseFloat(document.getElementById('prodPriceMetapan').value || 0),
+        puntosLosFuentes: parseInt(document.getElementById('prodPointsLosFuentes').value || 0),
+        puntosCorinto: parseInt(document.getElementById('prodPointsCorinto').value || 0),
+        puntosMetapan: parseInt(document.getElementById('prodPointsMetapan').value || 0),
         descripcion: document.getElementById('prodDesc').value.trim(),
         imagenUrl1: document.getElementById('prodImg1').value.trim()
-      });
-      document.getElementById('productForm').reset();
-      loadAdminProducts();
+      };
+
+      try {
+        if (editId) {
+          await updateDoc(doc(db, "productos", editId), productData);
+          alert("¡Producto actualizado con éxito!");
+        } else {
+          await addDoc(collection(db, "productos"), productData);
+          alert("¡Producto creado con éxito!");
+        }
+        resetProductForm();
+        loadProducts();
+        loadAdminProducts();
+      } catch (err) {
+        alert("Error al guardar el producto.");
+      }
     });
 
     document.getElementById('rewardForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      await addDoc(collection(db, "products"), {
+      const editId = document.getElementById('rewardEditId').value;
+      const rewardData = {
         name: document.getElementById('rewardName').value.trim(),
         points: parseInt(document.getElementById('rewardPointsCost').value || 0),
         image: document.getElementById('rewardImg').value.trim()
-      });
-      document.getElementById('rewardForm').reset();
-      loadAdminRewards();
+      };
+
+      try {
+        if (editId) {
+          await updateDoc(doc(db, "products", editId), rewardData);
+          alert("¡Premio actualizado con éxito!");
+        } else {
+          await addDoc(collection(db, "products"), rewardData);
+          alert("¡Premio guardado con éxito!");
+        }
+        resetRewardForm();
+        loadAdminRewards();
+      } catch (err) {
+        alert("Error al guardar el premio.");
+      }
     });
 
     async function loadAdminRewards() {
       const list = document.getElementById('adminRewardsList');
-      const snapshot = await getDocs(collection(db, "products"));
-      list.innerHTML = '';
-      snapshot.forEach(d => {
-        const r = d.data();
-        list.innerHTML += `<div class="card" style="flex-direction:row; gap:0.5rem; align-items:center;"><strong>${r.name || r.nombre}</strong> (${r.points || r.puntos} Pts)</div>`;
-      });
+      try {
+        const snapshot = await getDocs(collection(db, "products"));
+        list.innerHTML = '';
+        if (snapshot.empty) {
+          list.innerHTML = '<p style="text-align:center; color:var(--text-muted);">No hay premios configurados.</p>';
+          return;
+        }
+        snapshot.forEach(d => {
+          const r = d.data();
+          const rName = r.name || r.nombre || 'Premio';
+          const rPoints = r.points || r.puntos || 0;
+          const rImage = r.image || r.imagenUrl || '';
+          list.innerHTML += `
+            <div class="order-card" style="display:flex; justify-content:space-between; align-items:center;">
+              <div style="display:flex; align-items:center; gap:0.75rem;">
+                <img src="${fixDriveUrl(rImage) || DEFAULT_REWARD_IMG}" style="width:45px; height:45px; object-fit:contain; border-radius:8px; background:#f8fafc; border:1px solid var(--border);">
+                <div>
+                  <strong>${rName}</strong><br>
+                  <span style="color:var(--amber-accent); font-weight:800;">⭐ ${rPoints} Pts</span>
+                </div>
+              </div>
+              <div style="display:flex; gap:0.4rem;">
+                <button class="btn btn-sm btn-amber" onclick="editReward('${d.id}', '${rName}', ${rPoints}, '${rImage}')">Editar</button>
+                <button class="btn btn-sm btn-danger" onclick="deleteReward('${d.id}')">Eliminar</button>
+              </div>
+            </div>
+          `;
+        });
+      } catch (e) {
+        list.innerHTML = '<p style="text-align:center; color:var(--danger);">Error al cargar premios.</p>';
+      }
     }
+
+    window.editReward = (id, name, points, image) => {
+      document.getElementById('rewardEditId').value = id;
+      document.getElementById('rewardName').value = name;
+      document.getElementById('rewardPointsCost').value = points;
+      document.getElementById('rewardImg').value = image;
+      document.getElementById('rewardFormTitle').innerText = "✏️ Editar Premio por Puntos";
+      document.getElementById('cancelRewardEditBtn').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.resetRewardForm = () => {
+      document.getElementById('rewardForm').reset();
+      document.getElementById('rewardEditId').value = "";
+      document.getElementById('rewardFormTitle').innerText = "Agregar Premio por Puntos";
+      document.getElementById('cancelRewardEditBtn').classList.add('hidden');
+    };
+
+    window.deleteReward = async (id) => {
+      if (confirm("¿Estás seguro de eliminar este premio del catálogo?")) {
+        try {
+          await deleteDoc(doc(db, "products", id));
+          alert("¡Premio eliminado con éxito!");
+          loadAdminRewards();
+        } catch (e) {
+          alert("Error al eliminar el premio.");
+        }
+      }
+    };
 
     document.getElementById('promoForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      await addDoc(collection(db, "promociones"), {
+      const editId = document.getElementById('promoEditId').value;
+      const promoData = {
         sucursal: document.getElementById('promoBranch').value,
         titulo: document.getElementById('promoTitle').value.trim(),
         precio: parseFloat(document.getElementById('promoPrice').value || 0),
         imagenUrl: document.getElementById('promoImg').value.trim(),
         descripcion: document.getElementById('promoDesc').value.trim()
-      });
-      document.getElementById('promoForm').reset();
-      loadAdminPromos();
+      };
+
+      try {
+        if (editId) {
+          await updateDoc(doc(db, "promociones", editId), promoData);
+          alert("¡Promoción actualizada con éxito!");
+        } else {
+          await addDoc(collection(db, "promociones"), promoData);
+          alert("¡Promoción publicada con éxito!");
+        }
+        resetPromoForm();
+        loadAdminPromos();
+        loadPromos();
+      } catch (err) {
+        alert("Error al guardar promoción.");
+      }
     });
 
     async function loadAdminPromos() {
       const list = document.getElementById('adminPromosList');
-      const snapshot = await getDocs(collection(db, "promociones"));
-      list.innerHTML = '';
-      snapshot.forEach(d => {
-        const p = d.data();
-        list.innerHTML += `<div class="order-card"><strong>${p.titulo}</strong> (${p.sucursal})</div>`;
-      });
+      try {
+        const snapshot = await getDocs(collection(db, "promociones"));
+        list.innerHTML = '';
+        if (snapshot.empty) {
+          list.innerHTML = '<p style="text-align:center; color:var(--text-muted);">No hay promociones creadas.</p>';
+          return;
+        }
+        snapshot.forEach(d => {
+          const p = d.data();
+          list.innerHTML += `
+            <div class="order-card" style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <strong>🔥 ${p.titulo}</strong><br>
+                <small>🏪 ${p.sucursal} | 💵 $${parseFloat(p.precio || 0).toFixed(2)}</small><br>
+                <small style="color:var(--text-muted);">${p.descripcion}</small>
+              </div>
+              <div style="display:flex; gap:0.4rem;">
+                <button class="btn btn-sm btn-amber" onclick="editPromo('${d.id}', '${p.sucursal}', '${p.titulo}', ${p.precio}, '${p.imagenUrl}', '${p.descripcion}')">Editar</button>
+                <button class="btn btn-sm btn-danger" onclick="deletePromo('${d.id}')">Eliminar</button>
+              </div>
+            </div>
+          `;
+        });
+      } catch (e) {
+        list.innerHTML = '<p style="text-align:center; color:var(--danger);">Error al cargar promos.</p>';
+      }
     }
+
+    window.editPromo = (id, sucursal, titulo, precio, imagenUrl, descripcion) => {
+      document.getElementById('promoEditId').value = id;
+      document.getElementById('promoBranch').value = sucursal;
+      document.getElementById('promoTitle').value = titulo;
+      document.getElementById('promoPrice').value = precio;
+      document.getElementById('promoImg').value = imagenUrl;
+      document.getElementById('promoDesc').value = descripcion;
+      document.getElementById('promoFormTitle').innerText = "✏️ Editar Promoción";
+      document.getElementById('cancelPromoEditBtn').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.resetPromoForm = () => {
+      document.getElementById('promoForm').reset();
+      document.getElementById('promoEditId').value = "";
+      document.getElementById('promoFormTitle').innerText = "Crear Promoción por Sucursal";
+      document.getElementById('cancelPromoEditBtn').classList.add('hidden');
+    };
+
+    window.deletePromo = async (id) => {
+      if (confirm("¿Estás seguro de eliminar esta promoción?")) {
+        try {
+          await deleteDoc(doc(db, "promociones", id));
+          alert("¡Promoción eliminada!");
+          loadAdminPromos();
+          loadPromos();
+        } catch (e) {
+          alert("Error al eliminar promoción.");
+        }
+      }
+    };
 
     document.getElementById('logoutBtn').addEventListener('click', () => {
       currentUser = null;
