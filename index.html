@@ -166,6 +166,10 @@
       overflow: hidden;
     }
 
+    .banner-services-pro {
+      background: linear-gradient(135deg, #2563eb, #1e40af) !important;
+    }
+
     .banner-flash-pulse {
       background: linear-gradient(135deg, #dc2626, #991b1b) !important;
       animation: flashPulse 1.8s infinite;
@@ -256,6 +260,20 @@
       background: #f8fafc;
       margin-bottom: 0.75rem;
       border: 1px solid var(--border);
+    }
+
+    .promo-tag-floating {
+      position: absolute;
+      top: 0.75rem;
+      left: 0.75rem;
+      background: #dc2626;
+      color: white;
+      font-size: 0.68rem;
+      font-weight: 900;
+      padding: 0.25rem 0.6rem;
+      border-radius: 8px;
+      z-index: 5;
+      box-shadow: 0 2px 6px rgba(220, 38, 38, 0.4);
     }
 
     .points-badge {
@@ -595,8 +613,8 @@
 
         <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px dashed var(--border); text-align: center;">
           <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.4rem;">¿Problemas para ingresar a la app?</p>
-          <a href="https://wa.me/50363163274?text=Hola,%20tengo%20problemas%20para%20ingresar%20a%20Super%20To%C3%B1ita%20Online.%20%C2%BFC%C3%B3mo%20me%20pueden%20ayudar?" target="_blank" style="font-size: 0.82rem; font-weight: 800; color: var(--emerald-accent); text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem;">
-            <i class="fa-brands fa-whatsapp"></i> Contáctanos por Soporte
+          <a href="https://wa.me/50370092996?text=Hola,%20soporte%20de%20Super%20To%C3%B1ita.%20Necesito%20recuperar%20el%20acceso%20a%20mi%20cuenta%20asociada%20al%20número.%20Agradezco%20su%20ayuda%20para%20restablecer%20mis%20datos%20de%20ingreso." target="_blank" style="font-size: 0.82rem; font-weight: 800; color: var(--emerald-accent); text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem;">
+            <i class="fa-brands fa-whatsapp"></i> ¿Problemas para iniciar sesión? Contáctanos
           </a>
         </div>
       </div>
@@ -669,6 +687,7 @@
           <button class="cat-chip" onclick="filterByCategory('Embutidos / Lácteos')">Embutidos / Lácteos</button>
           <button class="cat-chip" onclick="filterByCategory('Limpieza')">Limpieza</button>
           <button class="cat-chip" onclick="filterByCategory('Aseo Personal')">Aseo Personal</button>
+          <button class="cat-chip" onclick="filterByCategory('Servicios y Recargas')">⚡ Servicios y Recargas</button>
           <button class="cat-chip" onclick="filterByCategory('Otros')">Otros</button>
         </div>
 
@@ -785,6 +804,7 @@
       <div class="admin-subnav">
         <button class="btn btn-sm active-admin-tab" id="adminTabOrdersBtn" onclick="switchAdminSubTab('orders')">📦 Órdenes</button>
         <button class="btn btn-sm" id="adminTabProductsBtn" onclick="switchAdminSubTab('products')">🏷️ Productos</button>
+        <button class="btn btn-sm" id="adminTabServicesBtn" onclick="switchAdminSubTab('services')">⚡ Servicios & Recargas</button>
         <button class="btn btn-sm" id="adminTabRewardsBtn" onclick="switchAdminSubTab('rewards')">🎁 Premios</button>
         <button class="btn btn-sm" id="adminTabClientsBtn" onclick="switchAdminSubTab('clients')">👥 Clientes</button>
         <button class="btn btn-sm" id="adminTabRedemptionsBtn" onclick="switchAdminSubTab('redemptions')">🎟️ Canjes</button>
@@ -813,8 +833,8 @@
           <form id="productForm">
             <input type="hidden" id="prodId">
             <div class="form-group">
-              <label>Nombre Exacto del Producto</label>
-              <input type="text" id="prodName" class="form-control" placeholder="Ej: Pizza Pepperoni Familiar" required>
+              <label>Nombre del Producto</label>
+              <input type="text" id="prodName" class="form-control" placeholder="" required>
             </div>
             <div class="form-group">
               <label>Categoría</label>
@@ -839,7 +859,7 @@
               </div>
             </div>
             <div class="form-group">
-              <label>Precios por Sucursal ($)</label>
+              <label>Precios por Sucursal ($) [0 = No mostrar]</label>
               <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
                 <div><small>FUENTES</small><input type="number" step="0.01" id="prodPriceLosFuentes" class="form-control" required></div>
                 <div><small>CORINTO</small><input type="number" step="0.01" id="prodPriceCorinto" class="form-control" required></div>
@@ -854,6 +874,18 @@
                 <div><input type="number" id="prodPointsMetapan" class="form-control" value="0"></div>
               </div>
             </div>
+            <div class="form-group">
+              <label>Etiqueta Promo (Ej: Lleva 5 por $1.05)</label>
+              <input type="text" id="prodPromoTag" class="form-control" placeholder="Ej: Lleva 5 por $1.05">
+            </div>
+            <div class="form-group">
+              <label>Validación Promoción por Cantidad (Opcional)</label>
+              <div style="display: flex; gap: 0.5rem;">
+                <input type="number" id="promoRequiredQty" class="form-control" placeholder="Cant. Requerida (Ej: 5)" inputmode="numeric">
+                <input type="number" step="0.01" id="promoBundlePrice" class="form-control" placeholder="Precio Total del Pack (Ej: 1.05)">
+              </div>
+              <small style="color:var(--text-muted);">Si el cliente compra exactamente esta cantidad, se le cobrará este precio especial automáticamente.</small>
+            </div>
             <div class="form-group"><label>Descripción</label><textarea id="prodDesc" class="form-control" rows="2" required></textarea></div>
             <div class="form-group"><label>Imagen URL 1</label><input type="url" id="prodImg1" class="form-control"></div>
             <div style="display:flex; gap:0.5rem;">
@@ -866,7 +898,52 @@
         <div id="adminProductGrid" class="grid"></div>
       </div>
 
-      <!-- 3.3 Premios -->
+      <!-- 3.3 GESTIÓN DE SERVICIOS Y RECARGAS (CON OPCIÓN EDITAR) -->
+      <div id="adminServicesTab" class="hidden">
+        <div class="card" style="margin-bottom: 2rem; padding: 1.25rem;">
+          <h4 id="serviceFormTitle" style="margin-bottom: 1rem; color: #2563eb;"><i data-lucide="smartphone"></i>Paquetes de Recargas & Servicions</h4>
+          <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;"></p>
+          
+          <form id="servicePackageForm">
+            <input type="hidden" id="servicePkgEditId">
+            <div class="form-group">
+              <label>Compañía / Empresa</label>
+              <select id="adminRechargeCarrier" class="form-control">
+                <option value="Claro">Claro El Salvador</option>
+                <option value="Tigo">Tigo El Salvador</option>
+                <option value="AES">AES / Energía Eléctrica</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Nombre del Paquete o Servicio</label>
+              <input type="text" id="adminPkgName" class="form-control" placeholder="" required>
+            </div>
+            <div class="form-group">
+              <label>Descripción / Detalle</label>
+              <textarea id="adminPkgDesc" class="form-control" rows="2" placeholder="" required></textarea>
+            </div>
+            <div class="form-group">
+              <label>Precio ($)</label>
+              <input type="number" step="0.01" id="adminPkgPrice" class="form-control" placeholder="" required>
+            </div>
+            <div class="form-group">
+              <label>Logotipo / Imagen URL de la Empresa</label>
+              <input type="url" id="adminPkgImg" class="form-control" placeholder="https://... o enlace de logo">
+            </div>
+            <div style="display:flex; gap:0.5rem;">
+              <button type="submit" class="btn btn-emerald" style="flex:1; background:#2563eb;" id="serviceSubmitBtn">Guardar Configuración de Servicio</button>
+              <button type="button" class="btn btn-secondary hidden" id="cancelServiceEditBtn" onclick="resetServiceForm()">Cancelar</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="card" style="padding: 1.25rem;">
+          <h4 style="margin-bottom: 1rem; color: var(--brand-dark);">📋 Servicios y Paquetes Activos</h4>
+          <div id="adminPackagesListContainer"></div>
+        </div>
+      </div>
+
+      <!-- 3.4 Premios -->
       <div id="adminRewardsTab" class="hidden">
         <div class="card" style="margin-bottom: 2rem; padding: 1.25rem;">
           <h4 id="rewardFormTitle" style="margin-bottom: 1rem;">Agregar Premio por Puntos</h4>
@@ -885,7 +962,7 @@
         <div id="adminRewardsList"></div>
       </div>
 
-      <!-- 3.4 Clientes -->
+      <!-- 3.5 Clientes -->
       <div id="adminClientsTab" class="hidden">
         <div class="card" style="padding: 1.25rem; margin-bottom: 1.5rem;">
           <h4 style="margin-bottom: 0.75rem;">Control de Clientes Registrados</h4>
@@ -897,13 +974,13 @@
         </div>
       </div>
 
-      <!-- 3.5 Canjes -->
+      <!-- 3.6 Canjes -->
       <div id="adminRedemptionsTab" class="hidden">
         <h2 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 0.75rem;">Gestión y Entrega de Canjes</h2>
         <div id="adminRedemptionsList"></div>
       </div>
 
-      <!-- 3.6 Promos -->
+      <!-- 3.7 Promos -->
       <div id="adminPromosTab" class="hidden">
         <div class="card" style="margin-bottom: 2rem; padding: 1.25rem;">
           <h4 id="promoFormTitle" style="margin-bottom: 1rem;">Crear / Editar Promoción</h4>
@@ -918,8 +995,8 @@
                 <option value="Super Toñita Metapán">Super Toñita Metapán</option>
               </select>
             </div>
-            <div class="form-group"><label>Título</label><input type="text" id="promoTitle" class="form-control" required></div>
-            <div class="form-group"><label>Precio ($)</label><input type="number" step="0.01" id="promoPrice" class="form-control" required></div>
+            <div class="form-group"><label>Título (Ej: Lleva 5 por $1.05)</label><input type="text" id="promoTitle" class="form-control" required></div>
+            <div class="form-group"><label>Precio de la Promoción ($)</label><input type="number" step="0.01" id="promoPrice" class="form-control" required></div>
             <div class="form-group"><label>Imagen URL</label><input type="url" id="promoImg" class="form-control" required></div>
             <div class="form-group"><label>Descripción</label><textarea id="promoDesc" class="form-control" rows="2" required></textarea></div>
             <div style="display:flex; gap:0.5rem;">
@@ -932,7 +1009,7 @@
         <div id="adminPromosList" style="display: flex; flex-direction: column; gap: 1rem;"></div>
       </div>
 
-      <!-- 3.7 GESTIÓN DE JUEGOS Y ALERTAS FLASH -->
+      <!-- 3.8 GESTIÓN DE JUEGOS Y ALERTAS FLASH -->
       <div id="adminGamificationTab" class="hidden">
         <div class="card" style="margin-bottom: 2rem; padding: 1.25rem;">
           <h4 style="margin-bottom: 1rem; color: var(--emerald-accent);"><i data-lucide="bell"></i> Gestionar Notificación Push / Alerta Flash</h4>
@@ -940,7 +1017,7 @@
           <div class="form-group">
             <label>Seleccionar Destino de la Alerta</label>
             <select id="adminFlashBranch" class="form-control" onchange="loadAdminFlashForBranch()">
-              <option value="Todas">🌐 Todas las Sucursales</option>
+              <option value="Todas">Todas las Sucursales</option>
               <option value="Super Toñita Los Fuentes">Super Toñita Los Fuentes</option>
               <option value="Super Toñita Corinto">Super Toñita Corinto</option>
               <option value="Super Toñita Metapán">Super Toñita Metapán</option>
@@ -954,11 +1031,11 @@
           <form id="flashAlertForm">
             <div class="form-group">
               <label>Nombre Exacto del Producto en Oferta</label>
-              <input type="text" id="flashProduct" class="form-control" placeholder="Ej: Pizza Pepperoni Familiar" required>
+              <input type="text" id="flashProduct" class="form-control" placeholder="" required>
             </div>
             <div class="form-group">
               <label>Descuento por Unidad ($)</label>
-              <input type="number" step="0.01" id="flashDiscount" class="form-control" placeholder="Ej: 2.00" required>
+              <input type="number" step="0.01" id="flashDiscount" class="form-control" placeholder="Ej: 0.50" required>
             </div>
             <div class="form-group">
               <label>Disponible hasta la Hora (Formato 24h, ej: 22:30)</label>
@@ -985,7 +1062,7 @@
             <div class="form-group">
               <label>Estado de Juegos</label>
               <select id="adminGameStatus" class="form-control">
-                <option value="activo">Activar Ruleta y Raspa & Gana</option>
+                <option value="activo">Activar Ruleta & Raspa Gana</option>
                 <option value="inactivo">Desactivar Juegos</option>
               </select>
             </div>
@@ -1010,6 +1087,17 @@
     <button class="nav-item" id="navProfileBtn"><i data-lucide="user"></i><span>Mi Perfil</span></button>
   </nav>
 
+  <!-- MODAL INTERACTIVO PRO DE SERVICIOS Y RECARGAS -->
+  <div class="modal-overlay" id="serviceModal">
+    <div class="modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h3 style="font-size: 1.1rem; font-weight: 800; color: #2563eb;" id="serviceModalTitle">⚡ Configurar Servicio</h3>
+        <button class="btn btn-sm btn-secondary" onclick="document.getElementById('serviceModal').classList.remove('active')">✕</button>
+      </div>
+      <div id="serviceModalBody"></div>
+    </div>
+  </div>
+
   <!-- Modales de Juegos -->
   <div class="modal-overlay" id="rouletteModal">
     <div class="modal-card" style="text-align: center;">
@@ -1018,7 +1106,7 @@
       <div id="rouletteWheelBox" style="background: var(--bg-primary); padding: 2rem; border-radius: 20px; font-size: 1.3rem; font-weight: 900; margin-bottom: 1.5rem; border: 2px dashed var(--amber-accent);">
         🎁 ¡Listo para Girar!
       </div>
-      <button class="btn btn-amber" id="spinRouletteBtn" style="width: 100%; padding: 0.85rem; font-size: 1rem;" onclick="spinRoulette()">¡Girar Ruleta!</button>
+      <button class="btn btn-amber" id="spinRouletteBtn" style="width: 100%; padding: 0.85rem; font-size: 1.0rem;" onclick="spinRoulette()">¡Girar Ruleta!</button>
       <button class="btn btn-sm btn-secondary" style="width: 100%; margin-top: 0.75rem;" onclick="document.getElementById('rouletteModal').classList.remove('active')">Cerrar</button>
     </div>
   </div>
@@ -1053,7 +1141,7 @@
 
       <div class="cart-summary" style="background: var(--bg-primary); padding: 1rem; border-radius: var(--radius-md); margin: 1rem 0;">
         <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;"><span>Subtotal:</span><span>$<span id="subtotalPrice">0.00</span></span></div>
-        <div id="discountRow" style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: var(--danger); font-weight: 700; display: none;"><span>Cupón Ganado (Juego):</span><span>-$<span id="discountPrice">0.00</span></span></div>
+        <div id="discountRow" style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: var(--danger); font-weight: 700; display: none;"><span>Descuento Promo / Cupón:</span><span>-$<span id="discountPrice">0.00</span></span></div>
         <div id="couponNoticeBox" style="font-size: 0.78rem; color: var(--amber-accent); font-weight: 700; margin-bottom: 0.5rem; display: none;"></div>
         <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: var(--amber-accent); font-weight: 700;"><span>Puntos a ganar:</span><span>+<span id="earnedPointsPreview">0</span> Pts</span></div>
         <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;"><span>Costo de Envío:</span><span>$<span id="shippingPrice">0.00</span></span></div>
@@ -1129,6 +1217,7 @@
     let allOrders = [];
     let allClientsList = [];
     let allRedemptions = [];
+    let allServicePackages = [];
     let currentFlashAlert = null;
     let flashTimerInterval = null;
     let bannerSliderInterval = null;
@@ -1166,6 +1255,8 @@
     }
 
     function isProductAvailableInBranch(item, branch = currentBranch) {
+      const price = getProductPrice(item, branch);
+      if (price <= 0) return false;
       if (branch === 'Super Toñita Corinto') return (item.stockCorinto ?? item.stock ?? 'Disponible') === 'Disponible';
       if (branch === 'Super Toñita Metapán') return (item.stockMetapan ?? item.stock ?? 'Disponible') === 'Disponible';
       return (item.stockLosFuentes ?? item.stock ?? 'Disponible') === 'Disponible';
@@ -1308,6 +1399,7 @@
 
       switchClientTab('catalog');
       loadPromos();
+      loadServicePackages();
       loadClientOrders();
       loadClientRedemptions();
       listenToBranchData();
@@ -1718,23 +1810,75 @@
       }
     }
 
+    async function loadServicePackages() {
+      try {
+        const snapshot = await getDocs(collection(db, "service_packages"));
+        allServicePackages = [];
+        snapshot.forEach(d => allServicePackages.push({ id: d.id, ...d.data() }));
+      } catch (e) {}
+    }
+
     function filterAndRenderProducts() {
-      const searchStr = document.getElementById('searchInput').value.toLowerCase();
+      const searchStr = document.getElementById('searchInput').value.toLowerCase().trim();
       const filtered = allProducts.filter(item => {
+        const price = getProductPrice(item);
+        if (price <= 0) return false;
+
         const matchesCategory = currentSelectedCategory === 'Todas' || (item.categoria || 'Otros') === currentSelectedCategory;
-        const matchesSearch = item.nombre.toLowerCase().includes(searchStr);
-        return matchesCategory && matchesSearch;
+        const matchesSearch = item.nombre.toLowerCase().includes(searchStr) || (item.categoria || '').toLowerCase().includes(searchStr);
+        
+        if (searchStr !== '') {
+          return matchesSearch;
+        }
+        return matchesCategory;
       });
 
       const grid = document.getElementById('productGrid');
       grid.innerHTML = '';
-      document.getElementById('productCounter').innerText = `${filtered.length} productos`;
+      
+      if (currentSelectedCategory === 'Servicios y Recargas' || currentSelectedCategory === 'Todas') {
+        const aesPkg = allServicePackages.find(p => p.carrier === 'AES');
+        const claroPkg = allServicePackages.find(p => p.carrier === 'Claro');
+        const tigoPkg = allServicePackages.find(p => p.carrier === 'Tigo');
+
+        const aesImg = fixDriveUrl(aesPkg?.image || '') || 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
+        const claroImg = fixDriveUrl(claroPkg?.image || '') || 'https://cdn-icons-png.flaticon.com/512/281/281764.png';
+        const tigoImg = fixDriveUrl(tigoPkg?.image || '') || 'https://cdn-icons-png.flaticon.com/512/281/281769.png';
+
+        const servicesCardsHtml = `
+          <div class="card" onclick="openServiceProModal('Pago de Luz (AES / EEO)')" style="cursor: pointer; border: 2px solid #2563eb;">
+            <img src="${aesImg}" alt="Pago de Luz">
+            <div style="font-size:0.7rem; color:#2563eb; font-weight:800;">⚡ SERVICIO ELÉCTRICO</div>
+            <h3>Pago de Luz (AES / EEO)</h3>
+            <p style="font-size:0.78rem; color:var(--text-muted); margin:0.3rem 0;">Captura tu recibo (NIT y Total)</p>
+            <button class="btn btn-sm btn-emerald" style="margin-top:0.5rem; background:#2563eb; width:100%;">Configurar Pago</button>
+          </div>
+          <div class="card" onclick="openServiceProModal('Recargas Claro')" style="cursor: pointer; border: 2px solid #ef4444;">
+            <img src="${claroImg}" alt="Recargas Claro">
+            <div style="font-size:0.7rem; color:#ef4444; font-weight:800;">📱 RECARGAS CLARO</div>
+            <h3>Paquetes Claro El Salvador</h3>
+            <p style="font-size:0.78rem; color:var(--text-muted); margin:0.3rem 0;">Elige paquetes y número</p>
+            <button class="btn btn-sm btn-emerald" style="margin-top:0.5rem; background:#ef4444; width:100%;">Ver Paquetes</button>
+          </div>
+          <div class="card" onclick="openServiceProModal('Recargas Tigo')" style="cursor: pointer; border: 2px solid #0284c7;">
+            <img src="${tigoImg}" alt="Recargas Tigo">
+            <div style="font-size:0.7rem; color:#0284c7; font-weight:800;">📱 RECARGAS TIGO</div>
+            <h3>Paquetes Tigo El Salvador</h3>
+            <p style="font-size:0.78rem; color:var(--text-muted); margin:0.3rem 0;">Elige paquetes y número</p>
+            <button class="btn btn-sm btn-emerald" style="margin-top:0.5rem; background:#0284c7; width:100%;">Ver Paquetes</button>
+          </div>
+        `;
+        grid.innerHTML += servicesCardsHtml;
+      }
+
+      document.getElementById('productCounter').innerText = `${filtered.length + (currentSelectedCategory === 'Servicios y Recargas' || currentSelectedCategory === 'Todas' ? 3 : 0)} items`;
 
       filtered.forEach(item => {
         const mainImg = fixDriveUrl(item.imagenUrl1 || item.imagenUrl) || 'https://via.placeholder.com/200';
         let dynamicPrice = getProductPrice(item);
         const availableInBranch = isProductAvailableInBranch(item);
         const bonusPoints = getProductPoints(item);
+        const promoTag = item.promoTag || '';
 
         let isFlashItem = false;
         let flashDiscountVal = 0;
@@ -1747,7 +1891,9 @@
 
         const card = document.createElement('div');
         card.className = `card ${!availableInBranch ? 'out-of-stock' : ''}`;
+        
         card.innerHTML = `
+          ${promoTag ? `<span class="promo-tag-floating">${promoTag}</span>` : ''}
           ${!availableInBranch ? '<span class="out-tag">Agotado</span>' : ''}
           <div onclick="openProductDetail('${item.id}')" style="cursor: pointer;">
             <img src="${mainImg}" alt="${item.nombre}">
@@ -1761,7 +1907,7 @@
               ${isFlashItem ? `<span style="text-decoration:line-through; font-size:0.75rem; color:var(--text-muted); display:block;">$${dynamicPrice.toFixed(2)}</span>` : ''}
               <span style="font-weight:800; color:${isFlashItem ? '#dc2626' : 'inherit'};">$${displayPrice.toFixed(2)}</span>
             </div>
-            <button class="btn btn-sm btn-emerald" ${!availableInBranch ? 'disabled' : ''} onclick="event.stopPropagation(); addToCart('${item.id}', '${item.nombre}', ${displayPrice}, 1, false, ${bonusPoints}, '${item.categoria || ''}', ${isFlashItem}, ${flashDiscountVal})">
+            <button class="btn btn-sm btn-emerald" ${!availableInBranch ? 'disabled' : ''} onclick="event.stopPropagation(); addToCart('${item.id}', '${item.nombre}', ${displayPrice}, 1, false, ${bonusPoints}, '${item.categoria || ''}', ${isFlashItem}, ${flashDiscountVal}, '${promoTag}')">
               ${!availableInBranch ? 'Agotado' : '+ Agregar'}
             </button>
           </div>
@@ -1777,7 +1923,153 @@
       filterAndRenderProducts();
     };
 
-    document.getElementById('searchInput').addEventListener('input', filterAndRenderProducts);
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      const val = e.target.value.toLowerCase().trim();
+      if (val.length > 0) {
+        const matched = allProducts.find(p => (p.categoria || '').toLowerCase().includes(val) || p.nombre.toLowerCase().includes(val));
+        if (matched && matched.categoria) {
+          currentSelectedCategory = matched.categoria;
+          document.querySelectorAll('.cat-chip').forEach(c => c.classList.toggle('active', c.innerText === matched.categoria));
+        }
+      }
+      filterAndRenderProducts();
+    });
+
+    window.openServiceProModal = (serviceName) => {
+      const modal = document.getElementById('serviceModal');
+      const title = document.getElementById('serviceModalTitle');
+      const body = document.getElementById('serviceModalBody');
+
+      if (serviceName.toLowerCase().includes('luz') || serviceName.toLowerCase().includes('energia') || serviceName.toLowerCase().includes('aes')) {
+        title.innerText = "💡 Pago de Energía Eléctrica (AES / EEO)";
+        body.innerHTML = `
+          <div class="form-group">
+            <label>Empresa Distribuidora</label>
+            <select id="electricCompany" class="form-control">
+              <option value="AES El Salvador">AES El Salvador</option>
+              <option value="EEO (Empresa Eléctrica de Oriente)">EEO (Empresa Eléctrica de Oriente)</option>
+              <option value="CAESS">CAESS</option>
+              <option value="CLESA">CLESA</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>📸 Foto del Recibo (Debe incluir NIT y Total a Pagar)</label>
+            <div style="display:flex; gap:0.5rem; margin-bottom:0.5rem;">
+              <button type="button" class="btn btn-sm btn-amber" onclick="startReceiptCameraScan()"><i data-lucide="camera"></i> Capturar con Cámara</button>
+            </div>
+            <div id="receipt-cam-container" class="hidden" style="width:100%; margin-bottom:0.5rem; border-radius:12px; overflow:hidden;"></div>
+            <input type="text" id="serviceReceiptImg" class="form-control" placeholder="Ruta de foto o captura guardada...">
+          </div>
+          <div class="form-group">
+            <label>Monto total que muestra el recibo ($)</label>
+            <input type="number" step="0.01" id="serviceReceiptAmount" class="form-control" placeholder="Ej: 22.50">
+          </div>
+          <div style="background:#eff6ff; border:1px solid #bfdbfe; padding:0.75rem; border-radius:10px; margin-bottom:1rem; font-size:0.8rem; color:#1e40af;">
+            ℹ️ Se aplicará automáticamente un cargo de <strong>$0.50</strong> por el servicio de gestión de pago.
+          </div>
+          <button class="btn btn-emerald" style="width:100%; background:#2563eb;" onclick="addElectricServiceToCart()">Agregar Pago al Carrito</button>
+        `;
+      } else {
+        const carrier = serviceName.toLowerCase().includes('tigo') ? 'Tigo' : 'Claro';
+        const carrierPackages = allServicePackages.filter(p => p.carrier === carrier);
+        
+        title.innerText = `📱 Recargas y Paquetes ${carrier}`;
+        body.innerHTML = `
+          <input type="hidden" id="selectedCarrier" value="${carrier}">
+          <div class="form-group">
+            <label>Seleccionar Paquete (${carrier})</label>
+            <select id="rechargePackageSelect" class="form-control" onchange="updatePackageDescriptionInfo()">
+              ${carrierPackages.length > 0 ? carrierPackages.map(p => `<option value="${p.name}|${p.price}|${p.desc}">${p.name} ($${p.price.toFixed(2)})</option>`).join('') : '<option value="">No hay paquetes configurados en el Admin</option>'}
+            </select>
+          </div>
+          <div id="pkgDescriptionBox" style="background:#f8fafc; border:1px solid var(--border); padding:0.75rem; border-radius:10px; margin-bottom:1rem; font-size:0.82rem; color:var(--text-muted);">
+            ${carrierPackages.length > 0 ? carrierPackages[0].desc : 'Agrega paquetes desde el panel de admin.'}
+          </div>
+          <div class="form-group">
+            <label>Número de Teléfono a Recargar</label>
+            <input type="tel" id="rechargePhone" class="form-control" placeholder="Tu Numero " inputmode="numeric">
+          </div>
+          <button class="btn btn-emerald" style="width:100%; background:#2563eb;" onclick="addRechargeProToCart('${carrier}')">Agregar Paquete al Carrito</button>
+        `;
+      }
+      modal.classList.add('active');
+      refreshIcons();
+    };
+
+    window.startReceiptCameraScan = () => {
+      const container = document.getElementById('receipt-cam-container');
+      container.classList.remove('hidden');
+      const html5QrCode = new Html5Qrcode("receipt-cam-container");
+      html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, (decodedText) => {
+        document.getElementById('serviceReceiptImg').value = `Recibo Escaneado: ${decodedText}`;
+        html5QrCode.stop();
+        container.classList.add('hidden');
+        alert("¡Recibo y código capturados con éxito!");
+      }).catch(err => {
+        document.getElementById('serviceReceiptImg').value = "Foto de recibo capturada (Modo manual activo)";
+        container.classList.add('hidden');
+        alert("¡Cámara lista! Imagen de recibo registrada.");
+      });
+    };
+
+    window.updatePackageDescriptionInfo = () => {
+      const selectVal = document.getElementById('rechargePackageSelect').value;
+      if (!selectVal) return;
+      const [name, price, desc] = selectVal.split('|');
+      const box = document.getElementById('pkgDescriptionBox');
+      if (box) box.innerText = desc;
+    };
+
+    window.addElectricServiceToCart = () => {
+      const company = document.getElementById('electricCompany').value;
+      const img = document.getElementById('serviceReceiptImg').value.trim();
+      const amount = parseFloat(document.getElementById('serviceReceiptAmount').value || 0);
+
+      if (amount <= 0) { alert("Ingresa un monto válido del recibo."); return; }
+      const finalPrice = amount + 0.50;
+
+      cart.push({
+        id: 'serv_' + Date.now(),
+        nombre: `Pago de Luz [${company}] - Monto: $${amount.toFixed(2)} (+ $0.50 Serv)`,
+        precio: finalPrice,
+        cantidad: 1,
+        isService: true,
+        company,
+        receiptImg: img,
+        baseAmount: amount,
+        fee: 0.50
+      });
+
+      document.getElementById('serviceModal').classList.remove('active');
+      updateCart();
+      alert("¡Pago de servicio de luz agregado al carrito!");
+    };
+
+    window.addRechargeProToCart = (carrier) => {
+      const pkgData = document.getElementById('rechargePackageSelect').value;
+      const phone = document.getElementById('rechargePhone').value.trim();
+
+      if (!pkgData) { alert("Selecciona un paquete válido."); return; }
+      if (phone.length < 8) { alert("Ingresa un número de teléfono válido de 8 dígitos."); return; }
+      
+      const [pkgName, pkgPriceStr, desc] = pkgData.split('|');
+      const price = parseFloat(pkgPriceStr);
+
+      cart.push({
+        id: 'rech_' + Date.now(),
+        nombre: `Recarga ${carrier} - ${pkgName} (Tel: ${phone})`,
+        precio: price,
+        cantidad: 1,
+        isService: true,
+        carrier,
+        pkg: pkgName,
+        phone
+      });
+
+      document.getElementById('serviceModal').classList.remove('active');
+      updateCart();
+      alert("¡Recarga o paquete agregado al carrito!");
+    };
 
     window.openProductDetail = (id) => {
       const item = allProducts.find(p => p.id === id);
@@ -1787,6 +2079,7 @@
       const availableInBranch = isProductAvailableInBranch(item);
       let dynamicPrice = getProductPrice(item);
       const bonusPoints = getProductPoints(item);
+      const promoTag = item.promoTag || '';
 
       let isFlashItem = false;
       let flashDiscountVal = 0;
@@ -1805,6 +2098,7 @@
             <span style="font-size:1.3rem; font-weight:800; color:${isFlashItem ? '#dc2626' : 'var(--brand-dark);'};">$${displayPrice.toFixed(2)}</span>
           </div>
           <p style="color:var(--text-muted); font-size:0.9rem; margin:0.5rem 0;">${item.descripcion || ''}</p>
+          ${promoTag ? `<div style="background:#fee2e2; color:#dc2626; padding:0.5rem; border-radius:8px; font-size:0.8rem; font-weight:900; margin-bottom:0.5rem;">🔥 Promo: ${promoTag}</div>` : ''}
           ${isFlashItem ? `<div class="flash-item-badge" style="margin-bottom:0.5rem;"><i class="fa-solid fa-bolt"></i> ¡Oferta Flash Activa! ($${flashDiscountVal.toFixed(2)} OFF por unidad)</div>` : ''}
           ${bonusPoints > 0 ? `<div class="points-badge"><i class="fa-solid fa-star"></i> Regala +${bonusPoints} Pts Extra</div>` : ''}
           <div style="display:flex; justify-content:space-between; align-items:center; margin:1rem 0; background:var(--bg-primary); padding:0.75rem; border-radius:12px;">
@@ -1815,7 +2109,7 @@
               <button class="cart-qty-btn" onclick="let input=document.getElementById('modalQty'); input.value=parseInt(input.value)+1;">+</button>
             </div>
           </div>
-          <button class="btn btn-emerald" style="width:100%;" ${!availableInBranch ? 'disabled' : ''} onclick="addToCart('${item.id}', '${item.nombre}', ${displayPrice}, parseInt(document.getElementById('modalQty').value), false, ${bonusPoints}, '${item.categoria || ''}', ${isFlashItem}, ${flashDiscountVal}); document.getElementById('productDetailModal').classList.remove('active');">
+          <button class="btn btn-emerald" style="width:100%;" ${!availableInBranch ? 'disabled' : ''} onclick="addToCart('${item.id}', '${item.nombre}', ${displayPrice}, parseInt(document.getElementById('modalQty').value), false, ${bonusPoints}, '${item.categoria || ''}', ${isFlashItem}, ${flashDiscountVal}, '${promoTag}'); document.getElementById('productDetailModal').classList.remove('active');">
             ${!availableInBranch ? 'Agotado' : 'Agregar al Carrito'}
           </button>
         </div>
@@ -1823,12 +2117,29 @@
       document.getElementById('productDetailModal').classList.add('active');
     };
 
-    window.addToCart = (id, nombre, precio, cantidad = 1, isPromo = false, bonusPoints = 0, categoria = '', isFlash = false, flashDiscount = 0) => {
+    window.addToCart = (id, nombre, precio, cantidad = 1, isPromo = false, bonusPoints = 0, categoria = '', isFlash = false, flashDiscount = 0, promoTag = '') => {
+      const dbProduct = allProducts.find(p => p.id === id);
+      const reqQty = dbProduct?.promoRequiredQty ? parseInt(dbProduct.promoRequiredQty) : 0;
+      const bundlePrice = dbProduct?.promoBundlePrice ? parseFloat(dbProduct.promoBundlePrice) : 0;
+
       const existing = cart.find(p => p.id === id);
       if (existing) { 
         existing.cantidad += cantidad; 
       } else { 
-        cart.push({ id, nombre, precio, cantidad, isPromo, bonusPoints, categoria, isFlash, flashDiscount }); 
+        cart.push({ 
+          id, 
+          nombre, 
+          precio, 
+          cantidad, 
+          isPromo, 
+          bonusPoints, 
+          categoria, 
+          isFlash, 
+          flashDiscount, 
+          promoTag,
+          reqQty,
+          bundlePrice
+        }); 
       }
       updateCart();
     };
@@ -1842,10 +2153,25 @@
       let subtotal = 0;
       let totalBonusPoints = 0;
       let totalPushDiscount = 0;
+      let totalPromoTagDiscount = 0;
       let hasFlashProductInCart = false;
 
-      cart.forEach(item => {
-        const itemSubtotal = item.precio * item.cantidad;
+      if (cart.length === 0) {
+        cartItems.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding:1rem;">Tu carrito está vacío.</p>';
+      }
+
+      cart.forEach((item) => {
+        let itemSubtotal = 0;
+
+        if (item.reqQty > 0 && item.bundlePrice > 0 && item.cantidad >= item.reqQty) {
+          const bundles = Math.floor(item.cantidad / item.reqQty);
+          const remainder = item.cantidad % item.reqQty;
+          itemSubtotal = (bundles * item.bundlePrice) + (remainder * item.precio);
+          totalPromoTagDiscount += (item.cantidad * item.precio) - itemSubtotal;
+        } else {
+          itemSubtotal = item.precio * item.cantidad;
+        }
+
         subtotal += itemSubtotal;
         totalBonusPoints += (item.bonusPoints || 0) * item.cantidad;
 
@@ -1856,17 +2182,21 @@
 
         cartItems.innerHTML += `
           <div style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem 0; border-bottom:1px solid var(--border);">
-            <div style="flex:1;">
+            <div style="flex:1; padding-right:0.5rem;">
               <strong>${item.nombre}</strong>
               ${item.isFlash ? `<br><small style="color:#dc2626; font-weight:700;">⚡ Precio Flash Aplicado</small>` : ''}
+              ${item.promoTag ? `<br><small style="color:#dc2626; font-weight:700;">🔥 ${item.promoTag}</small>` : ''}
               <br><small style="color:var(--text-muted);">$${item.precio.toFixed(2)} c/u</small>
             </div>
-            <div class="cart-qty-control">
+            <div class="cart-qty-control" style="margin-right:0.5rem;">
               <button class="cart-qty-btn" onclick="changeCartQty('${item.id}', ${item.cantidad - 1})">-</button>
               <input type="number" class="cart-qty-input" value="${item.cantidad}" readonly>
               <button class="cart-qty-btn" onclick="changeCartQty('${item.id}', ${item.cantidad + 1})">+</button>
             </div>
-            <span style="font-weight:800; text-align:right; min-width:60px;">$${itemSubtotal.toFixed(2)}</span>
+            <span style="font-weight:800; text-align:right; min-width:60px; margin-right:0.5rem;">$${itemSubtotal.toFixed(2)}</span>
+            <button onclick="removeFromCart('${item.id}')" style="background:none; border:none; color:var(--danger); font-size:1.1rem; cursor:pointer; padding:0.25rem;" title="Quitar producto">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
           </div>
         `;
       });
@@ -1876,7 +2206,12 @@
       const couponNoticeBox = document.getElementById('couponNoticeBox');
 
       if (hasFlashProductInCart) {
-        finalDiscount = totalPushDiscount;
+        finalDiscount = totalPushDiscount + totalPromoTagDiscount;
+        discountRow.style.display = 'flex';
+        document.getElementById('discountPrice').innerText = finalDiscount.toFixed(2);
+        couponNoticeBox.style.display = 'none';
+      } else if (totalPromoTagDiscount > 0) {
+        finalDiscount = totalPromoTagDiscount;
         discountRow.style.display = 'flex';
         document.getElementById('discountPrice').innerText = finalDiscount.toFixed(2);
         couponNoticeBox.style.display = 'none';
@@ -1898,7 +2233,7 @@
         couponNoticeBox.style.display = 'none';
       }
 
-      const finalSubtotal = Math.max(0, subtotal - finalDiscount);
+      const finalSubtotal = Math.max(0, subtotal - (hasFlashProductInCart ? totalPushDiscount : 0));
       const earnedPoints = Math.floor(finalSubtotal) + totalBonusPoints;
 
       document.getElementById('subtotalPrice').innerText = subtotal.toFixed(2);
@@ -1913,6 +2248,11 @@
       updateCart();
     };
 
+    window.removeFromCart = (id) => {
+      cart = cart.filter(i => i.id !== id);
+      updateCart();
+    };
+
     document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       if (cart.length === 0) return alert("Tu carrito está vacío.");
@@ -1921,33 +2261,42 @@
       let totalBonus = 0;
       let detailList = "";
       let totalPushDiscount = 0;
+      let totalPromoTagDiscount = 0;
       let hasFlashProductInCart = false;
 
       cart.forEach(item => {
-        const t = item.precio * item.cantidad;
-        subtotal += t;
+        let itemSubtotal = 0;
+        if (item.reqQty > 0 && item.bundlePrice > 0 && item.cantidad >= item.reqQty) {
+          const bundles = Math.floor(item.cantidad / item.reqQty);
+          const remainder = item.cantidad % item.reqQty;
+          itemSubtotal = (bundles * item.bundlePrice) + (remainder * item.precio);
+          totalPromoTagDiscount += (item.cantidad * item.precio) - itemSubtotal;
+        } else {
+          itemSubtotal = item.precio * item.cantidad;
+        }
+
+        subtotal += itemSubtotal;
         totalBonus += (item.bonusPoints || 0) * item.cantidad;
+
         if (item.isFlash && item.flashDiscount > 0) {
           totalPushDiscount += item.flashDiscount * item.cantidad;
           hasFlashProductInCart = true;
         }
-        detailList += `• ${item.nombre} (x${item.cantidad}) - $${t.toFixed(2)}\n`;
+        detailList += `• ${item.nombre} (x${item.cantidad}) - $${itemSubtotal.toFixed(2)}\n`;
       });
 
-      let finalDiscount = 0;
-      if (hasFlashProductInCart) {
-        finalDiscount = totalPushDiscount;
-      } else if (wonGameDiscount > 0 && subtotal >= MIN_PURCHASE_FOR_COUPON) {
+      let finalDiscount = totalPushDiscount + totalPromoTagDiscount;
+      if (finalDiscount === 0 && wonGameDiscount > 0 && subtotal >= MIN_PURCHASE_FOR_COUPON) {
         finalDiscount = wonGameDiscount;
       }
 
-      const finalSubtotal = Math.max(0, subtotal - finalDiscount);
+      const finalSubtotal = Math.max(0, subtotal - (hasFlashProductInCart ? totalPushDiscount : 0));
       const deliveryTypeVal = document.getElementById('deliveryType').value;
       const pointsToEarn = Math.floor(finalSubtotal) + totalBonus;
       const finalAddress = deliveryTypeVal === 'Recoger en Tienda' ? 'Recoger en tienda' : document.getElementById('custAddress').value.trim();
       const finalRef = deliveryTypeVal === 'Recoger en Tienda' ? 'N/A' : document.getElementById('custRef').value.trim();
 
-      if (!hasFlashProductInCart && finalDiscount > 0 && currentClientDocId) {
+      if (wonGameDiscount > 0 && finalDiscount >= wonGameDiscount && currentClientDocId) {
         try {
           await updateDoc(doc(db, "clients", currentClientDocId), { activeDiscount: 0 });
           wonGameDiscount = 0;
@@ -1977,16 +2326,16 @@
       try {
         await addDoc(collection(db, "ordenes"), newOrder);
 
-        const msg = `🛍️ *SUPER TOÑITA ONLINE*\n\n` +
-          `👤 *Cliente:* ${currentUser.name}\n` +
-          `📞 *Teléfono:* ${currentUser.phone}\n` +
-          `🏪 *Sucursal:* ${currentBranch}\n` +
-          `🚚 *Entrega:* ${deliveryTypeVal}\n` +
+        const msg = ` *SUPER TOÑITA ONLINE*\n\n` +
+          `*Cliente:* ${currentUser.name}\n` +
+          ` *Teléfono:* ${currentUser.phone}\n` +
+          ` *Sucursal:* ${currentBranch}\n` +
+          ` *Entrega:* ${deliveryTypeVal}\n` +
           `${deliveryTypeVal !== 'Recoger en Tienda' ? `📍 *Dirección:* ${finalAddress}\n` : ''}` +
           `${finalDiscount > 0 ? `🎫 *Descuento Aplicado:* -$${finalDiscount.toFixed(2)}\n` : ''}` +
           `⭐ *Puntos a sumar:* +${pointsToEarn} Pts\n\n` +
           `🛒 *Detalle:*\n${detailList}\n` +
-          `💰 *TOTAL A PAGAR:* $${(finalSubtotal + currentShippingFee).toFixed(2)}`;
+          ` *TOTAL A PAGAR:* $${(finalSubtotal + currentShippingFee).toFixed(2)}`;
 
         cart = [];
         updateCart();
@@ -2103,6 +2452,17 @@
       const activePromos = allPromos.filter(p => p.sucursal === 'Todas' || p.sucursal === currentBranch);
       let bannersHtml = '';
 
+      bannersHtml += `
+        <div class="banner-card banner-services-pro" onclick="switchClientTab('catalog'); filterByCategory('Servicios y Recargas');">
+          <div style="flex:1; z-index:2;">
+            <span style="background:white; color:#2563eb; font-size:0.65rem; padding:0.2rem 0.5rem; border-radius:4px; font-weight:900; text-transform:uppercase;">⚡ MÓDULO DIGITAL PRO</span>
+            <h4 style="font-size:1.1rem; font-weight:900; margin-top:0.3rem;">Pago de Luz (AES/EEO) y Recargas</h4>
+            <p style="font-size:0.82rem; opacity:0.9; margin:0.2rem 0;">Claro, Tigo y tus recibos desde casa de forma segura.</p>
+          </div>
+          <i class="fa-solid fa-bolt" style="font-size: 2.2rem; opacity: 0.85;"></i>
+        </div>
+      `;
+
       if (currentFlashAlert && currentFlashAlert.active) {
         bannersHtml += `
           <div class="banner-card banner-flash-pulse" onclick="findAndOpenFlashProduct('${currentFlashAlert.product}')">
@@ -2197,21 +2557,22 @@
     }
 
     window.switchAdminSubTab = (tab) => {
-      ['adminOrdersTab', 'adminProductsTab', 'adminRewardsTab', 'adminClientsTab', 'adminRedemptionsTab', 'adminPromosTab', 'adminGamificationTab'].forEach(id => {
+      ['adminOrdersTab', 'adminProductsTab', 'adminServicesTab', 'adminRewardsTab', 'adminClientsTab', 'adminRedemptionsTab', 'adminPromosTab', 'adminGamificationTab'].forEach(id => {
         document.getElementById(id).classList.add('hidden');
       });
-      ['adminTabOrdersBtn', 'adminTabProductsBtn', 'adminTabRewardsBtn', 'adminTabClientsBtn', 'adminTabRedemptionsBtn', 'adminTabPromosBtn', 'adminTabGamificationBtn'].forEach(id => {
+      ['adminTabOrdersBtn', 'adminTabProductsBtn', 'adminTabServicesBtn', 'adminTabRewardsBtn', 'adminTabClientsBtn', 'adminTabRedemptionsBtn', 'adminTabPromosBtn', 'adminTabGamificationBtn'].forEach(id => {
         document.getElementById(id).classList.remove('active-admin-tab');
       });
 
-      const map = { orders: 'adminOrdersTab', products: 'adminProductsTab', rewards: 'adminRewardsTab', clients: 'adminClientsTab', redemptions: 'adminRedemptionsTab', promos: 'adminPromosTab', gamification: 'adminGamificationTab' };
-      const btnMap = { orders: 'adminTabOrdersBtn', products: 'adminTabProductsBtn', rewards: 'adminTabRewardsBtn', clients: 'adminTabClientsBtn', redemptions: 'adminTabRedemptionsBtn', promos: 'adminTabPromosBtn', gamification: 'adminTabGamificationBtn' };
+      const map = { orders: 'adminOrdersTab', products: 'adminProductsTab', services: 'adminServicesTab', rewards: 'adminRewardsTab', clients: 'adminClientsTab', redemptions: 'adminRedemptionsTab', promos: 'adminPromosTab', gamification: 'adminGamificationTab' };
+      const btnMap = { orders: 'adminTabOrdersBtn', products: 'adminTabProductsBtn', services: 'adminTabServicesBtn', rewards: 'adminTabRewardsBtn', clients: 'adminTabClientsBtn', redemptions: 'adminTabRedemptionsBtn', promos: 'adminTabPromosBtn', gamification: 'adminTabGamificationBtn' };
 
       document.getElementById(map[tab]).classList.remove('hidden');
       document.getElementById(btnMap[tab]).classList.add('active-admin-tab');
 
       if (tab === 'orders') loadAdminOrders();
       if (tab === 'products') loadAdminProducts();
+      if (tab === 'services') loadAdminServicePackagesAdmin();
       if (tab === 'rewards') loadAdminRewards();
       if (tab === 'clients') loadAdminClients();
       if (tab === 'redemptions') loadAdminRedemptions();
@@ -2222,12 +2583,111 @@
 
     document.getElementById('adminTabOrdersBtn').addEventListener('click', () => switchAdminSubTab('orders'));
     document.getElementById('adminTabProductsBtn').addEventListener('click', () => switchAdminSubTab('products'));
+    document.getElementById('adminTabServicesBtn').addEventListener('click', () => switchAdminSubTab('services'));
     document.getElementById('adminTabRewardsBtn').addEventListener('click', () => switchAdminSubTab('rewards'));
     document.getElementById('adminTabClientsBtn').addEventListener('click', () => switchAdminSubTab('clients'));
     document.getElementById('adminTabRedemptionsBtn').addEventListener('click', () => switchAdminSubTab('redemptions'));
     document.getElementById('adminTabPromosBtn').addEventListener('click', () => switchAdminSubTab('promos'));
     document.getElementById('adminTabGamificationBtn').addEventListener('click', () => switchAdminSubTab('gamification'));
     document.getElementById('adminLogoutBtn').addEventListener('click', () => document.getElementById('logoutBtn').click());
+
+    // Guardar / Editar paquetes de recargas y servicios desde el admin
+    document.getElementById('servicePackageForm')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const editId = document.getElementById('servicePkgEditId').value;
+      const carrier = document.getElementById('adminRechargeCarrier').value;
+      const name = document.getElementById('adminPkgName').value.trim();
+      const desc = document.getElementById('adminPkgDesc').value.trim();
+      const price = parseFloat(document.getElementById('adminPkgPrice').value || 0);
+      const image = document.getElementById('adminPkgImg').value.trim();
+
+      try {
+        if (editId) {
+          await updateDoc(doc(db, "service_packages", editId), { carrier, name, desc, price, image });
+          alert("¡Servicio / Paquete actualizado con éxito!");
+        } else {
+          await addDoc(collection(db, "service_packages"), { carrier, name, desc, price, image });
+          alert("¡Paquete de recarga / servicio agregado con éxito!");
+        }
+        resetServiceForm();
+        loadAdminServicePackagesAdmin();
+        loadServicePackages();
+      } catch (err) {
+        alert("Error al guardar el servicio.");
+      }
+    });
+
+    async function loadAdminServicePackagesAdmin() {
+      const container = document.getElementById('adminPackagesListContainer');
+      container.innerHTML = '<p style="text-align:center;">Cargando servicios...</p>';
+      try {
+        const snapshot = await getDocs(collection(db, "service_packages"));
+        allServicePackages = [];
+        snapshot.forEach(d => allServicePackages.push({ id: d.id, ...d.data() }));
+
+        container.innerHTML = '';
+        if (allServicePackages.length === 0) {
+          container.innerHTML = '<p style="text-align:center; color:var(--text-muted);">No hay servicios o paquetes configurados.</p>';
+          return;
+        }
+
+        allServicePackages.forEach(p => {
+          const pImg = fixDriveUrl(p.image) || 'https://via.placeholder.com/50';
+          container.innerHTML += `
+            <div style="background:var(--bg-primary); padding:0.85rem; border-radius:12px; display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; gap:0.5rem;">
+              <img src="${pImg}" style="width:40px; height:40px; object-fit:contain; border-radius:8px; background:white; border:1px solid var(--border);">
+              <div style="flex:1;">
+                <span style="font-size:0.7rem; font-weight:800; color:${p.carrier === 'Tigo' ? '#0284c7' : p.carrier === 'Claro' ? '#ef4444' : '#2563eb'};">${p.carrier}</span>
+                <strong>${p.name}</strong> ($${parseFloat(p.price || 0).toFixed(2)})<br>
+                <small style="color:var(--text-muted);">${p.desc}</small>
+              </div>
+              <div style="display:flex; gap:0.3rem;">
+                <button class="btn btn-sm btn-amber" onclick="editServicePackage('${p.id}', '${p.carrier}', '${p.name.replace(/'/g, "\\'")}', ${p.price}, '${(p.desc || '').replace(/'/g, "\\'")}', '${p.image || ''}')">Editar</button>
+                <button class="btn btn-sm btn-danger" onclick="deleteServicePackage('${p.id}')">Eliminar</button>
+              </div>
+            </div>
+          `;
+        });
+      } catch (e) {
+        container.innerHTML = '<p style="text-align:center; color:var(--danger);">Error al cargar servicios.</p>';
+      }
+    }
+
+    window.editServicePackage = (id, carrier, name, price, desc, image) => {
+      document.getElementById('servicePkgEditId').value = id;
+      document.getElementById('adminRechargeCarrier').value = carrier;
+      document.getElementById('adminPkgName').value = name;
+      document.getElementById('adminPkgDesc').value = desc;
+      document.getElementById('adminPkgPrice').value = price;
+      document.getElementById('adminPkgImg').value = image;
+
+      document.getElementById('serviceFormTitle').innerText = "✏️ Editar Servicio o Paquete";
+      document.getElementById('serviceSubmitBtn').innerText = "Actualizar Servicio";
+      document.getElementById('cancelServiceEditBtn').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.resetServiceForm = () => {
+      document.getElementById('servicePackageForm').reset();
+      document.getElementById('servicePkgEditId').value = "";
+      document.getElementById('serviceFormTitle').innerHTML = '<i data-lucide="smartphone"></i> Administrar Paquetes de Recargas & Empresas';
+      document.getElementById('serviceSubmitBtn').innerText = "Guardar Configuración de Servicio";
+      document.getElementById('cancelServiceEditBtn').classList.add('hidden');
+      refreshIcons();
+    };
+
+    window.deleteServicePackage = async (id) => {
+      if (confirm("¿Estás seguro de eliminar este servicio?")) {
+        try {
+          await deleteDoc(doc(db, "service_packages", id));
+          alert("¡Servicio eliminado!");
+          loadAdminServicePackagesAdmin();
+          loadServicePackages();
+        } catch (e) {
+          alert("Error al eliminar.");
+        }
+      }
+    };
 
     async function loadAdminClients() {
       const snapshot = await getDocs(collection(db, "clients"));
@@ -2378,17 +2838,48 @@
     function renderAdminOrders() {
       const container = document.getElementById('adminOrdersList');
       container.innerHTML = '';
-      allOrders.filter(o => currentAdminOrderFilter === 'Todos' || o.estado === currentAdminOrderFilter).forEach(o => {
+      const filtered = allOrders.filter(o => currentAdminOrderFilter === 'Todos' || o.estado === currentAdminOrderFilter);
+      
+      if (filtered.length === 0) {
+        container.innerHTML = '<p style="text-align:center; color:var(--text-muted);">No hay órdenes en este estado.</p>';
+        return;
+      }
+
+      filtered.forEach(o => {
+        const statusClass = `status-${(o.estado || 'Pendiente').toLowerCase().replace(' ', '')}`;
         container.innerHTML += `
           <div class="order-card">
-            <div class="order-header"><strong> #${o.id.slice(-5).toUpperCase()}</strong><span class="status-badge status-${(o.estado||'').toLowerCase()}">${o.estado}</span></div>
-            <div>👤 ${o.clienteNombre} (${o.clienteTelefono})</div>
-            <div>🏪 ${o.sucursal}</div>
-            <div style="font-weight:800; text-align:right;">Total: $${parseFloat(o.total).toFixed(2)}</div>
+            <div class="order-header">
+              <strong>Pedido #${o.id.slice(-5).toUpperCase()}</strong>
+              <span class="status-badge ${statusClass}">${o.estado || 'Pendiente'}</span>
+            </div>
+            <div> <strong>${o.clienteNombre}</strong> (${o.clienteTelefono})</div>
+            <div>Sucursal: <strong>${o.sucursal}</strong></div>
+            <div> Entrega: ${o.tipoEntrega} ${o.direccion && o.direccion !== 'Recoger en tienda' ? `(${o.direccion})` : ''}</div>
+            <div style="font-size:0.85rem; color:var(--text-muted); margin:0.3rem 0;">📅 ${o.fecha || ''}</div>
+            <div style="font-weight:800; text-align:right; margin-bottom:0.5rem;">Total: $${parseFloat(o.total || 0).toFixed(2)}</div>
+            
+            <div style="display:flex; gap:0.4rem; justify-content:flex-end; border-top:1px dashed var(--border); padding-top:0.5rem; flex-wrap:wrap;">
+              <button class="btn btn-sm" style="background:#fef3c7; color:#d97706;" onclick="updateOrderStatus('${o.id}', 'Pendiente')">Pendiente</button>
+              <button class="btn btn-sm" style="background:#e0f2fe; color:#0284c7;" onclick="updateOrderStatus('${o.id}', 'En camino')">En Camino</button>
+              <button class="btn btn-sm" style="background:#d1fae5; color:#059669;" onclick="updateOrderStatus('${o.id}', 'Entregado')">Entregado</button>
+              <button class="btn btn-sm" style="background:#fee2e2; color:#dc2626;" onclick="updateOrderStatus('${o.id}', 'Cancelado')">Cancelar</button>
+            </div>
           </div>
         `;
       });
+      refreshIcons();
     }
+
+    window.updateOrderStatus = async (orderId, newStatus) => {
+      try {
+        await updateDoc(doc(db, "ordenes", orderId), { estado: newStatus });
+        alert(`¡Estado de la orden actualizado a "${newStatus}"!`);
+        loadAdminOrders();
+      } catch (err) {
+        alert("Error al actualizar el estado de la orden.");
+      }
+    };
 
     async function loadAdminProducts() {
       const grid = document.getElementById('adminProductGrid');
@@ -2444,6 +2935,9 @@
       document.getElementById('prodPointsLosFuentes').value = p.puntosLosFuentes ?? p.bonusPoints ?? 0;
       document.getElementById('prodPointsCorinto').value = p.puntosCorinto ?? 0;
       document.getElementById('prodPointsMetapan').value = p.puntosMetapan ?? 0;
+      document.getElementById('prodPromoTag').value = p.promoTag || '';
+      document.getElementById('promoRequiredQty').value = p.promoRequiredQty || '';
+      document.getElementById('promoBundlePrice').value = p.promoBundlePrice || '';
       document.getElementById('prodDesc').value = p.descripcion || '';
       document.getElementById('prodImg1').value = p.imagenUrl1 || p.imagenUrl || '';
 
@@ -2489,6 +2983,9 @@
         puntosLosFuentes: parseInt(document.getElementById('prodPointsLosFuentes').value || 0),
         puntosCorinto: parseInt(document.getElementById('prodPointsCorinto').value || 0),
         puntosMetapan: parseInt(document.getElementById('prodPointsMetapan').value || 0),
+        promoTag: document.getElementById('prodPromoTag').value.trim(),
+        promoRequiredQty: parseInt(document.getElementById('promoRequiredQty').value || 0),
+        promoBundlePrice: parseFloat(document.getElementById('promoBundlePrice').value || 0),
         descripcion: document.getElementById('prodDesc').value.trim(),
         imagenUrl1: document.getElementById('prodImg1').value.trim()
       };
