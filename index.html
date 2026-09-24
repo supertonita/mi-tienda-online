@@ -1958,9 +1958,9 @@
         const claroPkg = allServicePackages.find(p => p.carrier === 'Claro');
         const tigoPkg = allServicePackages.find(p => p.carrier === 'Tigo');
 
-        const aesImg = fixDriveUrl(aesPkg?.image || '') || 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
-        const claroImg = fixDriveUrl(claroPkg?.image || '') || 'https://cdn-icons-png.flaticon.com/512/281/281764.png';
-        const tigoImg = fixDriveUrl(tigoPkg?.image || '') || 'https://cdn-icons-png.flaticon.com/512/281/281769.png';
+        const aesImg = fixDriveUrl(aesPkg?.image || '') || 'https://drive.google.com/file/d/1scncfVM8lpuyPMyJoC8f_1X4h8oAlqmM/view?usp=drive_link';
+        const claroImg = fixDriveUrl(claroPkg?.image || '') || 'https://drive.google.com/file/d/1gj0KWfSnRw6LSrtajTvRBk9LK9HGwU8I/view?usp=drive_link';
+        const tigoImg = fixDriveUrl(tigoPkg?.image || '') || 'https://drive.google.com/file/d/1SWR0IMoweEiF49wbUMp_U7xHSj837u1n/view?usp=drive_link';
 
         const servicesCardsHtml = `
           <div class="card" onclick="openServiceProModal('Pago de Luz (AES / EEO)')" style="cursor: pointer; border: 2px solid #2563eb;">
