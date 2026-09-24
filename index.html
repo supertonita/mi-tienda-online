@@ -1336,9 +1336,12 @@
 
     function fixDriveUrl(url) {
       if (!url) return '';
+      // Si la URL contiene un ID de Google Drive (ya sea /d/ID o id=ID)
       if (url.includes('drive.google.com')) {
-        const matches = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-        if (matches && matches[1]) return `https://lh3.googleusercontent.com/d/${matches[1]}`;
+        const matchD = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+        if (matchD && matchD[1]) return `https://lh3.googleusercontent.com/d/${matchD[1]}`;
+        const matchId = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+        if (matchId && matchId[1]) return `https://lh3.googleusercontent.com/d/${matchId[1]}`;
       }
       return url;
     }
@@ -1958,9 +1961,10 @@
         const claroPkg = allServicePackages.find(p => p.carrier === 'Claro');
         const tigoPkg = allServicePackages.find(p => p.carrier === 'Tigo');
 
-        const aesImg = fixDriveUrl(aesPkg?.image || '') || 'https://drive.google.com/file/d/1scncfVM8lpuyPMyJoC8f_1X4h8oAlqmM/view?usp=drive_link';
-        const claroImg = fixDriveUrl(claroPkg?.image || '') || 'https://drive.google.com/file/d/1gj0KWfSnRw6LSrtajTvRBk9LK9HGwU8I/view?usp=drive_link';
-        const tigoImg = fixDriveUrl(tigoPkg?.image || '') || 'https://drive.google.com/file/d/1SWR0IMoweEiF49wbUMp_U7xHSj837u1n/view?usp=drive_link';
+        // Aquí usamos fixDriveUrl para que tome automáticamente los enlaces cargados en Firebase por ti
+        const aesImg = fixDriveUrl(aesPkg?.image || '') || 'https://lh3.googleusercontent.com/d/1scncfVM8lpuyPMyJoC8f_1X4h8oAlqmM';
+        const claroImg = fixDriveUrl(claroPkg?.image || '') || 'https://lh3.googleusercontent.com/d/1gj0KWfSnRw6LSrtajTvRBk9LK9HGwU8I';
+        const tigoImg = fixDriveUrl(tigoPkg?.image || '') || 'https://lh3.googleusercontent.com/d/1SWR0IMoweEiF49wbUMp_U7xHSj837u1n';
 
         const servicesCardsHtml = `
           <div class="card" onclick="openServiceProModal('Pago de Luz (AES / EEO)')" style="cursor: pointer; border: 2px solid #2563eb;">
