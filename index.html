@@ -682,7 +682,7 @@
           <button class="cat-chip" onclick="filterByCategory('Embutidos / Lácteos')">Embutidos / Lácteos</button>
           <button class="cat-chip" onclick="filterByCategory('Limpieza')">Limpieza</button>
           <button class="cat-chip" onclick="filterByCategory('Aseo Personal')">Aseo Personal</button>
-          <button class="cat-chip" onclick="filterByCategory('Servicios y Recargas')">⚡ Servicios y Recargas</button>
+          <button class="cat-chip" onclick="filterByCategory('Servicios y Recargas')">Servicios y Recargas</button>
           <button class="cat-chip" onclick="filterByCategory('Otros')">Otros</button>
         </div>
 
@@ -876,6 +876,7 @@
                 <option value="Embutidos / Lácteos">Embutidos / Lácteos</option>
                 <option value="Limpieza">Limpieza</option>
                 <option value="Aseo Personal">Aseo Personal</option>
+                <option value="Servicios y Recargas">Servicios y Recargas</option>
                 <option value="Otros">Otros</option>
               </select>
             </div>
@@ -1067,7 +1068,7 @@
               </select>
             </div>
             <div class="form-group">
-              <label>Título del Banner o Alerta (Ej: ¡Paga tu recibo de luz! o Pollo en Oferta)</label>
+              <label>Título del Banner o Alerta (Pollo en Oferta)</label>
               <input type="text" id="flashTitle" class="form-control" placeholder="Ej: Pago de Luz AES / Pollo Entero" required>
             </div>
             <div class="form-group">
@@ -1336,7 +1337,6 @@
 
     function fixDriveUrl(url) {
       if (!url) return '';
-      // Si la URL contiene un ID de Google Drive (ya sea /d/ID o id=ID)
       if (url.includes('drive.google.com')) {
         const matchD = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
         if (matchD && matchD[1]) return `https://lh3.googleusercontent.com/d/${matchD[1]}`;
@@ -1961,7 +1961,6 @@
         const claroPkg = allServicePackages.find(p => p.carrier === 'Claro');
         const tigoPkg = allServicePackages.find(p => p.carrier === 'Tigo');
 
-        // Aquí usamos fixDriveUrl para que tome automáticamente los enlaces cargados en Firebase por ti
         const aesImg = fixDriveUrl(aesPkg?.image || '') || 'https://lh3.googleusercontent.com/d/1scncfVM8lpuyPMyJoC8f_1X4h8oAlqmM';
         const claroImg = fixDriveUrl(claroPkg?.image || '') || 'https://lh3.googleusercontent.com/d/1gj0KWfSnRw6LSrtajTvRBk9LK9HGwU8I';
         const tigoImg = fixDriveUrl(tigoPkg?.image || '') || 'https://lh3.googleusercontent.com/d/1SWR0IMoweEiF49wbUMp_U7xHSj837u1n';
@@ -2643,12 +2642,12 @@
       const activeFlashAlerts = allFlashAlertsList.filter(f => f.active && (f.branch === 'Todas' || f.branch === currentBranch));
       let bannersHtml = '';
 
+      // Banner limpio sin "Módulo Digital Pro"
       bannersHtml += `
         <div class="banner-card banner-services-pro" onclick="switchClientTab('catalog'); filterByCategory('Servicios y Recargas');" style="background: linear-gradient(135deg, #2563eb, #1e40af);">
           <div style="flex:1; z-index:2;">
-            <span style="background:white; color:#2563eb; font-size:0.65rem; padding:0.2rem 0.5rem; border-radius:4px; font-weight:900; text-transform:uppercase;">⚡ MÓDULO DIGITAL PRO</span>
-            <h4 style="font-size:1.1rem; font-weight:900; margin-top:0.3rem;">Pago de Luz (AES/EEO) y Recargas</h4>
-            <p style="font-size:0.82rem; opacity:0.9; margin:0.2rem 0;">Claro, Tigo y tus recibos desde casa de forma segura.</p>
+            <h4 style="font-size:1.15rem; font-weight:900; margin-top:0.1rem;">⚡ Pago de Servicios & Recargas</h4>
+            <p style="font-size:0.82rem; opacity:0.9; margin:0.3rem 0;">Paga tu luz (AES/EEO) y recarga Claro o Tigo al instante.</p>
           </div>
           <i class="fa-solid fa-bolt" style="font-size: 2.2rem; opacity: 0.85;"></i>
         </div>
