@@ -1148,43 +1148,6 @@
     <button class="nav-item" id="navProfileBtn"><i data-lucide="user"></i><span>Mi Perfil</span></button>
   </nav>
 
-  <!-- PLANTILLA OCULTA PARA GENERAR TICKET TÉRMICO VISUAL (IMAGEN) -->
-  <div id="thermalTicketTemplate" style="position: absolute; left: -9999px; top: 0; width: 320px; background: #ffffff; padding: 15px; font-family: 'Courier New', Courier, monospace; color: #000000; font-size: 11px; line-height: 1.4;">
-    <div style="text-align: center; margin-bottom: 8px;">
-      <img src="LOGO.png" style="width: 45px; height: 45px; object-fit: contain; margin-bottom: 4px; border-radius: 8px;">
-      <h3 style="font-size: 15px; font-weight: bold; margin: 0;">SUPER TOÑITA</h3>
-      <p id="ticketBranchName" style="font-size: 11px; font-weight: bold; margin: 2px 0;">Sucursal</p>
-      <p style="font-size: 10px; margin: 0;">NIT: 1234-567890-123-4</p>
-      <p style="font-size: 10px; margin: 2px 0;" id="ticketDateTime">Fecha/Hora</p>
-    </div>
-    
-    <div style="border-top: 1px dashed #000; border-bottom: 1px dashed #000; padding: 6px 0; margin: 6px 0;">
-      <p><strong>Cliente:</strong> <span id="ticketCustName">---</span></p>
-      <p><strong>Teléfono:</strong> <span id="ticketCustPhone">---</span></p>
-      <p><strong>Tipo Entrega:</strong> <span id="ticketDeliveryType">---</span></p>
-      <p id="ticketAddressWrapper"><strong>Dirección:</strong> <span id="ticketCustAddress">---</span></p>
-      <p id="ticketRefWrapper"><strong>Referencia:</strong> <span id="ticketCustRef">---</span></p>
-    </div>
-
-    <div style="margin-bottom: 8px;">
-      <p style="font-weight: bold; border-bottom: 1px solid #000; padding-bottom: 2px; margin-bottom: 4px;">DETALLE DE PRODUCTOS:</p>
-      <div id="ticketItemsList"></div>
-    </div>
-
-    <div style="border-top: 1px dashed #000; padding-top: 6px; margin-top: 6px;">
-      <div style="display: flex; justify-content: space-between;"><span>Subtotal:</span><span>$<span id="ticketSubtotal">0.00</span></span></div>
-      <div style="display: flex; justify-content: space-between;" id="ticketDiscountRow"><span>Descuento / Promo:</span><span>-$<span id="ticketDiscount">0.00</span></span></div>
-      <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 13px; margin-top: 4px; border-top: 1px solid #000; padding-top: 4px;">
-        <span>TOTAL A PAGAR:</span><span>$<span id="ticketTotal">0.00</span></span>
-      </div>
-    </div>
-
-    <div style="text-align: center; margin-top: 12px;">
-      <p style="font-size: 10px; margin-bottom: 6px;">¡Gracias por tu compra en Super Toñita!</p>
-      <svg id="ticketBarcodeSVG" style="max-width: 100%;"></svg>
-    </div>
-  </div>
-
   <!-- MODAL DE MOVIMIENTOS E HISTORIAL DE CLIENTE (ADMIN) -->
   <div class="modal-overlay" id="adminClientDetailsModal">
     <div class="modal-card">
@@ -1282,7 +1245,7 @@
           </select>
         </div>
         <button type="submit" class="btn btn-whatsapp" id="sendOrderBtn">
-          Generar Ticket y Enviar Pedido <i data-lucide="send" style="width:16px;"></i>
+          Enviar Pedido por WhatsApp <i data-lucide="send" style="width:16px;"></i>
         </button>
       </form>
     </div>
@@ -2427,6 +2390,7 @@
       }
 
       const newOrder = {
+        clientDocId: currentClientDocId,
         clienteNombre: currentUser.name,
         clienteTelefono: currentUser.phone,
         sucursal: currentBranch,
@@ -2445,129 +2409,132 @@
         createdAt: new Date().toISOString()
       };
 
+      const sendBtn = document.getElementById('sendOrderBtn');
+      sendBtn.innerText = "Enviando pedido...";
+      sendBtn.disabled = true;
+
       try {
         const docRef = await addDoc(collection(db, "ordenes"), newOrder);
         const orderIdCode = docRef.id.slice(-6).toUpperCase();
 
-        await generateAndDownloadTicketImage(newOrder, orderIdCode);
+        await updateDoc(doc(db, "clients", currentClientDocId), {
+          address: finalAddress,
+          reference: finalRef
+        });
+
+        let itemsText = "";
+        cart.forEach(item => {
+          itemsText += `• ${item.cantidad}x ${item.nombre} ($${(item.precio * item.cantidad).toFixed(2)})\n`;
+        });
+
+        const targetWhatsApp = BRANCH_WHATSAPP[currentBranch] || "50370092996";
+        const msg = `🛍️ *NUEVO PEDIDO #${orderIdCode}* - *${currentBranch}*\n\n` +
+          `👤 *Cliente:* ${currentUser.name}\n` +
+          `📞 *Teléfono:* ${currentUser.phone}\n` +
+          `📦 *Entrega:* ${deliveryTypeVal}\n` +
+          `${deliveryTypeVal !== 'Recoger en Tienda' ? `📍 *Dirección:* ${finalAddress}\n🏷️ *Referencia:* ${finalRef}\n` : ''}` +
+          `💳 *Pago:* ${document.getElementById('paymentMethod').value}\n\n` +
+          `📋 *DETALLE DE PRODUCTOS:*\n${itemsText}\n` +
+          `💵 *Subtotal:* $${subtotal.toFixed(2)}\n` +
+          `${finalDiscount > 0 ? `🎁 *Descuento:* -$${finalDiscount.toFixed(2)}\n` : ''}` +
+          `💰 *TOTAL A PAGAR: $${(finalSubtotal + currentShippingFee).toFixed(2)}*\n` +
+          `⭐ *Puntos a ganar:* +${pointsToEarn} Pts (Se acreditarán al entregar)`;
 
         cart = [];
         updateCart();
         document.getElementById('cartModal').classList.remove('active');
 
-        const targetWhatsApp = BRANCH_WHATSAPP[currentBranch] || "50370092996";
-        const msg = `¡Hola! Acabo de realizar mi pedido en *${currentBranch}*.\n\n` +
-          `👤 Cliente: ${currentUser.name}\n` +
-          `📞 Teléfono: ${currentUser.phone}\n` +
-          `📦 Tipo Entrega: ${deliveryTypeVal}\n` +
-          `${deliveryTypeVal !== 'Recoger en Tienda' ? `📍 Dirección: ${finalAddress}\n` : ''}` +
-          `💵 TOTAL A PAGAR: $${(finalSubtotal + currentShippingFee).toFixed(2)}\n\n` +
-          `*(He generado y descargado el ticket visual de mi compra en mi dispositivo para compartirlo)*`;
-
         window.location.href = `https://wa.me/${targetWhatsApp}?text=${encodeURIComponent(msg)}`;
       } catch (err) {
         alert("Error al procesar pedido.");
+      } finally {
+        sendBtn.innerText = "Enviar Pedido por WhatsApp";
+        sendBtn.disabled = false;
       }
     });
 
-    async function generateAndDownloadTicketImage(orderData, orderIdCode) {
-      document.getElementById('ticketBranchName').innerText = orderData.sucursal;
-      document.getElementById('ticketDateTime').innerText = orderData.fecha;
-      document.getElementById('ticketCustName').innerText = orderData.clienteNombre;
-      document.getElementById('ticketCustPhone').innerText = orderData.clienteTelefono;
-      document.getElementById('ticketDeliveryType').innerText = orderData.tipoEntrega;
-      
-      const addrWrapper = document.getElementById('ticketAddressWrapper');
-      const refWrapper = document.getElementById('ticketRefWrapper');
-
-      if (orderData.tipoEntrega === 'Recoger en Tienda') {
-        addrWrapper.style.display = 'none';
-        refWrapper.style.display = 'none';
-      } else {
-        addrWrapper.style.display = 'block';
-        refWrapper.style.display = 'block';
-        document.getElementById('ticketCustAddress').innerText = orderData.direccion;
-        document.getElementById('ticketCustRef').innerText = orderData.referencia;
-      }
-
-      document.getElementById('ticketSubtotal').innerText = orderData.subtotal.toFixed(2);
-      document.getElementById('ticketTotal').innerText = orderData.total.toFixed(2);
-      
-      if(orderData.descuento > 0) {
-        document.getElementById('ticketDiscountRow').style.display = 'flex';
-        document.getElementById('ticketDiscount').innerText = orderData.descuento.toFixed(2);
-      } else {
-        document.getElementById('ticketDiscountRow').style.display = 'none';
-      }
-
-      let itemsHtml = '';
-      orderData.items.forEach(item => {
-        itemsHtml += `<div style="display: flex; justify-content: space-between; font-size: 11px; margin: 2px 0;">
-          <span>${item.cantidad}x ${item.nombre.substring(0, 18)}</span>
-          <span>$${(item.precio * item.cantidad).toFixed(2)}</span>
-        </div>`;
-      });
-      document.getElementById('ticketItemsList').innerHTML = itemsHtml;
-
-      if(window.JsBarcode) {
-        try {
-          JsBarcode("#ticketBarcodeSVG", "ST-" + orderIdCode, {
-            format: "CODE128",
-            width: 1.2,
-            height: 30,
-            displayValue: true
-          });
-        } catch(e){}
-      }
-
-      const ticketElement = document.getElementById('thermalTicketTemplate');
-      ticketElement.style.left = '0';
-
-      try {
-        const canvas = await html2canvas(ticketElement, { scale: 2 });
-        ticketElement.style.left = '-9999px';
-        
-        const imageURL = canvas.toDataURL('image/png');
-        const downloadLink = document.createElement('a');
-        downloadLink.href = imageURL;
-        downloadLink.download = `Ticket_Super_Tonita_${orderIdCode}.png`;
-        downloadLink.click();
-      } catch (error) {
-        ticketElement.style.left = '-9999px';
-      }
-    }
-
+    // CORREGIDO: Se compara usando cleanPhone() para que aparezcan sin importar diferencias de formato en el teléfono
     async function loadClientOrders() {
       const container = document.getElementById('clientOrdersList');
-      container.innerHTML = '<p style="text-align:center;">Cargando...</p>';
+      container.innerHTML = '<p style="text-align:center;">Cargando tus pedidos...</p>';
       try {
-        const q = query(collection(db, "ordenes"), where("clienteTelefono", "==", currentUser.phone));
-        const snapshot = await getDocs(q);
+        const snapshot = await getDocs(collection(db, "ordenes"));
         container.innerHTML = '';
-        if (snapshot.empty) { container.innerHTML = '<p style="text-align:center; color:var(--text-muted);">No tienes órdenes.</p>'; return; }
+        let clientOrders = [];
+        const userCleanPhone = cleanPhone(currentUser.phone);
+
         snapshot.forEach(docSnap => {
           const o = docSnap.data();
+          const orderPhoneClean = cleanPhone(o.clienteTelefono);
+          
+          // Coincidencia por ID de cliente o por coincidencia exacta de los últimos dígitos del teléfono
+          if ((o.clientDocId && o.clientDocId === currentClientDocId) || (orderPhoneClean && orderPhoneClean === userCleanPhone)) {
+            clientOrders.push({ id: docSnap.id, ...o });
+          }
+        });
+
+        if (clientOrders.length === 0) {
+          container.innerHTML = '<p style="text-align:center; color:var(--text-muted);">No tienes órdenes registradas.</p>';
+          return;
+        }
+
+        // Ordenar de más reciente a más antiguo
+        clientOrders.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+
+        clientOrders.forEach(o => {
+          const statusClass = `status-${(o.estado||'Pendiente').toLowerCase().replace(' ','')}`;
           container.innerHTML += `
             <div class="order-card">
-              <div class="order-header"><strong>Pedido #${docSnap.id.slice(-5).toUpperCase()}</strong><span class="status-badge status-${(o.estado||'').toLowerCase().replace(' ','')}">${o.estado}</span></div>
-              <div>Sucursal: ${o.sucursal}</div>
-              <div style="font-weight:800; text-align:right;">Total: $${parseFloat(o.total).toFixed(2)}</div>
+              <div class="order-header">
+                <strong>Pedido #${o.id.slice(-5).toUpperCase()}</strong>
+                <span class="status-badge ${statusClass}">${o.estado || 'Pendiente'}</span>
+              </div>
+              <div style="font-size:0.85rem; color:var(--text-muted);">Sucursal: ${o.sucursal}</div>
+              <div style="font-size:0.85rem; color:var(--text-muted);">📅 ${o.fecha || ''}</div>
+              <div style="font-weight:800; text-align:right; margin-top:0.4rem;">Total: $${parseFloat(o.total || 0).toFixed(2)}</div>
             </div>
           `;
         });
-      } catch (e) {}
+      } catch (e) {
+        container.innerHTML = '<p style="text-align:center; color:var(--danger);">Error al cargar tus pedidos.</p>';
+      }
     }
 
     async function loadClientRedemptions() {
       const container = document.getElementById('clientRedemptionsList');
-      const q = query(collection(db, "redemptions"), where("clientPhone", "==", currentUser.phone));
-      const snapshot = await getDocs(q);
-      container.innerHTML = '';
-      if (snapshot.empty) { container.innerHTML = '<p style="text-align:center; color:var(--text-muted);">Sin canjes.</p>'; return; }
-      snapshot.forEach(docSnap => {
-        const r = docSnap.data();
-        container.innerHTML += `<div class="order-card"><strong>${r.productName}</strong><br><small>${r.status}</small></div>`;
-      });
+      try {
+        const snapshot = await getDocs(collection(db, "redemptions"));
+        container.innerHTML = '';
+        let clientRedemptions = [];
+        const userCleanPhone = cleanPhone(currentUser.phone);
+
+        snapshot.forEach(docSnap => {
+          const r = docSnap.data();
+          const rPhoneClean = cleanPhone(r.clientPhone || r.clientPhoneClean);
+          if (rPhoneClean === userCleanPhone) {
+            clientRedemptions.push({ id: docSnap.id, ...r });
+          }
+        });
+
+        if (clientRedemptions.length === 0) {
+          container.innerHTML = '<p style="text-align:center; color:var(--text-muted);">No tienes canjes solicitados.</p>';
+          return;
+        }
+
+        clientRedemptions.forEach(r => {
+          const isCompleted = r.status === 'Entregado';
+          container.innerHTML += `
+            <div class="order-card">
+              <strong>🎁 ${r.productName}</strong><br>
+              <small>Costo: ${r.pointsTransacted} Pts</small><br>
+              <small style="color:var(--text-muted);">Fecha: ${r.date || ''}</small><br>
+              <span class="status-badge ${isCompleted ? 'status-entregado' : 'status-pendiente'}">${r.status || 'Pendiente'}</span>
+            </div>
+          `;
+        });
+      } catch (e) {
+        container.innerHTML = '<p style="text-align:center; color:var(--danger);">Error al cargar tus canjes.</p>';
+      }
     }
 
     async function loadRewards() {
@@ -2642,7 +2609,6 @@
       const activeFlashAlerts = allFlashAlertsList.filter(f => f.active && (f.branch === 'Todas' || f.branch === currentBranch));
       let bannersHtml = '';
 
-      // Banner limpio sin "Módulo Digital Pro"
       bannersHtml += `
         <div class="banner-card banner-services-pro" onclick="switchClientTab('catalog'); filterByCategory('Servicios y Recargas');" style="background: linear-gradient(135deg, #2563eb, #1e40af);">
           <div style="flex:1; z-index:2;">
@@ -2928,7 +2894,7 @@
       try {
         const cleanTargetPhone = cleanPhone(clientPhone);
         
-        const ordersSnap = await getDocs(query(collection(db, "ordenes"), where("clienteTelefono", "==", clientPhone)));
+        const ordersSnap = await getDocs(collection(db, "ordenes"));
         let clientOrders = [];
         ordersSnap.forEach(d => {
           const o = d.data();
@@ -2937,11 +2903,11 @@
           }
         });
 
-        const redemptionsSnap = await getDocs(query(collection(db, "redemptions"), where("clientPhone", "==", clientPhone)));
+        const redemptionsSnap = await getDocs(collection(db, "redemptions"));
         let clientRedemptions = [];
         redemptionsSnap.forEach(d => {
           const r = d.data();
-          if (cleanPhone(r.clientPhone) === cleanTargetPhone) {
+          if (cleanPhone(r.clientPhone || r.clientPhoneClean) === cleanTargetPhone) {
             clientRedemptions.push({ id: d.id, ...r });
           }
         });
@@ -3119,6 +3085,9 @@
             <div> Entrega: ${o.tipoEntrega} ${o.direccion && o.direccion !== 'Recoger en tienda' ? `(${o.direccion})` : ''}</div>
             <div style="font-size:0.85rem; color:var(--text-muted); margin:0.3rem 0;">📅 ${o.fecha || ''}</div>
             <div style="font-weight:800; text-align:right; margin-bottom:0.5rem;">Total: $${parseFloat(o.total || 0).toFixed(2)}</div>
+            <div style="font-size:0.78rem; color:var(--amber-accent); font-weight:700; margin-bottom:0.5rem;">
+              ⭐ Puntos por acreditar: +${o.puntosAGanar || 0} Pts ${o.puntosAcreditados ? '(Ya Acreditados ✅)' : '(Pendientes de entrega)'}
+            </div>
             
             <div style="display:flex; gap:0.4rem; justify-content:flex-end; border-top:1px dashed var(--border); padding-top:0.5rem; flex-wrap:wrap;">
               <button class="btn btn-sm" style="background:#fef3c7; color:#d97706;" onclick="updateOrderStatus('${o.id}', 'Pendiente')">Pendiente</button>
@@ -3134,8 +3103,35 @@
 
     window.updateOrderStatus = async (orderId, newStatus) => {
       try {
-        await updateDoc(doc(db, "ordenes", orderId), { estado: newStatus });
-        alert(`¡Estado de la orden actualizado a "${newStatus}"!`);
+        const orderRef = doc(db, "ordenes", orderId);
+        const orderSnap = await getDoc(orderRef);
+        if (!orderSnap.exists()) { alert("La orden no existe."); return; }
+        
+        const orderData = orderSnap.data();
+        let updatePayload = { estado: newStatus };
+
+        if (newStatus === 'Entregado' && !orderData.puntosAcreditados) {
+          const clientDocId = orderData.clientDocId;
+          const pointsToAdd = parseInt(orderData.puntosAGanar || 0);
+
+          if (clientDocId && pointsToAdd > 0) {
+            const clientRef = doc(db, "clients", clientDocId);
+            const clientSnap = await getDoc(clientRef);
+            
+            if (clientSnap.exists()) {
+              const currentClientPts = parseInt(clientSnap.data().points || 0);
+              await updateDoc(clientRef, { points: currentClientPts + pointsToAdd });
+              updatePayload.puntosAcreditados = true;
+              alert(`✅ ¡Pedido marcado como Entregado! Se han sumado exitosamente +${pointsToAdd} puntos al cliente.`);
+            } else {
+              alert(`⚠️ Pedido entregado, pero no se encontró el perfil de cliente asociado para sumar puntos.`);
+            }
+          }
+        } else {
+          alert(`¡Estado de la orden actualizado a "${newStatus}"!`);
+        }
+
+        await updateDoc(orderRef, updatePayload);
         loadAdminOrders();
       } catch (err) {
         alert("Error al actualizar el estado de la orden.");
