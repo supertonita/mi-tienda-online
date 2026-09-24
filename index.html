@@ -15,10 +15,11 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
-  <!-- HTML5 QR Code & QRCodeJS & JsBarcode -->
+  <!-- HTML5 QR Code & QRCodeJS & JsBarcode & html2canvas -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <style>
     :root {
@@ -149,7 +150,6 @@
       max-width: 90%;
       flex-shrink: 0;
       scroll-snap-align: center;
-      background: linear-gradient(135deg, var(--emerald-accent), var(--brand-dark));
       color: white;
       border-radius: var(--radius-lg);
       padding: 1.1rem;
@@ -166,12 +166,7 @@
       overflow: hidden;
     }
 
-    .banner-services-pro {
-      background: linear-gradient(135deg, #2563eb, #1e40af) !important;
-    }
-
     .banner-flash-pulse {
-      background: linear-gradient(135deg, #dc2626, #991b1b) !important;
       animation: flashPulse 1.8s infinite;
     }
     @keyframes flashPulse {
@@ -614,7 +609,7 @@
         <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px dashed var(--border); text-align: center;">
           <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.4rem;">¿Problemas para ingresar a la app?</p>
           <a href="https://wa.me/50370092996?text=Hola,%20soporte%20de%20Super%20To%C3%B1ita.%20Necesito%20recuperar%20el%20acceso%20a%20mi%20cuenta%20asociada%20al%20número.%20Agradezco%20su%20ayuda%20para%20restablecer%20mis%20datos%20de%20ingreso." target="_blank" style="font-size: 0.82rem; font-weight: 800; color: var(--emerald-accent); text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem;">
-            <i class="fa-brands fa-whatsapp"></i> ¿Problemas para iniciar sesión? Contáctanos
+            <i class="fa-brands fa-whatsapp"></i>Contáctanos
           </a>
         </div>
       </div>
@@ -627,7 +622,7 @@
           <i data-lucide="shield-check" style="color: var(--emerald-accent); width: 32px; height: 32px;"></i>
         </div>
         <h3 style="font-size: 1.25rem; margin-bottom: 0.3rem; color: var(--brand-dark); font-weight: 800;">Validación de Administrador</h3>
-        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Hola FrankR. Escanea tu código QR o ingresa tu clave.</p>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Hola. Escanea tu código QR o ingresa tu clave.</p>
 
         <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
           <button type="button" onclick="startAdminQRScan()" class="btn btn-amber" style="width: 100%; padding: 0.75rem;">
@@ -724,6 +719,40 @@
           </p>
         </div>
 
+        <!-- SECCIÓN DE REDES SOCIALES CON ENLACES REALES -->
+        <div class="card" style="padding: 1.25rem; margin-bottom: 1.25rem; background: var(--surface);">
+          <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; color: var(--brand-dark);">
+            <i data-lucide="share-2" style="color: var(--emerald-accent);"></i> ¡Gana Puntos Extra en Redes!
+          </h3>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">Sigue nuestras redes y canal para enterarte de promos y reclamar puntos.</p>
+          
+          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 0.65rem 0.85rem; border-radius: 12px; border: 1px solid var(--border);">
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fa-brands fa-whatsapp" style="color: #25d366; font-size: 1.2rem;"></i>
+                <div style="font-size: 0.85rem; font-weight: 700;">Canal de WhatsApp</div>
+              </div>
+              <button class="btn btn-sm btn-whatsapp" style="width: auto; padding: 0.4rem 0.8rem; font-size: 0.75rem; margin-top: 0;" onclick="claimSocialReward('whatsapp', 25, 'https://whatsapp.com/channel/0029VaCvQi8Likg91tY6yE3G')">Unirme (+25 Pts)</button>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 0.65rem 0.85rem; border-radius: 12px; border: 1px solid var(--border);">
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fa-brands fa-facebook" style="color: #1877f2; font-size: 1.2rem;"></i>
+                <div style="font-size: 0.85rem; font-weight: 700;">Seguir en Facebook</div>
+              </div>
+              <button class="btn btn-sm" style="width: auto; padding: 0.4rem 0.8rem; font-size: 0.75rem; background: #1877f2; color: white;" onclick="claimSocialReward('facebook', 25, 'https://www.facebook.com/share/19WjFjrQ2V/?mibextid=wwXIfr')">Seguir (+25 Pts)</button>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 0.65rem 0.85rem; border-radius: 12px; border: 1px solid var(--border);">
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fa-brands fa-tiktok" style="color: #000000; font-size: 1.2rem;"></i>
+                <div style="font-size: 0.85rem; font-weight: 700;">Seguir en TikTok</div>
+              </div>
+              <button class="btn btn-sm" style="width: auto; padding: 0.4rem 0.8rem; font-size: 0.75rem; background: #000000; color: white;" onclick="claimSocialReward('tiktok', 25, 'https://www.tiktok.com/@mini.super.toita?_r=1&_t=ZS-99zKrCcTnTI')">Seguir (+25 Pts)</button>
+            </div>
+          </div>
+        </div>
+
         <div id="gamesSectionContainer"></div>
 
         <div class="card" style="padding: 1.25rem; margin-bottom: 1.25rem;">
@@ -802,14 +831,14 @@
     <!-- 3. VISTA ADMINISTRADOR -->
     <section id="adminView" class="hidden">
       <div class="admin-subnav">
-        <button class="btn btn-sm active-admin-tab" id="adminTabOrdersBtn" onclick="switchAdminSubTab('orders')">📦 Órdenes</button>
-        <button class="btn btn-sm" id="adminTabProductsBtn" onclick="switchAdminSubTab('products')">🏷️ Productos</button>
-        <button class="btn btn-sm" id="adminTabServicesBtn" onclick="switchAdminSubTab('services')">⚡ Servicios & Recargas</button>
-        <button class="btn btn-sm" id="adminTabRewardsBtn" onclick="switchAdminSubTab('rewards')">🎁 Premios</button>
-        <button class="btn btn-sm" id="adminTabClientsBtn" onclick="switchAdminSubTab('clients')">👥 Clientes</button>
-        <button class="btn btn-sm" id="adminTabRedemptionsBtn" onclick="switchAdminSubTab('redemptions')">🎟️ Canjes</button>
-        <button class="btn btn-sm" id="adminTabPromosBtn" onclick="switchAdminSubTab('promos')">🔥 Promos</button>
-        <button class="btn btn-sm" id="adminTabGamificationBtn" onclick="switchAdminSubTab('gamification')">🎰 Juegos y Alertas</button>
+        <button class="btn btn-sm active-admin-tab" id="adminTabOrdersBtn" onclick="switchAdminSubTab('orders')">Órdenes</button>
+        <button class="btn btn-sm" id="adminTabProductsBtn" onclick="switchAdminSubTab('products')"> Productos</button>
+        <button class="btn btn-sm" id="adminTabServicesBtn" onclick="switchAdminSubTab('services')"> Servicios & Recargas</button>
+        <button class="btn btn-sm" id="adminTabRewardsBtn" onclick="switchAdminSubTab('rewards')">Premios</button>
+        <button class="btn btn-sm" id="adminTabClientsBtn" onclick="switchAdminSubTab('clients')"> Clientes</button>
+        <button class="btn btn-sm" id="adminTabRedemptionsBtn" onclick="switchAdminSubTab('redemptions')"> Canjes</button>
+        <button class="btn btn-sm" id="adminTabPromosBtn" onclick="switchAdminSubTab('promos')"> Promos</button>
+        <button class="btn btn-sm" id="adminTabGamificationBtn" onclick="switchAdminSubTab('gamification')">Juegos y Alertas</button>
         <button class="btn btn-sm btn-danger" id="adminLogoutBtn">Salir</button>
       </div>
 
@@ -898,12 +927,10 @@
         <div id="adminProductGrid" class="grid"></div>
       </div>
 
-      <!-- 3.3 GESTIÓN DE SERVICIOS Y RECARGAS (CON OPCIÓN EDITAR) -->
+      <!-- 3.3 GESTIÓN DE SERVICIOS Y RECARGAS -->
       <div id="adminServicesTab" class="hidden">
         <div class="card" style="margin-bottom: 2rem; padding: 1.25rem;">
-          <h4 id="serviceFormTitle" style="margin-bottom: 1rem; color: #2563eb;"><i data-lucide="smartphone"></i>Paquetes de Recargas & Servicions</h4>
-          <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;"></p>
-          
+          <h4 id="serviceFormTitle" style="margin-bottom: 1rem; color: #2563eb;"><i data-lucide="smartphone"></i>Paquetes de Recargas & Servicios</h4>
           <form id="servicePackageForm">
             <input type="hidden" id="servicePkgEditId">
             <div class="form-group">
@@ -962,10 +989,10 @@
         <div id="adminRewardsList"></div>
       </div>
 
-      <!-- 3.5 Clientes -->
+      <!-- 3.5 Clientes & Movimientos -->
       <div id="adminClientsTab" class="hidden">
         <div class="card" style="padding: 1.25rem; margin-bottom: 1.5rem;">
-          <h4 style="margin-bottom: 0.75rem;">Control de Clientes Registrados</h4>
+          <h4 style="margin-bottom: 0.75rem;">Control de Clientes Registrados & Movimientos</h4>
           <div class="search-box" style="margin-bottom: 1rem;">
             <i data-lucide="search" style="color: var(--text-muted); width: 18px;"></i>
             <input type="text" id="adminClientSearchInput" placeholder="Buscar por nombre o teléfono..." oninput="filterAdminClientsList()">
@@ -998,6 +1025,19 @@
             <div class="form-group"><label>Título (Ej: Lleva 5 por $1.05)</label><input type="text" id="promoTitle" class="form-control" required></div>
             <div class="form-group"><label>Precio de la Promoción ($)</label><input type="number" step="0.01" id="promoPrice" class="form-control" required></div>
             <div class="form-group"><label>Imagen URL</label><input type="url" id="promoImg" class="form-control" required></div>
+            
+            <div class="form-group">
+              <label>🎨 Color de Fondo o Estilo de Degradado del Banner</label>
+              <select id="promoBannerColor" class="form-control">
+                <option value="linear-gradient(135deg, #059669, #1e293b)">Esmeralda Corporativo (Por defecto)</option>
+                <option value="linear-gradient(135deg, #2563eb, #1e40af)">Azul Océano Pro</option>
+                <option value="linear-gradient(135deg, #dc2626, #991b1b)">Rojo Flash / Urgente</option>
+                <option value="linear-gradient(135deg, #d97706, #b45309)">Ámbar / Oferta Dorada</option>
+                <option value="linear-gradient(135deg, #7c3aed, #4c1d95)">Morado Premium</option>
+                <option value="linear-gradient(135deg, #0f172a, #334155)">Oscuro Minimalista</option>
+              </select>
+            </div>
+
             <div class="form-group"><label>Descripción</label><textarea id="promoDesc" class="form-control" rows="2" required></textarea></div>
             <div style="display:flex; gap:0.5rem;">
               <button type="submit" class="btn btn-emerald" style="flex:1;">Guardar Promoción</button>
@@ -1009,43 +1049,63 @@
         <div id="adminPromosList" style="display: flex; flex-direction: column; gap: 1rem;"></div>
       </div>
 
-      <!-- 3.8 GESTIÓN DE JUEGOS Y ALERTAS FLASH -->
+      <!-- 3.8 GESTIÓN DE JUEGOS Y ALERTAS FLASH MÚLTIPLES -->
       <div id="adminGamificationTab" class="hidden">
         <div class="card" style="margin-bottom: 2rem; padding: 1.25rem;">
-          <h4 style="margin-bottom: 1rem; color: var(--emerald-accent);"><i data-lucide="bell"></i> Gestionar Notificación Push / Alerta Flash</h4>
+          <h4 id="flashFormTitle" style="margin-bottom: 1rem; color: var(--emerald-accent);"><i data-lucide="bell"></i> Crear / Editar Alerta Flash o Aviso Semanal</h4>
+          <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">Configura alertas múltiples independientes (incluyendo recordatorios de pago de luz, ofertas flash, etc.) sin tocar código.</p>
           
-          <div class="form-group">
-            <label>Seleccionar Destino de la Alerta</label>
-            <select id="adminFlashBranch" class="form-control" onchange="loadAdminFlashForBranch()">
-              <option value="Todas">Todas las Sucursales</option>
-              <option value="Super Toñita Los Fuentes">Super Toñita Los Fuentes</option>
-              <option value="Super Toñita Corinto">Super Toñita Corinto</option>
-              <option value="Super Toñita Metapán">Super Toñita Metapán</option>
-            </select>
-          </div>
-
-          <div id="adminFlashStatusBox" style="background:var(--bg-primary); padding:1rem; border-radius:12px; margin-bottom:1rem;">
-            <p style="font-size:0.85rem; color:var(--text-muted);">Cargando estado de la alerta...</p>
-          </div>
-
           <form id="flashAlertForm">
+            <input type="hidden" id="flashAlertEditId">
             <div class="form-group">
-              <label>Nombre Exacto del Producto en Oferta</label>
-              <input type="text" id="flashProduct" class="form-control" placeholder="" required>
+              <label>Sucursal Destino</label>
+              <select id="adminFlashBranch" class="form-control" required>
+                <option value="Todas">Todas las Sucursales</option>
+                <option value="Super Toñita Los Fuentes">Super Toñita Los Fuentes</option>
+                <option value="Super Toñita Corinto">Super Toñita Corinto</option>
+                <option value="Super Toñita Metapán">Super Toñita Metapán</option>
+              </select>
             </div>
             <div class="form-group">
-              <label>Descuento por Unidad ($)</label>
-              <input type="number" step="0.01" id="flashDiscount" class="form-control" placeholder="Ej: 0.50" required>
+              <label>Título del Banner o Alerta (Ej: ¡Paga tu recibo de luz! o Pollo en Oferta)</label>
+              <input type="text" id="flashTitle" class="form-control" placeholder="Ej: Pago de Luz AES / Pollo Entero" required>
+            </div>
+            <div class="form-group">
+              <label>Descripción / Detalle Breve (Ej: - $0.50 OFF o Evita cortes)</label>
+              <input type="text" id="flashSubtext" class="form-control" placeholder="Ej: -$0.50 OFF por unidad o Sube tu recibo hoy" required>
+            </div>
+            <div class="form-group">
+              <label>Nombre Exacto del Producto (Opcional - Si vincula a catálogo)</label>
+              <input type="text" id="flashProduct" class="form-control" placeholder="Ej: Pollo Entero (O dejar vacío si es servicio)">
+            </div>
+            <div class="form-group">
+              <label>Descuento por Unidad ($) (Poner 0 si no aplica)</label>
+              <input type="number" step="0.01" id="flashDiscount" class="form-control" value="0" required>
             </div>
             <div class="form-group">
               <label>Disponible hasta la Hora (Formato 24h, ej: 22:30)</label>
-              <input type="time" id="flashEndTime" class="form-control" required>
+              <input type="time" id="flashEndTime" class="form-control" value="23:59" required>
+            </div>
+            <div class="form-group">
+              <label>🎨 Color de Fondo o Estilo de Degradado del Banner</label>
+              <select id="flashBannerColor" class="form-control">
+                <option value="linear-gradient(135deg, #dc2626, #991b1b)">Rojo Flash / Urgente (Por defecto)</option>
+                <option value="linear-gradient(135deg, #2563eb, #1e40af)">Azul Océano / Servicios</option>
+                <option value="linear-gradient(135deg, #059669, #1e293b)">Esmeralda Corporativo</option>
+                <option value="linear-gradient(135deg, #d97706, #b45309)">Ámbar / Oferta Dorada</option>
+                <option value="linear-gradient(135deg, #7c3aed, #4c1d95)">Morado Premium</option>
+              </select>
             </div>
             <div style="display:flex; gap:0.5rem;">
-              <button type="submit" class="btn btn-emerald" style="flex:1;">Guardar / Actualizar Alerta</button>
-              <button type="button" class="btn btn-danger" onclick="deleteFlashAlertForBranch()">Eliminar Alerta</button>
+              <button type="submit" class="btn btn-emerald" style="flex:1;" id="flashSubmitBtn">Guardar / Publicar Alerta Flash</button>
+              <button type="button" class="btn btn-secondary hidden" id="cancelFlashEditBtn" onclick="resetFlashForm()">Cancelar</button>
             </div>
           </form>
+        </div>
+
+        <div class="card" style="padding: 1.25rem; margin-bottom: 1.5rem;">
+          <h4 style="margin-bottom: 1rem; color: var(--brand-dark);"><i data-lucide="list"></i> Alertas Flash / Avisos Activos</h4>
+          <div id="adminFlashListContainer"></div>
         </div>
 
         <div class="card" style="padding: 1.25rem;">
@@ -1087,11 +1147,59 @@
     <button class="nav-item" id="navProfileBtn"><i data-lucide="user"></i><span>Mi Perfil</span></button>
   </nav>
 
+  <!-- PLANTILLA OCULTA PARA GENERAR TICKET TÉRMICO VISUAL (IMAGEN) -->
+  <div id="thermalTicketTemplate" style="position: absolute; left: -9999px; top: 0; width: 320px; background: #ffffff; padding: 15px; font-family: 'Courier New', Courier, monospace; color: #000000; font-size: 11px; line-height: 1.4;">
+    <div style="text-align: center; margin-bottom: 8px;">
+      <img src="LOGO.png" style="width: 45px; height: 45px; object-fit: contain; margin-bottom: 4px; border-radius: 8px;">
+      <h3 style="font-size: 15px; font-weight: bold; margin: 0;">SUPER TOÑITA</h3>
+      <p id="ticketBranchName" style="font-size: 11px; font-weight: bold; margin: 2px 0;">Sucursal</p>
+      <p style="font-size: 10px; margin: 0;">NIT: 1234-567890-123-4</p>
+      <p style="font-size: 10px; margin: 2px 0;" id="ticketDateTime">Fecha/Hora</p>
+    </div>
+    
+    <div style="border-top: 1px dashed #000; border-bottom: 1px dashed #000; padding: 6px 0; margin: 6px 0;">
+      <p><strong>Cliente:</strong> <span id="ticketCustName">---</span></p>
+      <p><strong>Teléfono:</strong> <span id="ticketCustPhone">---</span></p>
+      <p><strong>Tipo Entrega:</strong> <span id="ticketDeliveryType">---</span></p>
+      <p id="ticketAddressWrapper"><strong>Dirección:</strong> <span id="ticketCustAddress">---</span></p>
+      <p id="ticketRefWrapper"><strong>Referencia:</strong> <span id="ticketCustRef">---</span></p>
+    </div>
+
+    <div style="margin-bottom: 8px;">
+      <p style="font-weight: bold; border-bottom: 1px solid #000; padding-bottom: 2px; margin-bottom: 4px;">DETALLE DE PRODUCTOS:</p>
+      <div id="ticketItemsList"></div>
+    </div>
+
+    <div style="border-top: 1px dashed #000; padding-top: 6px; margin-top: 6px;">
+      <div style="display: flex; justify-content: space-between;"><span>Subtotal:</span><span>$<span id="ticketSubtotal">0.00</span></span></div>
+      <div style="display: flex; justify-content: space-between;" id="ticketDiscountRow"><span>Descuento / Promo:</span><span>-$<span id="ticketDiscount">0.00</span></span></div>
+      <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 13px; margin-top: 4px; border-top: 1px solid #000; padding-top: 4px;">
+        <span>TOTAL A PAGAR:</span><span>$<span id="ticketTotal">0.00</span></span>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 12px;">
+      <p style="font-size: 10px; margin-bottom: 6px;">¡Gracias por tu compra en Super Toñita!</p>
+      <svg id="ticketBarcodeSVG" style="max-width: 100%;"></svg>
+    </div>
+  </div>
+
+  <!-- MODAL DE MOVIMIENTOS E HISTORIAL DE CLIENTE (ADMIN) -->
+  <div class="modal-overlay" id="adminClientDetailsModal">
+    <div class="modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h3 style="font-size: 1.1rem; font-weight: 800;" id="modalClientTitle">Movimientos del Cliente</h3>
+        <button class="btn btn-sm btn-secondary" onclick="document.getElementById('adminClientDetailsModal').classList.remove('active')">✕</button>
+      </div>
+      <div id="modalClientDetailsBody"></div>
+    </div>
+  </div>
+
   <!-- MODAL INTERACTIVO PRO DE SERVICIOS Y RECARGAS -->
   <div class="modal-overlay" id="serviceModal">
     <div class="modal-card">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-        <h3 style="font-size: 1.1rem; font-weight: 800; color: #2563eb;" id="serviceModalTitle">⚡ Configurar Servicio</h3>
+        <h3 style="font-size: 1.1rem; font-weight: 800; color: #2563eb;" id="serviceModalTitle">Configurar Servicio</h3>
         <button class="btn btn-sm btn-secondary" onclick="document.getElementById('serviceModal').classList.remove('active')">✕</button>
       </div>
       <div id="serviceModalBody"></div>
@@ -1101,7 +1209,7 @@
   <!-- Modales de Juegos -->
   <div class="modal-overlay" id="rouletteModal">
     <div class="modal-card" style="text-align: center;">
-      <h3 style="margin-bottom: 0.5rem; color: var(--amber-accent);">🎰 Ruleta de la Suerte</h3>
+      <h3 style="margin-bottom: 0.5rem; color: var(--amber-accent);"> Ruleta de la Suerte</h3>
       <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">¡Gira y gana un descuento directo! (Compra mínima $25.00)</p>
       <div id="rouletteWheelBox" style="background: var(--bg-primary); padding: 2rem; border-radius: 20px; font-size: 1.3rem; font-weight: 900; margin-bottom: 1.5rem; border: 2px dashed var(--amber-accent);">
         🎁 ¡Listo para Girar!
@@ -1173,7 +1281,7 @@
           </select>
         </div>
         <button type="submit" class="btn btn-whatsapp" id="sendOrderBtn">
-          Enviar Pedido por WhatsApp <i data-lucide="send" style="width:16px;"></i>
+          Generar Ticket y Enviar Pedido <i data-lucide="send" style="width:16px;"></i>
         </button>
       </form>
     </div>
@@ -1218,8 +1326,7 @@
     let allClientsList = [];
     let allRedemptions = [];
     let allServicePackages = [];
-    let currentFlashAlert = null;
-    let flashTimerInterval = null;
+    let allFlashAlertsList = [];
     let bannerSliderInterval = null;
     let gamesConfigState = { status: "inactivo" };
     let wonGameDiscount = 0; 
@@ -1331,7 +1438,8 @@
               address: data.address || data.direccion || "",
               reference: data.reference || data.referencia || "",
               lastPlayedDate: data.lastPlayedDate || "",
-              activeDiscount: data.activeDiscount || 0
+              activeDiscount: data.activeDiscount || 0,
+              claimedSocials: data.claimedSocials || []
             };
           }
         });
@@ -1348,10 +1456,11 @@
             reference: "",
             lastPlayedDate: "",
             activeDiscount: 0,
+            claimedSocials: [],
             createdAt: new Date().toISOString()
           });
           currentClientDocId = newDoc.id;
-          currentUser = { id: newDoc.id, name, phone: rawPass, points: 100, address: "", reference: "", lastPlayedDate: "", activeDiscount: 0 };
+          currentUser = { id: newDoc.id, name, phone: rawPass, points: 100, address: "", reference: "", lastPlayedDate: "", activeDiscount: 0, claimedSocials: [] };
         }
 
         btn.innerText = "Ingresar a la Tienda";
@@ -1451,6 +1560,33 @@
         switchClientTab('catalog');
       } else {
         switchClientTab('rewards');
+      }
+    };
+
+    window.claimSocialReward = async (platform, pts, url) => {
+      if (!currentUser.claimedSocials) currentUser.claimedSocials = [];
+      if (currentUser.claimedSocials.includes(platform)) {
+        alert("⚠️ Ya reclamaste tus puntos por esta red social.");
+        window.open(url, '_blank');
+        return;
+      }
+
+      window.open(url, '_blank');
+
+      currentUser.claimedSocials.push(platform);
+      currentUser.points = (currentUser.points || 0) + pts;
+
+      document.getElementById('profilePointsDisplay').innerText = `${currentUser.points} Pts`;
+      document.getElementById('rewardsPointsDisplay').innerText = `${currentUser.points} Pts`;
+
+      try {
+        await updateDoc(doc(db, "clients", currentClientDocId), {
+          points: currentUser.points,
+          claimedSocials: currentUser.claimedSocials
+        });
+        alert(`🎉 ¡Felicidades! Se han sumado ${pts} puntos a tu cuenta por seguirnos.`);
+      } catch (e) {
+        alert("Error al actualizar puntos.");
       }
     };
 
@@ -1621,156 +1757,139 @@
           const data = docSnap.data();
           gamesConfigState = data.games || { status: "inactivo" };
           checkBranchFeatures();
-
-          if (data.flashAlert && data.flashAlert.active) {
-            currentFlashAlert = data.flashAlert;
-            startFlashTimeRemaining(data.flashAlert.endTime);
-          } else {
-            currentFlashAlert = null;
-            if (flashTimerInterval) clearInterval(flashTimerInterval);
-          }
         } else {
-          currentFlashAlert = null;
           gamesConfigState = { status: "inactivo" };
           checkBranchFeatures();
         }
+      });
+
+      onSnapshot(collection(db, "flash_alerts"), (snapshot) => {
+        allFlashAlertsList = [];
+        snapshot.forEach(d => allFlashAlertsList.push({ id: d.id, ...d.data() }));
         renderBranchPromos();
-        filterAndRenderProducts();
-      });
-
-      onSnapshot(doc(db, "branch_config", "Todas"), (docSnap) => {
-        if (docSnap.exists() && docSnap.data().flashAlert && docSnap.data().flashAlert.active && (!currentFlashAlert || !currentFlashAlert.active)) {
-          const data = docSnap.data();
-          currentFlashAlert = data.flashAlert;
-          startFlashTimeRemaining(data.flashAlert.endTime);
-          renderBranchPromos();
-          filterAndRenderProducts();
+        if (document.getElementById('adminGamificationTab') && !document.getElementById('adminGamificationTab').classList.contains('hidden')) {
+          renderAdminFlashList();
         }
       });
-    }
-
-    function startFlashTimeRemaining(endTimeStr) {
-      if (flashTimerInterval) clearInterval(flashTimerInterval);
-
-      function updateClock() {
-        if (!currentFlashAlert || !currentFlashAlert.active) return;
-        const now = new Date();
-        const [targetHours, targetMinutes] = endTimeStr.split(':').map(Number);
-        
-        const targetDate = new Date();
-        targetDate.setHours(targetHours, targetMinutes, 0, 0);
-
-        const diffMs = targetDate - now;
-        if (diffMs <= 0) {
-          const timerSpan = document.getElementById('flashTimerDisplay');
-          if (timerSpan) timerSpan.innerText = "¡Finalizada!";
-          clearInterval(flashTimerInterval);
-          return;
-        }
-
-        const totalSecs = Math.floor(diffMs / 1000);
-        const hrs = Math.floor(totalSecs / 3600);
-        const mins = Math.floor((totalSecs % 3600) / 60);
-        const secs = totalSecs % 60;
-
-        let timeStr = `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
-        if (hrs > 0) {
-          timeStr = `${hrs}:${timeStr}`;
-        }
-
-        const timerSpan = document.getElementById('flashTimerDisplay');
-        if (timerSpan) timerSpan.innerText = timeStr;
-      }
-
-      updateClock();
-      flashTimerInterval = setInterval(updateClock, 1000);
     }
 
     window.findAndOpenFlashProduct = (productExactName) => {
+      if (!productExactName) return;
       const found = allProducts.find(p => p.nombre.toLowerCase().trim() === productExactName.toLowerCase().trim());
       if (found) {
         switchClientTab('catalog');
         filterByCategory(found.categoria || 'Todas');
         setTimeout(() => openProductDetail(found.id), 200);
       } else {
-        alert("Este producto está en oferta flash pero no se encontró en esta sucursal.");
-      }
-    };
-
-    window.loadAdminFlashForBranch = async () => {
-      const branch = document.getElementById('adminFlashBranch').value;
-      const statusBox = document.getElementById('adminFlashStatusBox');
-      const prodInput = document.getElementById('flashProduct');
-      const discInput = document.getElementById('flashDiscount');
-      const timeInput = document.getElementById('flashEndTime');
-
-      statusBox.innerHTML = '<p style="font-size:0.85rem; color:var(--text-muted);">Cargando alerta de esta sucursal...</p>';
-
-      try {
-        const snap = await getDoc(doc(db, "branch_config", branch));
-        if (snap.exists() && snap.data().flashAlert && snap.data().flashAlert.active) {
-          const alertData = snap.data().flashAlert;
-          statusBox.innerHTML = `
-            <div style="color:var(--emerald-dark); font-weight:700; font-size:0.85rem;">
-              ✅ Alerta Activa en [${branch}]: <strong>${alertData.product}</strong> (-$${alertData.discount} OFF) hasta las ${alertData.endTime}
-            </div>
-          `;
-          prodInput.value = alertData.product || '';
-          discInput.value = alertData.discount || '';
-          timeInput.value = alertData.endTime || '22:00';
-        } else {
-          statusBox.innerHTML = `<div style="color:var(--text-muted); font-size:0.85rem;">⚠️ No hay alerta activa en [${branch}]. Puedes crear una abajo.</div>`;
-          prodInput.value = '';
-          discInput.value = '';
-          timeInput.value = '22:00';
-        }
-      } catch (e) {
-        statusBox.innerHTML = `<div style="color:var(--danger); font-size:0.85rem;">Error al cargar datos.</div>`;
+        switchClientTab('catalog');
+        filterByCategory('Servicios y Recargas');
       }
     };
 
     document.getElementById('flashAlertForm')?.addEventListener('submit', async (e) => {
       e.preventDefault();
+      const editId = document.getElementById('flashAlertEditId').value;
       const branch = document.getElementById('adminFlashBranch').value;
+      const title = document.getElementById('flashTitle').value.trim();
+      const subtext = document.getElementById('flashSubtext').value.trim();
       const product = document.getElementById('flashProduct').value.trim();
       const discount = parseFloat(document.getElementById('flashDiscount').value || 0);
       const endTime = document.getElementById('flashEndTime').value;
+      const bannerColor = document.getElementById('flashBannerColor').value;
+
+      const flashData = {
+        branch,
+        title,
+        subtext,
+        product,
+        discount,
+        endTime,
+        bannerColor,
+        active: true
+      };
 
       try {
-        const ref = doc(db, "branch_config", branch);
-        const snap = await getDoc(ref);
-        let existingData = snap.exists() ? snap.data() : {};
-
-        existingData.flashAlert = {
-          active: true,
-          product,
-          discount,
-          endTime
-        };
-
-        await setDoc(ref, existingData, { merge: true });
-        alert(`¡Alerta Flash programada hasta las ${endTime} para [${branch}]!`);
-        loadAdminFlashForBranch();
+        if (editId) {
+          await updateDoc(doc(db, "flash_alerts", editId), flashData);
+          alert("¡Alerta Flash / Aviso actualizado con éxito!");
+        } else {
+          await addDoc(collection(db, "flash_alerts"), flashData);
+          alert("¡Alerta Flash / Aviso creado y publicado con éxito!");
+        }
+        resetFlashForm();
+        renderAdminFlashList();
       } catch (err) {
-        alert("Error al guardar alerta.");
+        alert("Error al guardar la alerta.");
       }
     });
 
-    window.deleteFlashAlertForBranch = async () => {
-      const branch = document.getElementById('adminFlashBranch').value;
-      if (confirm(`¿Estás seguro de eliminar la Alerta Flash de [${branch}]?`)) {
+    async function renderAdminFlashList() {
+      const container = document.getElementById('adminFlashListContainer');
+      if (!container) return;
+      container.innerHTML = '<p style="text-align:center;">Cargando alertas...</p>';
+
+      try {
+        const snapshot = await getDocs(collection(db, "flash_alerts"));
+        container.innerHTML = '';
+        if (snapshot.empty) {
+          container.innerHTML = '<p style="text-align:center; color:var(--text-muted);">No hay alertas flash o avisos creados.</p>';
+          return;
+        }
+
+        snapshot.forEach(d => {
+          const f = d.data();
+          container.innerHTML += `
+            <div class="order-card" style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <span style="font-size:0.68rem; font-weight:800; background:var(--brand-dark); color:white; padding:0.15rem 0.4rem; border-radius:4px;">${f.branch}</span>
+                <strong style="display:block; margin-top:0.3rem;">🔥 ${f.title}</strong>
+                <small style="color:var(--text-muted);">${f.subtext} | Hasta: ${f.endTime}</small>
+              </div>
+              <div style="display:flex; gap:0.4rem;">
+                <button class="btn btn-sm btn-amber" onclick="editFlashAlert('${d.id}', '${f.branch}', '${(f.title||'').replace(/'/g, "\\'")}', '${(f.subtext||'').replace(/'/g, "\\'")}', '${(f.product||'').replace(/'/g, "\\'")}', ${f.discount || 0}, '${f.endTime}', '${(f.bannerColor||'').replace(/'/g, "\\'")}')">Editar</button>
+                <button class="btn btn-sm btn-danger" onclick="deleteFlashAlert('${d.id}')">Eliminar</button>
+              </div>
+            </div>
+          `;
+        });
+      } catch (e) {
+        container.innerHTML = '<p style="text-align:center; color:var(--danger);">Error al cargar alertas.</p>';
+      }
+    }
+
+    window.editFlashAlert = (id, branch, title, subtext, product, discount, endTime, bannerColor) => {
+      document.getElementById('flashAlertEditId').value = id;
+      document.getElementById('adminFlashBranch').value = branch;
+      document.getElementById('flashTitle').value = title;
+      document.getElementById('flashSubtext').value = subtext;
+      document.getElementById('flashProduct').value = product;
+      document.getElementById('flashDiscount').value = discount;
+      document.getElementById('flashEndTime').value = endTime;
+      if (bannerColor) document.getElementById('flashBannerColor').value = bannerColor;
+
+      document.getElementById('flashFormTitle').innerText = "✏️ Editar Alerta Flash / Aviso";
+      document.getElementById('flashSubmitBtn').innerText = "Actualizar Alerta";
+      document.getElementById('cancelFlashEditBtn').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.resetFlashForm = () => {
+      document.getElementById('flashAlertForm').reset();
+      document.getElementById('flashAlertEditId').value = "";
+      document.getElementById('flashFormTitle').innerHTML = '<i data-lucide="bell"></i> Crear / Editar Alerta Flash o Aviso Semanal';
+      document.getElementById('flashSubmitBtn').innerText = "Guardar / Publicar Alerta Flash";
+      document.getElementById('cancelFlashEditBtn').classList.add('hidden');
+      refreshIcons();
+    };
+
+    window.deleteFlashAlert = async (id) => {
+      if (confirm("¿Estás seguro de eliminar esta alerta flash?")) {
         try {
-          const ref = doc(db, "branch_config", branch);
-          const snap = await getDoc(ref);
-          if (snap.exists()) {
-            let data = snap.data();
-            data.flashAlert = { active: false };
-            await setDoc(ref, data, { merge: true });
-          }
+          await deleteDoc(doc(db, "flash_alerts", id));
           alert("¡Alerta eliminada con éxito!");
-          loadAdminFlashForBranch();
+          renderAdminFlashList();
         } catch (e) {
-          alert("Error al eliminar alerta.");
+          alert("Error al eliminar.");
         }
       }
     };
@@ -1784,9 +1903,7 @@
         const ref = doc(db, "branch_config", branch);
         const snap = await getDoc(ref);
         let existingData = snap.exists() ? snap.data() : {};
-
         existingData.games = { status };
-
         await setDoc(ref, existingData, { merge: true });
         alert(`¡Juegos actualizados para ${branch}!`);
       } catch (err) {
@@ -1848,21 +1965,21 @@
         const servicesCardsHtml = `
           <div class="card" onclick="openServiceProModal('Pago de Luz (AES / EEO)')" style="cursor: pointer; border: 2px solid #2563eb;">
             <img src="${aesImg}" alt="Pago de Luz">
-            <div style="font-size:0.7rem; color:#2563eb; font-weight:800;">⚡ SERVICIO ELÉCTRICO</div>
+            <div style="font-size:0.7rem; color:#2563eb; font-weight:800;">SERVICIO ELÉCTRICO</div>
             <h3>Pago de Luz (AES / EEO)</h3>
-            <p style="font-size:0.78rem; color:var(--text-muted); margin:0.3rem 0;">Captura tu recibo (NIT y Total)</p>
+            <p style="font-size:0.78rem; color:var(--text-muted); margin:0.3rem 0;">Toma foto de tu recibo (NIT y Total)</p>
             <button class="btn btn-sm btn-emerald" style="margin-top:0.5rem; background:#2563eb; width:100%;">Configurar Pago</button>
           </div>
           <div class="card" onclick="openServiceProModal('Recargas Claro')" style="cursor: pointer; border: 2px solid #ef4444;">
             <img src="${claroImg}" alt="Recargas Claro">
-            <div style="font-size:0.7rem; color:#ef4444; font-weight:800;">📱 RECARGAS CLARO</div>
+            <div style="font-size:0.7rem; color:#ef4444; font-weight:800;">RECARGAS CLARO</div>
             <h3>Paquetes Claro El Salvador</h3>
             <p style="font-size:0.78rem; color:var(--text-muted); margin:0.3rem 0;">Elige paquetes y número</p>
             <button class="btn btn-sm btn-emerald" style="margin-top:0.5rem; background:#ef4444; width:100%;">Ver Paquetes</button>
           </div>
           <div class="card" onclick="openServiceProModal('Recargas Tigo')" style="cursor: pointer; border: 2px solid #0284c7;">
             <img src="${tigoImg}" alt="Recargas Tigo">
-            <div style="font-size:0.7rem; color:#0284c7; font-weight:800;">📱 RECARGAS TIGO</div>
+            <div style="font-size:0.7rem; color:#0284c7; font-weight:800;">RECARGAS TIGO</div>
             <h3>Paquetes Tigo El Salvador</h3>
             <p style="font-size:0.78rem; color:var(--text-muted); margin:0.3rem 0;">Elige paquetes y número</p>
             <button class="btn btn-sm btn-emerald" style="margin-top:0.5rem; background:#0284c7; width:100%;">Ver Paquetes</button>
@@ -1882,9 +1999,10 @@
 
         let isFlashItem = false;
         let flashDiscountVal = 0;
-        if (currentFlashAlert && currentFlashAlert.active && item.nombre.toLowerCase().trim() === currentFlashAlert.product.toLowerCase().trim()) {
+        const matchingFlash = allFlashAlertsList.find(f => f.active && (f.branch === 'Todas' || f.branch === currentBranch) && f.product && f.product.toLowerCase().trim() === item.nombre.toLowerCase().trim());
+        if (matchingFlash) {
           isFlashItem = true;
-          flashDiscountVal = parseFloat(currentFlashAlert.discount || 0);
+          flashDiscountVal = parseFloat(matchingFlash.discount || 0);
         }
 
         const displayPrice = isFlashItem ? Math.max(0, dynamicPrice - flashDiscountVal) : dynamicPrice;
@@ -1953,12 +2071,9 @@
             </select>
           </div>
           <div class="form-group">
-            <label>📸 Foto del Recibo (Debe incluir NIT y Total a Pagar)</label>
-            <div style="display:flex; gap:0.5rem; margin-bottom:0.5rem;">
-              <button type="button" class="btn btn-sm btn-amber" onclick="startReceiptCameraScan()"><i data-lucide="camera"></i> Capturar con Cámara</button>
-            </div>
-            <div id="receipt-cam-container" class="hidden" style="width:100%; margin-bottom:0.5rem; border-radius:12px; overflow:hidden;"></div>
-            <input type="text" id="serviceReceiptImg" class="form-control" placeholder="Ruta de foto o captura guardada...">
+            <label>📸 Tomar o Adjuntar Foto del Recibo</label>
+            <input type="file" id="serviceReceiptFile" class="form-control" accept="image/*" capture="environment" onchange="previewReceiptImage(event)" style="padding: 0.5rem;">
+            <div id="receiptPreviewContainer" style="margin-top: 0.75rem; text-align: center;"></div>
           </div>
           <div class="form-group">
             <label>Monto total que muestra el recibo ($)</label>
@@ -1987,7 +2102,7 @@
           </div>
           <div class="form-group">
             <label>Número de Teléfono a Recargar</label>
-            <input type="tel" id="rechargePhone" class="form-control" placeholder="Tu Numero " inputmode="numeric">
+            <input type="tel" id="rechargePhone" class="form-control" placeholder="Tu Numero" inputmode="numeric">
           </div>
           <button class="btn btn-emerald" style="width:100%; background:#2563eb;" onclick="addRechargeProToCart('${carrier}')">Agregar Paquete al Carrito</button>
         `;
@@ -1996,20 +2111,21 @@
       refreshIcons();
     };
 
-    window.startReceiptCameraScan = () => {
-      const container = document.getElementById('receipt-cam-container');
-      container.classList.remove('hidden');
-      const html5QrCode = new Html5Qrcode("receipt-cam-container");
-      html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, (decodedText) => {
-        document.getElementById('serviceReceiptImg').value = `Recibo Escaneado: ${decodedText}`;
-        html5QrCode.stop();
-        container.classList.add('hidden');
-        alert("¡Recibo y código capturados con éxito!");
-      }).catch(err => {
-        document.getElementById('serviceReceiptImg').value = "Foto de recibo capturada (Modo manual activo)";
-        container.classList.add('hidden');
-        alert("¡Cámara lista! Imagen de recibo registrada.");
-      });
+    let capturedReceiptBase64 = "";
+
+    window.previewReceiptImage = (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        capturedReceiptBase64 = e.target.result;
+        const container = document.getElementById('receiptPreviewContainer');
+        container.innerHTML = `
+          <img src="${capturedReceiptBase64}" style="max-height: 150px; border-radius: 10px; border: 1px solid var(--border); object-fit: contain;">
+          <p style="font-size: 0.75rem; color: var(--emerald-accent); font-weight: 700; margin-top: 0.3rem;">✅ Foto de recibo cargada correctamente</p>
+        `;
+      };
+      reader.readAsDataURL(file);
     };
 
     window.updatePackageDescriptionInfo = () => {
@@ -2022,10 +2138,11 @@
 
     window.addElectricServiceToCart = () => {
       const company = document.getElementById('electricCompany').value;
-      const img = document.getElementById('serviceReceiptImg').value.trim();
       const amount = parseFloat(document.getElementById('serviceReceiptAmount').value || 0);
 
       if (amount <= 0) { alert("Ingresa un monto válido del recibo."); return; }
+      if (!capturedReceiptBase64) { alert("⚠️ Por favor toma o adjunta la foto del recibo de luz."); return; }
+
       const finalPrice = amount + 0.50;
 
       cart.push({
@@ -2035,14 +2152,15 @@
         cantidad: 1,
         isService: true,
         company,
-        receiptImg: img,
+        receiptImg: capturedReceiptBase64,
         baseAmount: amount,
         fee: 0.50
       });
 
+      capturedReceiptBase64 = "";
       document.getElementById('serviceModal').classList.remove('active');
       updateCart();
-      alert("¡Pago de servicio de luz agregado al carrito!");
+      alert("¡Pago de servicio de luz agregado al carrito con su foto!");
     };
 
     window.addRechargeProToCart = (carrier) => {
@@ -2083,9 +2201,10 @@
 
       let isFlashItem = false;
       let flashDiscountVal = 0;
-      if (currentFlashAlert && currentFlashAlert.active && item.nombre.toLowerCase().trim() === currentFlashAlert.product.toLowerCase().trim()) {
+      const matchingFlash = allFlashAlertsList.find(f => f.active && (f.branch === 'Todas' || f.branch === currentBranch) && f.product && f.product.toLowerCase().trim() === item.nombre.toLowerCase().trim());
+      if (matchingFlash) {
         isFlashItem = true;
-        flashDiscountVal = parseFloat(currentFlashAlert.discount || 0);
+        flashDiscountVal = parseFloat(matchingFlash.discount || 0);
       }
       const displayPrice = isFlashItem ? Math.max(0, dynamicPrice - flashDiscountVal) : dynamicPrice;
 
@@ -2184,6 +2303,7 @@
           <div style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem 0; border-bottom:1px solid var(--border);">
             <div style="flex:1; padding-right:0.5rem;">
               <strong>${item.nombre}</strong>
+              ${item.receiptImg ? `<br><img src="${item.receiptImg}" style="width:40px; height:40px; object-fit:cover; border-radius:6px; margin-top:0.2rem;"> <small style="color:#2563eb; font-weight:700;">[Foto de Recibo Adjunta]</small>` : ''}
               ${item.isFlash ? `<br><small style="color:#dc2626; font-weight:700;">⚡ Precio Flash Aplicado</small>` : ''}
               ${item.promoTag ? `<br><small style="color:#dc2626; font-weight:700;">🔥 ${item.promoTag}</small>` : ''}
               <br><small style="color:var(--text-muted);">$${item.precio.toFixed(2)} c/u</small>
@@ -2259,7 +2379,6 @@
 
       let subtotal = 0;
       let totalBonus = 0;
-      let detailList = "";
       let totalPushDiscount = 0;
       let totalPromoTagDiscount = 0;
       let hasFlashProductInCart = false;
@@ -2282,7 +2401,6 @@
           totalPushDiscount += item.flashDiscount * item.cantidad;
           hasFlashProductInCart = true;
         }
-        detailList += `• ${item.nombre} (x${item.cantidad}) - $${itemSubtotal.toFixed(2)}\n`;
       });
 
       let finalDiscount = totalPushDiscount + totalPromoTagDiscount;
@@ -2295,6 +2413,7 @@
       const pointsToEarn = Math.floor(finalSubtotal) + totalBonus;
       const finalAddress = deliveryTypeVal === 'Recoger en Tienda' ? 'Recoger en tienda' : document.getElementById('custAddress').value.trim();
       const finalRef = deliveryTypeVal === 'Recoger en Tienda' ? 'N/A' : document.getElementById('custRef').value.trim();
+      const currentDateFormatted = new Date().toLocaleString('es-SV');
 
       if (wonGameDiscount > 0 && finalDiscount >= wonGameDiscount && currentClientDocId) {
         try {
@@ -2319,34 +2438,101 @@
         puntosAGanar: pointsToEarn,
         puntosAcreditados: false,
         estado: "Pendiente",
-        fecha: new Date().toLocaleString('es-SV'),
+        fecha: currentDateFormatted,
         createdAt: new Date().toISOString()
       };
 
       try {
-        await addDoc(collection(db, "ordenes"), newOrder);
+        const docRef = await addDoc(collection(db, "ordenes"), newOrder);
+        const orderIdCode = docRef.id.slice(-6).toUpperCase();
 
-        const msg = ` *SUPER TOÑITA ONLINE*\n\n` +
-          `*Cliente:* ${currentUser.name}\n` +
-          ` *Teléfono:* ${currentUser.phone}\n` +
-          ` *Sucursal:* ${currentBranch}\n` +
-          ` *Entrega:* ${deliveryTypeVal}\n` +
-          `${deliveryTypeVal !== 'Recoger en Tienda' ? `📍 *Dirección:* ${finalAddress}\n` : ''}` +
-          `${finalDiscount > 0 ? `🎫 *Descuento Aplicado:* -$${finalDiscount.toFixed(2)}\n` : ''}` +
-          `⭐ *Puntos a sumar:* +${pointsToEarn} Pts\n\n` +
-          `🛒 *Detalle:*\n${detailList}\n` +
-          ` *TOTAL A PAGAR:* $${(finalSubtotal + currentShippingFee).toFixed(2)}`;
+        await generateAndDownloadTicketImage(newOrder, orderIdCode);
 
         cart = [];
         updateCart();
         document.getElementById('cartModal').classList.remove('active');
 
         const targetWhatsApp = BRANCH_WHATSAPP[currentBranch] || "50370092996";
+        const msg = `¡Hola! Acabo de realizar mi pedido en *${currentBranch}*.\n\n` +
+          `👤 Cliente: ${currentUser.name}\n` +
+          `📞 Teléfono: ${currentUser.phone}\n` +
+          `📦 Tipo Entrega: ${deliveryTypeVal}\n` +
+          `${deliveryTypeVal !== 'Recoger en Tienda' ? `📍 Dirección: ${finalAddress}\n` : ''}` +
+          `💵 TOTAL A PAGAR: $${(finalSubtotal + currentShippingFee).toFixed(2)}\n\n` +
+          `*(He generado y descargado el ticket visual de mi compra en mi dispositivo para compartirlo)*`;
+
         window.location.href = `https://wa.me/${targetWhatsApp}?text=${encodeURIComponent(msg)}`;
       } catch (err) {
         alert("Error al procesar pedido.");
       }
     });
+
+    async function generateAndDownloadTicketImage(orderData, orderIdCode) {
+      document.getElementById('ticketBranchName').innerText = orderData.sucursal;
+      document.getElementById('ticketDateTime').innerText = orderData.fecha;
+      document.getElementById('ticketCustName').innerText = orderData.clienteNombre;
+      document.getElementById('ticketCustPhone').innerText = orderData.clienteTelefono;
+      document.getElementById('ticketDeliveryType').innerText = orderData.tipoEntrega;
+      
+      const addrWrapper = document.getElementById('ticketAddressWrapper');
+      const refWrapper = document.getElementById('ticketRefWrapper');
+
+      if (orderData.tipoEntrega === 'Recoger en Tienda') {
+        addrWrapper.style.display = 'none';
+        refWrapper.style.display = 'none';
+      } else {
+        addrWrapper.style.display = 'block';
+        refWrapper.style.display = 'block';
+        document.getElementById('ticketCustAddress').innerText = orderData.direccion;
+        document.getElementById('ticketCustRef').innerText = orderData.referencia;
+      }
+
+      document.getElementById('ticketSubtotal').innerText = orderData.subtotal.toFixed(2);
+      document.getElementById('ticketTotal').innerText = orderData.total.toFixed(2);
+      
+      if(orderData.descuento > 0) {
+        document.getElementById('ticketDiscountRow').style.display = 'flex';
+        document.getElementById('ticketDiscount').innerText = orderData.descuento.toFixed(2);
+      } else {
+        document.getElementById('ticketDiscountRow').style.display = 'none';
+      }
+
+      let itemsHtml = '';
+      orderData.items.forEach(item => {
+        itemsHtml += `<div style="display: flex; justify-content: space-between; font-size: 11px; margin: 2px 0;">
+          <span>${item.cantidad}x ${item.nombre.substring(0, 18)}</span>
+          <span>$${(item.precio * item.cantidad).toFixed(2)}</span>
+        </div>`;
+      });
+      document.getElementById('ticketItemsList').innerHTML = itemsHtml;
+
+      if(window.JsBarcode) {
+        try {
+          JsBarcode("#ticketBarcodeSVG", "ST-" + orderIdCode, {
+            format: "CODE128",
+            width: 1.2,
+            height: 30,
+            displayValue: true
+          });
+        } catch(e){}
+      }
+
+      const ticketElement = document.getElementById('thermalTicketTemplate');
+      ticketElement.style.left = '0';
+
+      try {
+        const canvas = await html2canvas(ticketElement, { scale: 2 });
+        ticketElement.style.left = '-9999px';
+        
+        const imageURL = canvas.toDataURL('image/png');
+        const downloadLink = document.createElement('a');
+        downloadLink.href = imageURL;
+        downloadLink.download = `Ticket_Super_Tonita_${orderIdCode}.png`;
+        downloadLink.click();
+      } catch (error) {
+        ticketElement.style.left = '-9999px';
+      }
+    }
 
     async function loadClientOrders() {
       const container = document.getElementById('clientOrdersList');
@@ -2406,7 +2592,7 @@
       if ((currentUser.points || 0) < pointsCost) { alert("Puntos insuficientes."); return; }
       if (confirm(`¿Canjear "${name}" por ${pointsCost} puntos?`)) {
         await updateDoc(doc(db, "clients", currentClientDocId), { points: currentUser.points - pointsCost });
-        await addDoc(collection(db, "redemptions"), { clientName: currentUser.name, clientPhone: currentUser.phone, productName: name, pointsTransacted: pointsCost, status: "Pendiente", date: new Date().toLocaleString('es-SV') });
+        await addDoc(collection(db, "redemptions"), { clientName: currentUser.name, clientPhone: currentUser.phone, clientPhoneClean: cleanPhone(currentUser.phone), productName: name, pointsTransacted: pointsCost, status: "Pendiente", date: new Date().toLocaleString('es-SV') });
         alert("¡Canje solicitado!");
         loadClientRedemptions();
       }
@@ -2450,10 +2636,11 @@
 
     function renderBranchPromos() {
       const activePromos = allPromos.filter(p => p.sucursal === 'Todas' || p.sucursal === currentBranch);
+      const activeFlashAlerts = allFlashAlertsList.filter(f => f.active && (f.branch === 'Todas' || f.branch === currentBranch));
       let bannersHtml = '';
 
       bannersHtml += `
-        <div class="banner-card banner-services-pro" onclick="switchClientTab('catalog'); filterByCategory('Servicios y Recargas');">
+        <div class="banner-card banner-services-pro" onclick="switchClientTab('catalog'); filterByCategory('Servicios y Recargas');" style="background: linear-gradient(135deg, #2563eb, #1e40af);">
           <div style="flex:1; z-index:2;">
             <span style="background:white; color:#2563eb; font-size:0.65rem; padding:0.2rem 0.5rem; border-radius:4px; font-weight:900; text-transform:uppercase;">⚡ MÓDULO DIGITAL PRO</span>
             <h4 style="font-size:1.1rem; font-weight:900; margin-top:0.3rem;">Pago de Luz (AES/EEO) y Recargas</h4>
@@ -2463,22 +2650,23 @@
         </div>
       `;
 
-      if (currentFlashAlert && currentFlashAlert.active) {
+      activeFlashAlerts.forEach(f => {
+        const bgStyle = f.bannerColor || 'linear-gradient(135deg, #dc2626, #991b1b)';
         bannersHtml += `
-          <div class="banner-card banner-flash-pulse" onclick="findAndOpenFlashProduct('${currentFlashAlert.product}')">
+          <div class="banner-card banner-flash-pulse" onclick="findAndOpenFlashProduct('${f.product || ''}')" style="background: ${bgStyle};">
             <div style="flex:1; z-index:2;">
-              <span style="background:white; color:#dc2626; font-size:0.65rem; padding:0.2rem 0.5rem; border-radius:4px; font-weight:900; text-transform:uppercase;">🔥 OFERTA FLASH EN VIVO</span>
-              <h4 style="font-size:1.05rem; font-weight:900; margin-top:0.3rem;">${currentFlashAlert.product}</h4>
-              <p style="font-size:0.85rem; opacity:0.9; margin:0.2rem 0;">-$${parseFloat(currentFlashAlert.discount || 0).toFixed(2)} OFF por unidad</p>
-              <div style="font-size:0.8rem; font-weight:900; background:rgba(0,0,0,0.3); display:inline-block; padding:0.15rem 0.5rem; border-radius:6px; margin-top:0.2rem;">⏱️ Restante: <span id="flashTimerDisplay">Calculando...</span></div>
+              <span style="background:rgba(0,0,0,0.3); color:white; font-size:0.65rem; padding:0.2rem 0.5rem; border-radius:4px; font-weight:900; text-transform:uppercase;">🔥 AVISO / FLASH (${f.branch})</span>
+              <h4 style="font-size:1.05rem; font-weight:900; margin-top:0.3rem;">${f.title}</h4>
+              <p style="font-size:0.85rem; opacity:0.9; margin:0.2rem 0;">${f.subtext}</p>
+              <div style="font-size:0.8rem; font-weight:900; background:rgba(0,0,0,0.3); display:inline-block; padding:0.15rem 0.5rem; border-radius:6px; margin-top:0.2rem;">⏱️ Disponible hasta: ${f.endTime}</div>
             </div>
-            <i class="fa-solid fa-bolt" style="font-size: 2.5rem; opacity: 0.85;"></i>
+            <i class="fa-solid fa-bell" style="font-size: 2.2rem; opacity: 0.85;"></i>
           </div>
         `;
-      }
+      });
 
       bannersHtml += `
-        <div class="banner-card" onclick="switchClientTab('catalog')">
+        <div class="banner-card" onclick="switchClientTab('catalog')" style="background: linear-gradient(135deg, #059669, #1e293b);">
           <div>
             <h4>🛵 Envío a Domicilio</h4>
             <p>Rápido y seguro en ${currentBranch}.</p>
@@ -2489,10 +2677,11 @@
 
       activePromos.forEach(p => {
         const promoImg = fixDriveUrl(p.imagenUrl);
+        const bgStyle = p.bannerColor || 'linear-gradient(135deg, #059669, #1e293b)';
         bannersHtml += `
-          <div class="banner-card" onclick="switchClientTab('promos')" style="${promoImg ? `background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${promoImg}'); background-size: cover; background-position: center;` : ''}">
+          <div class="banner-card" onclick="switchClientTab('promos')" style="background: ${bgStyle}; ${promoImg ? `background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${promoImg}'); background-size: cover; background-position: center;` : ''}">
             <div style="flex:1; z-index:2;">
-              <span style="background:var(--emerald-accent); font-size:0.65rem; padding:0.15rem 0.4rem; border-radius:4px; font-weight:800; text-transform:uppercase;">${p.sucursal}</span>
+              <span style="background:rgba(0,0,0,0.3); font-size:0.65rem; padding:0.15rem 0.4rem; border-radius:4px; font-weight:800; text-transform:uppercase;">${p.sucursal}</span>
               <h4 style="font-size:0.95rem; font-weight:900; margin-top:0.2rem;">🔥 ${p.titulo}</h4>
               <p style="font-size:0.8rem; opacity:0.9; margin:0.2rem 0;">${p.descripcion}</p>
               <span style="font-weight:800; font-size:0.9rem; color:#34d399;">$${parseFloat(p.precio || 0).toFixed(2)} — ¡Toca para pedir!</span>
@@ -2577,7 +2766,7 @@
       if (tab === 'clients') loadAdminClients();
       if (tab === 'redemptions') loadAdminRedemptions();
       if (tab === 'promos') loadAdminPromos();
-      if (tab === 'gamification') loadAdminFlashForBranch();
+      if (tab === 'gamification') renderAdminFlashList();
       refreshIcons();
     };
 
@@ -2591,7 +2780,6 @@
     document.getElementById('adminTabGamificationBtn').addEventListener('click', () => switchAdminSubTab('gamification'));
     document.getElementById('adminLogoutBtn').addEventListener('click', () => document.getElementById('logoutBtn').click());
 
-    // Guardar / Editar paquetes de recargas y servicios desde el admin
     document.getElementById('servicePackageForm')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const editId = document.getElementById('servicePkgEditId').value;
@@ -2661,7 +2849,7 @@
       document.getElementById('adminPkgPrice').value = price;
       document.getElementById('adminPkgImg').value = image;
 
-      document.getElementById('serviceFormTitle').innerText = "✏️ Editar Servicio o Paquete";
+      document.getElementById('serviceFormTitle').innerText = "Editar Servicio o Paquete";
       document.getElementById('serviceSubmitBtn').innerText = "Actualizar Servicio";
       document.getElementById('cancelServiceEditBtn').classList.remove('hidden');
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2707,13 +2895,14 @@
         const clientName = c.name || c.nombre || 'Sin Nombre';
         const clientPhone = c.phone || c.telefono || 'Sin Teléfono';
         container.innerHTML += `
-          <div style="background:var(--bg-primary); padding:0.85rem; border-radius:12px; display:flex; justify-content:space-between; align-items:center; gap:0.5rem;">
+          <div style="background:var(--bg-primary); padding:0.85rem; border-radius:12px; display:flex; justify-content:space-between; align-items:center; gap:0.5rem; margin-bottom:0.5rem;">
             <div style="flex:1;">
               <strong>${clientName}</strong><br>
               <small>📞 ${clientPhone}</small><br>
               <span style="color:var(--amber-accent); font-weight:800;">⭐ ${c.points || 0} Pts</span>
             </div>
             <div style="display:flex; gap:0.3rem; flex-wrap:wrap; justify-content:flex-end;">
+              <button class="btn btn-sm btn-emerald" onclick="viewClientMovements('${clientPhone}', '${clientName.replace(/'/g, "\\'")}')">📋 Movimientos</button>
               <button class="btn btn-sm btn-amber" onclick="adminAdjustPoints('${c.id}', '${clientName}', ${c.points || 0})">Puntos</button>
               <button class="btn btn-sm btn-secondary" onclick="adminEditClient('${c.id}', '${clientName}', '${clientPhone}')">Editar</button>
               <button class="btn btn-sm btn-danger" onclick="adminDeleteClient('${c.id}', '${clientName}')">Eliminar</button>
@@ -2723,6 +2912,75 @@
       });
       refreshIcons();
     }
+
+    window.viewClientMovements = async (clientPhone, clientName) => {
+      const modal = document.getElementById('adminClientDetailsModal');
+      const title = document.getElementById('modalClientTitle');
+      const body = document.getElementById('modalClientDetailsBody');
+
+      title.innerText = `Movimientos de: ${clientName} (${clientPhone})`;
+      body.innerHTML = '<p style="text-align:center; padding:1rem;">Cargando compras y canjes...</p>';
+      modal.classList.add('active');
+
+      try {
+        const cleanTargetPhone = cleanPhone(clientPhone);
+        
+        const ordersSnap = await getDocs(query(collection(db, "ordenes"), where("clienteTelefono", "==", clientPhone)));
+        let clientOrders = [];
+        ordersSnap.forEach(d => {
+          const o = d.data();
+          if (cleanPhone(o.clienteTelefono) === cleanTargetPhone) {
+            clientOrders.push({ id: d.id, ...o });
+          }
+        });
+
+        const redemptionsSnap = await getDocs(query(collection(db, "redemptions"), where("clientPhone", "==", clientPhone)));
+        let clientRedemptions = [];
+        redemptionsSnap.forEach(d => {
+          const r = d.data();
+          if (cleanPhone(r.clientPhone) === cleanTargetPhone) {
+            clientRedemptions.push({ id: d.id, ...r });
+          }
+        });
+
+        let html = `<h4 style="font-size:0.95rem; font-weight:800; margin-bottom:0.5rem; color:var(--emerald-accent);">🛒 Compras Realizadas (${clientOrders.length})</h4>`;
+        if (clientOrders.length === 0) {
+          html += `<p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">Sin compras registradas.</p>`;
+        } else {
+          html += `<div style="max-height:180px; overflow-y:auto; margin-bottom:1rem; display:flex; flex-direction:column; gap:0.5rem;">`;
+          clientOrders.forEach(o => {
+            html += `
+              <div style="background:var(--bg-primary); padding:0.6rem; border-radius:8px; font-size:0.82rem;">
+                <strong>Pedido #${o.id.slice(-5).toUpperCase()}</strong> - <span style="color:var(--emerald-dark); font-weight:700;">$${parseFloat(o.total || 0).toFixed(2)}</span><br>
+                <small>Sucursal: ${o.sucursal} | Estado: ${o.estado}</small><br>
+                <small style="color:var(--text-muted);">${o.fecha || ''}</small>
+              </div>
+            `;
+          });
+          html += `</div>`;
+        }
+
+        html += `<h4 style="font-size:0.95rem; font-weight:800; margin-bottom:0.5rem; color:var(--amber-accent);">🎁 Canjes Solicitados (${clientRedemptions.length})</h4>`;
+        if (clientRedemptions.length === 0) {
+          html += `<p style="font-size:0.85rem; color:var(--text-muted);">Sin canjes solicitados.</p>`;
+        } else {
+          html += `<div style="max-height:180px; overflow-y:auto; display:flex; flex-direction:column; gap:0.5rem;">`;
+          clientRedemptions.forEach(r => {
+            html += `
+              <div style="background:var(--bg-primary); padding:0.6rem; border-radius:8px; font-size:0.82rem;">
+                <strong>${r.productName}</strong> (-${r.pointsTransacted} Pts)<br>
+                <small>Estado: <strong>${r.status}</strong> | Fecha: ${r.date || ''}</small>
+              </div>
+            `;
+          });
+          html += `</div>`;
+        }
+
+        body.innerHTML = html;
+      } catch (e) {
+        body.innerHTML = `<p style="color:var(--danger); text-align:center;">Error al cargar movimientos.</p>`;
+      }
+    };
 
     window.filterAdminClientsList = () => {
       const searchVal = document.getElementById('adminClientSearchInput').value.toLowerCase();
@@ -2941,7 +3199,7 @@
       document.getElementById('prodDesc').value = p.descripcion || '';
       document.getElementById('prodImg1').value = p.imagenUrl1 || p.imagenUrl || '';
 
-      document.getElementById('formTitle').innerText = "✏️ Editar Producto";
+      document.getElementById('formTitle').innerText = "Editar Producto";
       document.getElementById('prodSubmitBtn').innerText = "Actualizar Producto";
       document.getElementById('cancelProdEditBtn').classList.remove('hidden');
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -3102,6 +3360,7 @@
         titulo: document.getElementById('promoTitle').value.trim(),
         precio: parseFloat(document.getElementById('promoPrice').value || 0),
         imagenUrl: document.getElementById('promoImg').value.trim(),
+        bannerColor: document.getElementById('promoBannerColor').value,
         descripcion: document.getElementById('promoDesc').value.trim()
       };
 
@@ -3140,7 +3399,7 @@
                 <small style="color:var(--text-muted);">${p.descripcion}</small>
               </div>
               <div style="display:flex; gap:0.4rem;">
-                <button class="btn btn-sm btn-amber" onclick="editPromo('${d.id}', '${p.sucursal}', '${p.titulo}', ${p.precio}, '${p.imagenUrl}', '${p.descripcion}')">Editar</button>
+                <button class="btn btn-sm btn-amber" onclick="editPromo('${d.id}', '${p.sucursal}', '${p.titulo.replace(/'/g, "\\'")}', ${p.precio}, '${p.imagenUrl || ''}', '${(p.bannerColor || '').replace(/'/g, "\\'")}', '${(p.descripcion || '').replace(/'/g, "\\'")}')">Editar</button>
                 <button class="btn btn-sm btn-danger" onclick="deletePromo('${d.id}')">Eliminar</button>
               </div>
             </div>
@@ -3151,14 +3410,15 @@
       }
     }
 
-    window.editPromo = (id, sucursal, titulo, precio, imagenUrl, descripcion) => {
+    window.editPromo = (id, sucursal, titulo, precio, imagenUrl, bannerColor, descripcion) => {
       document.getElementById('promoEditId').value = id;
       document.getElementById('promoBranch').value = sucursal;
       document.getElementById('promoTitle').value = titulo;
       document.getElementById('promoPrice').value = precio;
       document.getElementById('promoImg').value = imagenUrl;
+      if (bannerColor) document.getElementById('promoBannerColor').value = bannerColor;
       document.getElementById('promoDesc').value = descripcion;
-      document.getElementById('promoFormTitle').innerText = "✏️ Editar Promoción";
+      document.getElementById('promoFormTitle').innerText = "Editar Promoción";
       document.getElementById('cancelPromoEditBtn').classList.remove('hidden');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
@@ -3166,7 +3426,7 @@
     window.resetPromoForm = () => {
       document.getElementById('promoForm').reset();
       document.getElementById('promoEditId').value = "";
-      document.getElementById('promoFormTitle').innerText = "Crear Promoción por Sucursal";
+      document.getElementById('promoFormTitle').innerText = "Crear / Editar Promoción";
       document.getElementById('cancelPromoEditBtn').classList.add('hidden');
     };
 
